@@ -11,8 +11,7 @@ RoxygenNote: 7.2.1
 Imports: 
     checkmate,
     lubridate,
-    stringr
-Suggests: 
+    stringr,
     covr,
     devtools,
     lintr,
