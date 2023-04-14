@@ -12,3 +12,6 @@ Imports:
     checkmate,
     lubridate,
     stringr
+Suggests: 
+    devtools,
+    usethis
