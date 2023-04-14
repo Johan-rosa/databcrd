@@ -13,5 +13,10 @@ Imports:
     lubridate,
     stringr
 Suggests: 
+    covr,
     devtools,
+    lintr,
+    rcmdcheck,
+    spelling,
+    testthat,
     usethis
