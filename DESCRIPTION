@@ -10,6 +10,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
 Imports: 
     checkmate,
+    dplyr,
     lubridate,
     stringr
 Suggests:
