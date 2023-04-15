@@ -1,2 +1,1 @@
-library(devtools)
 library(usethis)
