@@ -10,12 +10,13 @@ crear_mes(mes, type = "text_to_number")
 \item{mes}{a number or character with the month}
 
 \item{type}{a character indicating the type of conversion,
-can be any of these: \code{c("text_to_number", "number_to_text", "number_to_shorttext")}}
+can be any of these:
+\code{c("text_to_number", "number_to_text", "number_to_shorttext")}}
 }
 \description{
-Take month from text to number or form number to text. This work with any month
-name (Spanish or English) to create a number. From number to text only creates
-Spanish months
+Take month from text to number or form number to text. This work with any
+month name (Spanish or English) to create a number. From number to text only
+creates Spanish months
 }
 \examples{
 crear_mes("Enero", "text_to_number")

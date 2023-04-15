@@ -65,7 +65,7 @@ crear_mes <- function(mes, type = "text_to_number") {
   } else if (is.numeric(mes)) {
     checkmate::assert(
       checkmate::check_choice(type, c("number_to_text", "number_to_shorttext")),
-      checkmate::check_choice(mes, 1:12),
+      all(mes %in% 1:12),
       combine = "and"
     )
   }
