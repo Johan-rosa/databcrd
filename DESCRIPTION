@@ -12,3 +12,9 @@ Imports:
     checkmate,
     lubridate,
     stringr
+Suggests:
+    covr,
+    lintr,
+    rcmdcheck,
+    spelling,
+    testthat
