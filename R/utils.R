@@ -9,5 +9,8 @@
 #' @export
 date_label <- function(date = Sys.Date()) {
   checkmate::assert_date(date)
-  paste(stringr::str_to_title(lubridate::month(date, label = TRUE)), lubridate::year(date))
+  paste(
+    stringr::str_to_title(lubridate::month(date, label = TRUE)),
+    lubridate::year(date)
+  )
 }
