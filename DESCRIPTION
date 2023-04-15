@@ -3,7 +3,7 @@ Title: Get Dominican Republic's Central Bank data
 Version: 0.0.0.9000
 Authors@R: 
     person("Johan", "Rosa", , "johan.rosaperez@gmail.com", role = c("aut", "cre"))
-Description: Download, clean and import data from the Crentral Bank of the Dominican Republic.
+Description: Download, clean and import data from the Central Bank of the Dominican Republic.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -12,3 +12,9 @@ Imports:
     checkmate,
     lubridate,
     stringr
+Suggests:
+    covr,
+    lintr,
+    rcmdcheck,
+    spelling,
+    testthat
