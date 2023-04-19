@@ -12,16 +12,18 @@
 #'
 #' @return a tibble
 #' @examples
-#' get_ipc_data()
+#' get_ipc_data("general")
+#' get_ipc_data("grupos")
 # Funcion para descargar data del IPC
-get_ipc_data <- function(desagregacion = "general") {
+get_ipc_data <- function(desagregacion) {
   checkmate::assert_character(desagregacion)
-  checkmate::assert_choice(desagregacion, choices = c("general"))
+  checkmate::assert_choice(
+    desagregacion,
+    choices = c("general", "grupos")
+  )
 
-  if (desagregacion == "general") {
-    return(get_ipc_general())
-  }
-
+  if (desagregacion == "general") return(get_ipc_general())
+  if (desagregacion == "grupos") return(get_ipc_grupos())
 }
 
 #' To get the general CPI data
@@ -65,4 +67,58 @@ get_ipc_general <- function() {
       dplyr::select(fecha, year, mes, dplyr::everything())
 
     ipc_general
+}
+
+#' To get the CPI data by group of goods and services
+#'
+#' You can get the CPI index and the monthly, year over year and
+#' throughout the year variations, as well as the 12 month average
+get_ipc_grupos <- function() {
+  url_descarga <- paste0(
+    "https://cdn.bancentral.gov.do/documents/estadisticas/",
+    "precios/documents/ipc_grupos_base_2019-2020.xls"
+  )
+
+  file_path <- tempfile(pattern = "", fileext = ".xls")
+
+  utils::download.file(url_descarga, file_path, mode = "wb", quiet = TRUE)
+
+  header_ipc_grupos <- c(
+    "fecha", "ipc_ayb", "ipc_ayb_vm", "ipc_alcohol_tabaco",
+    "ipc_alcohol_tabaco_vm", "ipc_ropa_calzado", "ipc_ropa_calzado_vm",
+    "ipc_vivienda", "ipc_vivienda_vm",
+    "ipc_muebles", "ipc_muebles_vm", "ipc_salud", "ipc_salud_vm",
+    "ipc_transporte", "ipc_transporte_vm", "ipc_comunicaciones",
+    "ipc_comunicaciones_vm", "ipc_cultura", "ipc_cultura_vm", "ipc_educacion",
+    "ipc_educacion_vm", "ipc_hotel_restaurantes", "ipc_hotel_restaurantes_vm",
+    "ipc_bines_servicios", "ipc_bienes_servicios_vm"
+  )
+
+  suppressMessages(
+    ipc_grupos <- readxl::read_excel(
+      file_path,
+      skip = 10,
+      col_names = FALSE,
+      na = "-"
+    ))
+
+  ipc_grupos <-
+    ipc_grupos |>
+    janitor::clean_names() |>
+    dplyr::select(1:25) |>
+    stats::setNames(header_ipc_grupos) |>
+    dplyr::filter(!is.na(ipc_ayb)) |>
+    dplyr::mutate(
+      fecha = seq(
+        lubridate::ymd("1999/01/01"),
+        by = "month",
+        length.out = dplyr::n()),
+      year = lubridate::year(fecha),
+      mes = crear_mes(
+        mes = lubridate::month(fecha),
+        type = "number_to_text")) |>
+    dplyr::select(fecha, year, mes, dplyr::everything())
+
+  ipc_grupos
+
 }

@@ -4,11 +4,12 @@
 \alias{get_ipc_data}
 \title{Download the CPI series}
 \usage{
-get_ipc_data(desagregacion = "general")
+get_ipc_data(desagregacion)
 }
 \arguments{
 \item{desagregacion}{string with the desired disaggregation. options:
-"general", "grupos", "regiones", "subyacente", "tnt" (transable y no transable),
+"general", "grupos", "regiones", "subyacente", "tnt" (transable y no
+transable),
 "articulos"}
 }
 \value{
@@ -19,5 +20,6 @@ Download the CPI inflacion series for the Dominican Republic in any
 disaggregation
 }
 \examples{
-get_ipc_data()
+get_ipc_data("general")
+get_ipc_data("grupos")
 }
