@@ -11,7 +11,9 @@ RoxygenNote: 7.2.1
 Imports: 
     checkmate,
     dplyr,
+    janitor,
     lubridate,
+    readxl,
     stringr
 Suggests:
     covr,
