@@ -2,7 +2,7 @@
 % Please edit documentation in R/ipc.R
 \name{get_ipc_regiones}
 \alias{get_ipc_regiones}
-\title{To get the CPI data by group of geographic region}
+\title{To get the CPI data by geographic region}
 \usage{
 get_ipc_regiones()
 }

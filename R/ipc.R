@@ -16,18 +16,19 @@
 #' get_ipc_data("grupos")
 #' get_ipc_data("subyacente")
 #' get_ipc_data("regiones")
-# Funcion para descargar data del IPC
+#' get_ipc_data("tnt")
 get_ipc_data <- function(desagregacion) {
   checkmate::assert_character(desagregacion)
   checkmate::assert_choice(
     desagregacion,
-    choices = c("general", "grupos", "regiones", "subyacente")
+    choices = c("general", "grupos", "regiones", "subyacente", "tnt")
   )
 
   if (desagregacion == "general") return(get_ipc_general())
   if (desagregacion == "grupos") return(get_ipc_grupos())
   if (desagregacion == "regiones") return(get_ipc_regiones())
   if (desagregacion == "subyacente") return(get_ipc_subyacente())
+  if (desagregacion == "tnt") return(get_ipc_tnt())
 }
 
 #' To get the general CPI data
@@ -127,7 +128,7 @@ get_ipc_grupos <- function() {
 
 }
 
-#' To get the CPI data by group of geographic region
+#' To get the CPI data by geographic region
 #'
 #' You can get the CPI index and the monthly, year over year and
 #' throughout the year variations, as well as the 12 month average
@@ -172,7 +173,7 @@ get_ipc_regiones <- function() {
   ipc_region
 }
 
-#' To get the CPI data by group of geographic region
+#' To get the CPI core inflation data
 #'
 #' You can get the CPI index and the monthly, year over year and
 #' throughout the year variations, as well as the 12 month average
@@ -216,4 +217,51 @@ get_ipc_subyacente <- function() {
     dplyr::filter(!is.na(ipc_subyacente))
 
   ipc_subyacente
+}
+
+#' To get the CPI data by transferable or not
+#'
+#' You can get the CPI index and the monthly, year over year and
+#' throughout the year variations, as well as the 12 month average
+get_ipc_tnt <- function() {
+  header_ipc_tnt <- c(
+    "year", "mes", "ipc", "ipc_vm", "ipc_vd",
+    "ipc_t", "ipc_t_vm", "ipc_t_vd", "ipc_nt",
+    "ipc_nt_vm", "ipc_nt_vd"
+  )
+
+  url_descarga <- base::paste0(
+    "https://cdn.bancentral.gov.do/",
+    "documents/estadisticas/precios/",
+    "documents/ipc_tnt_base_2019-2020.xls"
+  )
+
+  file_path <- base::tempfile(pattern = "", fileext = ".xls")
+
+  utils::download.file(url_descarga, file_path, mode = "wb", quiet = TRUE)
+
+  suppressMessages(
+    ipc_tnt <- readxl::read_excel(
+      file_path,
+      skip = 31,
+      col_names = FALSE,
+      na = "-"
+    )
+  )
+
+  ipc_tnt <- ipc_tnt |>
+    janitor::clean_names() |>
+    stats::setNames(header_ipc_tnt) |>
+    dplyr::filter(!is.na(mes)) |>
+    dplyr::mutate(
+      fecha = seq(
+        lubridate::ymd("1999/02/01"),
+        by = "month",
+        length.out = dplyr::n()),
+      year = lubridate::year(fecha),
+      mes = crear_mes(
+        mes = lubridate::month(fecha), type = "number_to_text")) |>
+    dplyr::select(fecha, year, mes, dplyr::everything())
+
+  ipc_tnt
 }
