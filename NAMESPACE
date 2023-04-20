@@ -2,5 +2,6 @@
 
 export(crear_mes)
 export(date_label)
+export(get_imae)
 export(get_ipc_data)
 export(rescale)
