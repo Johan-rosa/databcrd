@@ -22,4 +22,6 @@ disaggregation
 \examples{
 get_ipc_data("general")
 get_ipc_data("grupos")
+get_ipc_data("subyacente")
+get_ipc_data("regiones")
 }
