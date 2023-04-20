@@ -24,6 +24,7 @@ get_ipc_data <- function(desagregacion) {
 
   if (desagregacion == "general") return(get_ipc_general())
   if (desagregacion == "grupos") return(get_ipc_grupos())
+  if (desagregacion == "regiones") return(get_ipc_regiones())
 }
 
 #' To get the general CPI data
@@ -121,4 +122,49 @@ get_ipc_grupos <- function() {
 
   ipc_grupos
 
+}
+
+#' To get the CPI data by group of geographic region
+#'
+#' You can get the CPI index and the monthly, year over year and
+#' throughout the year variations, as well as the 12 month average
+get_ipc_regiones <- function() {
+
+  header_ipc_regiones <- c(
+    "year", "mes", "ipc_ozama", "ipc_ozama_vm", "ipc_cibao",
+    "ipc_cibao_vm", "ipc_este", "ipc_este_vm", "ipc_sur",
+    "ipc_sur_vm")
+
+  url_descarga <-  base::paste0(
+    "https://cdn.bancentral.gov.do/",
+    "documents/estadisticas/precios/documents/",
+    "ipc_regiones_base_2019-2020.xls"
+  )
+
+  file_path <- base::tempfile(pattern = "", fileext = ".xls")
+
+  utils::download.file(url_descarga, file_path, mode = "wb", quiet = TRUE)
+
+  base::suppressMessages(
+    ipc_region <- readxl::read_excel(
+      file_path,
+      skip = 7,
+      col_names = FALSE
+    ))
+
+  ipc_region <-
+    ipc_region |>
+    stats::setNames(header_ipc_regiones) |>
+    dplyr::filter(!is.na(mes)) |>
+    dplyr::mutate(
+      fecha = seq(
+        lubridate::ymd("2011/01/01"),
+        by = "month",
+        length.out = dplyr::n()),
+      year = lubridate::year(fecha),
+      mes = crear_mes(
+        mes = lubridate::month(fecha), type = "number_to_text")) |>
+    dplyr::select(fecha, year, mes, dplyr::everything())
+
+  ipc_region
 }
