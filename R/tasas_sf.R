@@ -1,40 +1,46 @@
 get_tasas_pasivas <- function() {
-  # Rates urls
-  url_tasas_pasivas_91_07 <- paste0(
+  names_files <- c(
+    "Tasas 1991-2007",
+    "Tasas 2008-2012",
+    "Tasas 2013-2016",
+    "Tasas 2017-today"
+  )
+
+  urls <- c(
+   paste0(
+     "https://cdn.bancentral.gov.do/documents/",
+     "estadisticas/sector-monetario-y-financiero/",
+     "documents/tbm_pasiva-1991-2007.xls"),
+
+   paste0(
+     "https://cdn.bancentral.gov.do/documents/",
+     "estadisticas/sector-monetario-y-financiero/",
+     "documents/tbm_pasivad-2008-2012.xls"),
+
+   paste0(
     "https://cdn.bancentral.gov.do/documents/",
     "estadisticas/sector-monetario-y-financiero/",
-    "documents/tbm_pasiva-1991-2007.xls")
+    "documents/tbm_pasivad-2013-2016.xlsx"),
 
-  url_tasas_pasivas_08_12 <- paste0(
-    "https://cdn.bancentral.gov.do/documents/",
-    "estadisticas/sector-monetario-y-financiero/",
-    "documents/tbm_pasivad-2008-2012.xls")
+   paste0(
+     "https://cdn.bancentral.gov.do/documents/",
+     "estadisticas/sector-monetario-y-financiero/",
+     "documents/tbm_pasivad.xlsx")
+   )
 
-  url_tasas_pasivas_13_16 <- paste0(
-    "https://cdn.bancentral.gov.do/documents/",
-    "estadisticas/sector-monetario-y-financiero/",
-    "documents/tbm_pasivad-2013-2016.xlsx")
+  names(urls) <- names_files
 
-  url_tasas_pasivas_17 <- paste0(
-    "https://cdn.bancentral.gov.do/documents/",
-    "estadisticas/sector-monetario-y-financiero/",
-    "documents/tbm_pasivad.xlsx")
+  temp_files <- base::sapply(
+    c(".xls", ".xls", ".xlsx", ".xlsx"),
+    \(x) tempfile(fileext = x)
+  ) |> stats::setNames(names_files)
 
-  # Temporal files
-  pasivas_9107_path <- tempfile(pattern = "", fileext = ".xls")
-  pasivas2_0812_path <- tempfile(pattern = "", fileext = ".xls")
-  pasivas3_1316_path <- tempfile(pattern = "", fileext = ".xlsx")
-  pasivas4_17_path <- tempfile(pattern = "", fileext = ".xlsx")
+  purrr::walk2(urls, temp_files, utils::download.file, quiet = TRUE)
 
-  # Downloading the files
-  download.file(
-    url_tasas_pasivas_91_07, pasivas_9107_path, mode = "wb", quiet = TRUE)
-  download.file(
-    url_tasas_pasivas_08_12, pasivas2_0812_path, mode = "wb", quiet = TRUE)
-  download.file(
-    url_tasas_pasivas_13_16, pasivas3_1316_path, mode = "wb", quiet = TRUE)
-  download.file(
-    url_tasas_pasivas_17, pasivas4_17_path, mode = "wb", quiet = TRUE)
+  reading_arguments = pmap(
+    purrr::
+      \(file, sheet, range, skip){}
+  )
 
   # Reading the files
   pasivas_9107 <- readxl::read_excel(
