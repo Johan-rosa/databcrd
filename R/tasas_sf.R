@@ -1,4 +1,11 @@
 
+#' Download interest rates for savings
+#'
+#' Get the series of the interest rates for savings in the Dominican Republic
+#' separated by time and type of saving
+#'
+#' @return a data frame with monthly series
+#' @export
 get_tasas_pasivas <- function() {
   file_names <- c(
     "Tasas 1991-2007",
@@ -104,6 +111,13 @@ get_tasas_pasivas <- function() {
   tasas
 }
 
+#' Download interest rates for loans
+#'
+#' Get the series of the interest rates for loans in the dominican republic
+#' separated by time and type of loan
+#'
+#' @return a data frame with monthly series
+#' @export
 get_tasa_activas <- function() {
   file_names <- c(
     "Tasas 1991-2007",
