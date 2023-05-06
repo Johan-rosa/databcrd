@@ -15,7 +15,8 @@ Imports:
     lubridate,
     purrr,
     readxl,
-    stringr
+    stringr,
+    usethis
 Suggests:
     covr,
     lintr,
