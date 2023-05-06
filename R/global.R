@@ -1,1 +1,2 @@
-utils::globalVariables(c("fecha", "mes", "year", "ipc_ayb"))
+utils::globalVariables(
+  c("fecha", "mes", "year", "ipc_ayb", "ano", "dia", "trimestre"))
