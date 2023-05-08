@@ -10,6 +10,6 @@ get_tasas_pasivas()
 a data frame with monthly series
 }
 \description{
-Get the series of the interest rates for savings in the dominican republic
+Get the series of the interest rates for savings in the Dominican Republic
 separated by time and type of saving
 }
