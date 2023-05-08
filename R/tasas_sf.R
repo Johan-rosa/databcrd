@@ -73,7 +73,8 @@ get_tasas_pasivas <- function() {
   prepare_data <- function(df, names, start_date) {
     df |>
       stats::setNames(names) |>
-      dplyr::filter(stringr::str_detect(mes, "^[A-Z]")) |>
+      dplyr::filter(stringr::str_detect(mes, "^[\\*]?[A-Z]")) |>
+      dplyr::filter(!is.na(tp_30d)) |>
       dplyr::mutate(
         fecha = seq(as.Date(start_date), by = "month", length.out = dplyr::n()),
         year = lubridate::year(fecha),
@@ -84,7 +85,7 @@ get_tasas_pasivas <- function() {
   }
 
   df_names <- list(
-    c("mes", "tp_30d", "tp_60d", "tp_90d", "tp_180d", "tp_360", "tp_m360",
+    c("mes", "tp_30d", "tp_60d", "tp_90d", "tp_180d", "tp_360d", "tp_m360",
       "tp_ps", "tp_pp", "tp_dep_ahorros", "tp_preferencial", "tp_general",
       "tp_interbancarios"),
     c("mes", "tp_30d", "tp_60d", "tp_90d", "tp_180d", "tp_360d",
