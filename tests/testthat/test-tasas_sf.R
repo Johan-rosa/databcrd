@@ -14,7 +14,7 @@ test_that("There aren't haps between dates", {
   testthat::expect_true(all(test_nmonths$one_month_diff))
 })
 
-test_that("No missing columns",{
+test_that("No missing columns", {
   any_missing_columns <- tasas_activas |>
     sapply(function(x) all(is.na(x))) |>
     all()
@@ -46,7 +46,7 @@ test_that("There aren't haps between dates", {
   testthat::expect_true(all(test_nmonths$one_month_diff))
 })
 
-test_that("No missing columns",{
+test_that("No missing columns", {
   any_missing_columns <- tasas_pasivas |>
     sapply(function(x) all(is.na(x))) |>
     all()
