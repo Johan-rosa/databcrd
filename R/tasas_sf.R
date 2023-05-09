@@ -119,7 +119,7 @@ get_tasas_pasivas <- function() {
 #'
 #' @return a data frame with monthly series
 #' @export
-get_tasa_activas <- function() {
+get_tasas_activas <- function() {
   file_names <- c(
     "Tasas 1991-2007",
     "Tasas 2008-2012",

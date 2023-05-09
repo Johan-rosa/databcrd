@@ -1,4 +1,4 @@
-tasas_activas <- get_tasa_activas()
+tasas_activas <- get_tasas_activas()
 
 test_that("Pasivas: there aren't dates in the future", {
   testthat::expect_true(max(tasas_activas$fecha) <= lubridate::today())
