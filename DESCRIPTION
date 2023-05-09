@@ -17,6 +17,7 @@ Imports:
     readxl,
     stringr,
     usethis
+    tidyr
 Suggests:
     covr,
     lintr,
