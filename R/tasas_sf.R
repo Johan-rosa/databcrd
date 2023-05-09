@@ -186,14 +186,14 @@ get_tasa_activas <- function() {
       janitor::remove_empty(which = "cols") |>
       janitor::remove_empty(which = "rows") |>
       stats::setNames(names) |>
-      dplyr::filter(stringr::str_detect(mes, "^[A-Z]")) |>
+      dplyr::filter(stringr::str_detect(mes, "^[\\*]?[A-Z]")) |>
+      dplyr::filter(!is.na(ta_90d)) |>
       dplyr::mutate(
         fecha = seq(as.Date(start_date), by = "month", length.out = dplyr::n()),
         year = lubridate::year(fecha),
         mes = lubridate::month(fecha),
         mes = crear_mes(mes, "number_to_text")
       ) |>
-      dplyr::filter(!is.na(ta_90d)) |>
       dplyr::select(fecha, year, mes, dplyr::everything())
   }
 
