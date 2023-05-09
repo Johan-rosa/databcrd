@@ -13,8 +13,10 @@ Imports:
     dplyr,
     janitor,
     lubridate,
+    purrr,
     readxl,
     stringr,
+    usethis,
     tidyr
 Suggests:
     covr,
