@@ -41,7 +41,8 @@ get_indicadores_monetarios_bcrd <- function() { #nolint
       names_to = "fecha", values_to = "values") |>
     dplyr::group_by(short_names, nivel) |>
     dplyr::mutate(
-      fecha = seq(as.Date("1996-01-01"), length.out = dplyr::n(), by = "month"))
+      fecha = seq(as.Date("1996-01-01"), length.out = dplyr::n(), by = "month")) |>
+    dplyr::ungroup()
 
   indicadores_bcrd
 }
