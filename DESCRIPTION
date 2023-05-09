@@ -16,7 +16,7 @@ Imports:
     purrr,
     readxl,
     stringr,
-    usethis
+    usethis,
     tidyr
 Suggests:
     covr,
