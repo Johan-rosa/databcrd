@@ -14,7 +14,8 @@ Imports:
     janitor,
     lubridate,
     readxl,
-    stringr
+    stringr,
+    tidyr
 Suggests:
     covr,
     lintr,
