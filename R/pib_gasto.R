@@ -1,3 +1,11 @@
+#' GDP by the expenditure approach, both real and nominal
+#'
+#' @param modalidad string indicating if "real" or "nominal"
+#' @param acumulado logical, by default FALSE
+#' @param homogenea_91 logical, by default FALSE
+#'
+#' @return a data frame
+#' @export
 get_pib_gasto <- function(
     modalidad = "nominal",
     acumulado = FALSE,
@@ -44,18 +52,19 @@ get_pib_gasto <- function(
 
     pib_gasto |>
       stats::setNames(c("partida", quarters)) |>
-      dplyr::filter(!is.na(.data[["partida"]])) |>
+      dplyr::filter(!is.na(partida)) |>
       tidyr::pivot_longer(
         cols = -partida,
         names_to = "trimestre",
         values_to = indicator_name) |>
       dplyr::mutate(
-        trimestre = readr::parse_number(trimestre),
+        trimestre = as.numeric(trimestre),
         fecha = lubridate::as_date(trimestre),
         year = lubridate::year(fecha),
         trimestre = lubridate::quarter(fecha)
       ) |>
-      dplyr::select(partida, fecha, year, trimestre, dplyr::all_of(indicator_name))
+      dplyr::select(
+        partida, fecha, year, trimestre, dplyr::all_of(indicator_name))
   }
 
   to_read <- list(
@@ -72,6 +81,9 @@ get_pib_gasto <- function(
 
   to_read[[modalidad]] |>
     purrr::map(\(args) do.call(read_pib_indicator, args)) |>
-    purrr::reduce(dplyr::left_join, by = c("partida", "fecha", "year", "trimestre"))
+    purrr::reduce(
+      dplyr::left_join,
+      by = c("partida", "fecha", "year", "trimestre")
+    )
 
 }
