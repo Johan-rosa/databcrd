@@ -1,6 +1,5 @@
 
-# PIB nominal serie homogenea 1991 ----------------------------------------
-
+# PIB nominal series homogenea 1991 ----------------------------------------
 pib_gasto_nominal_homogenea <- get_pib_gasto(
   modalidad = "nominal", homogenea_91 = TRUE)
 
@@ -26,7 +25,8 @@ test_that("Correct column names", {
   )
 })
 
-# PIB nominal serie 2007 --------------------------------------------------
+
+# PIB nominal series 2007 --------------------------------------------------
 pib_gasto_nominal_2007 <- get_pib_gasto(modalidad = "nominal")
 
 test_that("Series starts at january 1991", {
@@ -67,7 +67,8 @@ test_that("PIB for december 2016 is Ok", {
   expect_equal(pib_2007, 926379.831619056)
 })
 
-# PIB nominal serie 2007 acumulada -------------------------------------------
+
+# PIB nominal series 2007 acumulada -------------------------------------------
 pib_gasto_nominal_2007_acumulado <- get_pib_gasto( # nolint
   modalidad = "nominal", acumulado = TRUE)
 
@@ -109,7 +110,8 @@ test_that("PIB for december 2016 is Ok", {
   expect_equal(pib_2016$pib_nominal, 3487292.51270275)
   expect_equal(pib_2016$ponderacion, 100)
 })
-# PIB real serie 2007 --------------------------------------------------
+
+# PIB real series 2007 --------------------------------------------------
 pib_gasto_real_2007 <- get_pib_gasto(modalidad = "real")
 
 test_that("Series starts at january 1991", {
