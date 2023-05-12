@@ -28,7 +28,7 @@ get_fbkf <- function() {
   )
 
   wrangling <- function(x, value) {
-    df <- data.frame(year = 2006 + 1:ncol(x),
+    df <- data.frame(year = 2006 + seq_len(ncol(x)),
                      total = t(x[1, ]),
                      privado = t(x[3, ]),
                      publico = t(x[4, ]),
