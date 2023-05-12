@@ -10,7 +10,7 @@
 #' @examples
 #' get_fbkf()
 
-get_fbkf <- function(){
+get_fbkf <- function() {
   file_url <- paste0("https://cdn.bancentral.gov.do/documents/",
                      "estadisticas/sector-real/",
                      "documents/fbkf.xlsx?v=1634051828540")
@@ -24,59 +24,33 @@ get_fbkf <- function(){
                                         sheet = 1L,
                                         skip = .x,
                                         n_max = 8,
-                                        col_names = TRUE)[,-1])
+                                        col_names = TRUE)[, -1])
   )
 
-  wrangling <- function(x, value){
+  wrangling <- function(x, value) {
     df <- data.frame(year = 2006 + 1:ncol(x),
-                     total = t(x[1,]),
-                     privado = t(x[3,]),
-                     publico = t(x[4,]),
-                     construccion = t(x[6,]),
-                     maquinaria_y_equipos = t(x[7,])) |>
+                     total = t(x[1, ]),
+                     privado = t(x[3, ]),
+                     publico = t(x[4, ]),
+                     construccion = t(x[6, ]),
+                     maquinaria_y_equipos = t(x[7, ])) |>
       tidyr::pivot_longer(!year,
-                          names_to = 'categoria',
+                          names_to = "categoria",
                           values_to = value)
 
     return(df)
   }
 
   data <- purrr::map2(.x = data,
-                        .y = c('monto', 'variacion_interanual', 'proporcion'),
+                        .y = c("monto", "variacion_interanual", "proporcion"),
                         .f = wrangling)
 
   fbkf <- dplyr::left_join(x = data[[1]],
                            y = data[[2]],
-                           by = c('year', 'categoria')) |>
+                           by = c("year", "categoria")) |>
     dplyr::left_join(y = data[[3]],
-                     by = c('year', 'categoria'))
+                     by = c("year", "categoria"))
 
   return(fbkf)
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
