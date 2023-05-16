@@ -15,7 +15,7 @@
 #' get_exportaciones("trimestral")
 #' get_exportaciones("anual")
 
-get_exportaciones <- function(frecuencia = 'mensual') {
+get_exportaciones <- function(frecuencia = "mensual") {
   checkmate::assert_choice(
     frecuencia,
     choices = c("mensual", "trimestral", "anual"))
@@ -25,7 +25,7 @@ get_exportaciones <- function(frecuencia = 'mensual') {
   url_descarga <- paste0(
     "https://cdn.bancentral.gov.do/documents/estadisticas/",
     "sector-externo/documents/Exportaciones_Mensuales_",
-    periodo,"_6.xls?v=1571253704905"
+    periodo, "_6.xls?v=1571253704905"
   )
 
   files_path <- purrr::map_chr(
@@ -33,7 +33,7 @@ get_exportaciones <- function(frecuencia = 'mensual') {
     ~tempfile(pattern = "", fileext = ".xls")
   )
 
-  download <- purrr::possibly(download.file, otherwise = -1)
+  dw_check <- purrr::possibly(download.file, otherwise = -1)
 
   suppressWarnings(
     descarga <- purrr::map2(
@@ -64,26 +64,26 @@ get_exportaciones <- function(frecuencia = 'mensual') {
         tidyr::drop_na(x2) |>
         dplyr::select(-x1, -x2, -dplyr::last_col()) |>
         dplyr::bind_cols(exports_details) |>
-        tidyr::gather('mes', "valor_expor", -c(original_names, labels, short_names,
-                                               categoria, nivel, direct_parent))
+        tidyr::gather("mes", "valor_expor", -c(original_names, labels,
+                                               short_names,categoria, nivel, direct_parent))
       ) |>
         dplyr::bind_rows(.id = "year") |>
         dplyr::mutate(mes = crear_mes(stringr::str_to_title(mes),
-                                      type = 'text_to_number'),
-                      fecha = as.Date(paste(year, mes, '1', sep = '-')),
+                                      type = "text_to_number"),
+                      fecha = as.Date(paste(year, mes, "1", sep = "-")),
                       trimestre = lubridate::quarter(fecha, with_year = TRUE))
 
-  if(frecuencia == 'mensual') {
+  if (frecuencia == "mensual") {
     data <- exportaciones1 |>
       dplyr::select(-c(year, mes, trimestre))
-  } else if(frecuencia == 'trimestral') {
+  } else if (frecuencia == "trimestral") {
     data <- exportaciones1 |>
       dplyr::select(-c(year, mes, fecha)) |>
       dplyr::group_by(trimestre, original_names, labels, short_names,
                       categoria, nivel, direct_parent) |>
       dplyr::summarize(valor_expor = sum(valor_expor)) |>
       suppressMessages()
-  } else if(frecuencia == 'anual') {
+  } else if (frecuencia == "anual") {
     data <- exportaciones1 |>
       dplyr::select(-c(trimestre, mes, fecha)) |>
       dplyr::group_by(year, original_names, labels, short_names,
@@ -120,17 +120,17 @@ get_importaciones <- function(frecuencia = 'mensual') {
 
   periodo <- c(2010:lubridate::year(Sys.Date()))
 
-  url_descarga <- paste0("https://cdn.bancentral.gov.do/documents/estadisticas/",
-                         "sector-externo/documents/Importaciones_Mensuales_",
-                         periodo,
-                         "_6.xls?v=1571324085432")
+  url_descarga <- paste0(
+    "https://cdn.bancentral.gov.do/documents/estadisticas/",
+    "sector-externo/documents/Importaciones_Mensuales_",
+    periodo, "_6.xls?v=1571324085432")
 
   files_path <- purrr::map_chr(
     periodo,
     ~tempfile(pattern = "", fileext = ".xls")
   )
 
-  download <- purrr::possibly(download.file, otherwise = -1)
+  dw_check <- purrr::possibly(download.file, otherwise = -1)
 
   suppressWarnings(
     descarga <- purrr::map2(
@@ -161,27 +161,27 @@ get_importaciones <- function(frecuencia = 'mensual') {
         tidyr::drop_na(ene) |>
         dplyr::select(-x1, -x2, -dplyr::last_col()) |>
         dplyr::bind_cols(imports_details) |>
-        tidyr::gather('mes', "valor_impor", -c(original_names, labels, short_names,
-                                               categoria, nivel, direct_parent))
+        tidyr::gather("mes", "valor_impor", -c(original_names, labels,
+                                               short_names, categoria, nivel, direct_parent))
     ) |>
     dplyr::bind_rows(.id = "year") |>
     dplyr::filter(!grepl("^x|^total", mes)) |>
     dplyr::mutate(mes = crear_mes(stringr::str_to_title(mes),
-                                  type = 'text_to_number'),
-                  fecha = as.Date(paste(year, mes, '1', sep = '-')),
+                                  type = "text_to_number"),
+                  fecha = as.Date(paste(year, mes, "1", sep = "-")),
                   trimestre = lubridate::quarter(fecha, with_year = TRUE))
 
-  if(frecuencia == 'mensual') {
+  if (frecuencia == "mensual") {
     data <- importaciones1 |>
       dplyr::select(-c(year, mes, trimestre))
-  } else if(frecuencia == 'trimestral') {
+  } else if (frecuencia == "trimestral") {
     data <- importaciones1 |>
       dplyr::select(-c(year, mes, fecha)) |>
       dplyr::group_by(trimestre, original_names, labels, short_names,
                       categoria, nivel, direct_parent) |>
       dplyr::summarize(valor_impor = sum(valor_impor)) |>
       suppressMessages()
-  } else if(frecuencia == 'anual') {
+  } else if (frecuencia == "anual") {
     data <- importaciones1 |>
       dplyr::select(-c(trimestre, mes, fecha)) |>
       dplyr::group_by(year, original_names, labels, short_names,
