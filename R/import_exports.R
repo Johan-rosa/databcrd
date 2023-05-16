@@ -33,13 +33,13 @@ get_exportaciones <- function(frecuencia = "mensual") {
     ~tempfile(pattern = "", fileext = ".xls")
   )
 
-  dw_check <- purrr::possibly(download.file, otherwise = -1)
+  dw_check <- purrr::possibly(utils::download.file, otherwise = -1)
 
   suppressWarnings(
     descarga <- purrr::map2(
       url_descarga,
       files_path,
-      ~download(.x, .y, mode = "wb", quiet = TRUE))
+      ~dw_check(.x, .y, mode = "wb", quiet = TRUE))
   )
 
   files_path <- files_path[as.logical(unlist(descarga) + 1)]
@@ -52,12 +52,12 @@ get_exportaciones <- function(frecuencia = "mensual") {
         readxl::read_excel, sheet = 1,
         col_names = TRUE, skip = 8, na = "n.d.",
         n_max = 70)  |>
-        setNames(periodo[as.logical(unlist(descarga) + 1)])
+        stats::setNames(periodo[as.logical(unlist(descarga) + 1)])
     )
   )
 
   exportaciones1 <- exportaciones |>
-    purrr:::map(
+    purrr::map(
       ~.x |>
         janitor::clean_names() |>
         dplyr::slice(-1) |>
@@ -65,7 +65,8 @@ get_exportaciones <- function(frecuencia = "mensual") {
         dplyr::select(-x1, -x2, -dplyr::last_col()) |>
         dplyr::bind_cols(exports_details) |>
         tidyr::gather("mes", "valor_expor", -c(original_names, labels,
-                                               short_names,categoria, nivel, direct_parent))
+                                               short_names, categoria,
+                                               nivel, direct_parent))
       ) |>
         dplyr::bind_rows(.id = "year") |>
         dplyr::mutate(mes = crear_mes(stringr::str_to_title(mes),
@@ -113,7 +114,7 @@ get_exportaciones <- function(frecuencia = "mensual") {
 #' get_importaciones("trimestral")
 #' get_importaciones("anual")
 
-get_importaciones <- function(frecuencia = 'mensual') {
+get_importaciones <- function(frecuencia = "mensual") {
   checkmate::assert_choice(
     frecuencia,
     choices = c("mensual", "trimestral", "anual"))
@@ -130,13 +131,13 @@ get_importaciones <- function(frecuencia = 'mensual') {
     ~tempfile(pattern = "", fileext = ".xls")
   )
 
-  dw_check <- purrr::possibly(download.file, otherwise = -1)
+  dw_check <- purrr::possibly(utils::download.file, otherwise = -1)
 
   suppressWarnings(
     descarga <- purrr::map2(
       url_descarga,
       files_path,
-      ~download(.x, .y, mode = "wb", quiet = TRUE))
+      ~dw_check(.x, .y, mode = "wb", quiet = TRUE))
   )
 
   files_path <- files_path[as.logical(unlist(descarga) + 1)]
@@ -149,12 +150,12 @@ get_importaciones <- function(frecuencia = 'mensual') {
         readxl::read_excel, sheet = 1,
         col_names = TRUE, skip = 8, na = "n.d.",
         n_max = 70)  |>
-        setNames(periodo[as.logical(unlist(descarga) + 1)])
+        stats::setNames(periodo[as.logical(unlist(descarga) + 1)])
     )
   )
 
   importaciones1 <- importaciones |>
-    purrr:::map(
+    purrr::map(
       ~.x |>
         janitor::clean_names() |>
         dplyr::slice(-1) |>
@@ -162,7 +163,8 @@ get_importaciones <- function(frecuencia = 'mensual') {
         dplyr::select(-x1, -x2, -dplyr::last_col()) |>
         dplyr::bind_cols(imports_details) |>
         tidyr::gather("mes", "valor_impor", -c(original_names, labels,
-                                               short_names, categoria, nivel, direct_parent))
+                                               short_names, categoria,
+                                               nivel, direct_parent))
     ) |>
     dplyr::bind_rows(.id = "year") |>
     dplyr::filter(!grepl("^x|^total", mes)) |>
