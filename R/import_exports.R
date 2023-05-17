@@ -33,7 +33,7 @@ get_exportaciones <- function(frecuencia = "mensual") {
     ~tempfile(pattern = "", fileext = ".xls")
   )
 
-  dw_check <- purrr::possibly(utils::download.file, otherwise = -1)
+  dw_check <- purrr::possibly(utils::download.file, otherwise = -1) # nolint
 
   suppressWarnings(
     descarga <- purrr::map2(
@@ -130,7 +130,7 @@ get_importaciones <- function(frecuencia = "mensual") {
     ~tempfile(pattern = "", fileext = ".xls")
   )
 
-  dw_check <- purrr::possibly(utils::download.file, otherwise = -1)
+  dw_check <- purrr::possibly(utils::download.file, otherwise = -1) # nolint
 
   suppressWarnings(
     descarga <- purrr::map2(
