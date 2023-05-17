@@ -20,38 +20,34 @@ get_exportaciones <- function(frecuencia = "mensual") {
     frecuencia,
     choices = c("mensual", "trimestral", "anual"))
 
-  periodo <- c(2010:lubridate::year(Sys.Date()))
+  years <- 2010:lubridate::year(Sys.Date())
 
   url_descarga <- paste0(
     "https://cdn.bancentral.gov.do/documents/estadisticas/",
     "sector-externo/documents/Exportaciones_Mensuales_",
-    periodo, "_6.xls?v=1571253704905"
+    years, "_6.xls"
   )
 
-  files_path <- purrr::map_chr(
-    periodo,
-    ~tempfile(pattern = "", fileext = ".xls")
-  )
+  files_path <- tempfile(pattern = as.character(years), fileext = ".xls")
 
-  dw_check <- purrr::possibly(utils::download.file, otherwise = -1) # nolint
+  save_download <- purrr::possibly(utils::download.file, otherwise = NA) # nolint
 
-  suppressWarnings(
-    descarga <- purrr::map2(
-      url_descarga,
-      files_path,
-      ~dw_check(.x, .y, mode = "wb", quiet = TRUE))
-  )
+  purrr::walk2(
+    url_descarga,
+    files_path,
+    \(url, file) save_download(url, file, mode = "wb", quiet = TRUE)
+  ) |> suppressWarnings()
 
-  files_path <- files_path[as.logical(unlist(descarga) + 1)]
+  files_path <- files_path[file.exists(files_path)]
 
   suppressMessages(
     suppressWarnings(
       exportaciones <- purrr::map(
         files_path,
-        readxl::read_excel, sheet = 1,
+        readxl::read_excel,
         col_names = TRUE, skip = 8, na = "n.d.",
         n_max = 70)  |>
-        stats::setNames(periodo[as.logical(unlist(descarga) + 1)])
+        stats::setNames(years[seq_along(files_path)])
     )
   )
 
@@ -118,37 +114,33 @@ get_importaciones <- function(frecuencia = "mensual") {
     frecuencia,
     choices = c("mensual", "trimestral", "anual"))
 
-  periodo <- c(2010:lubridate::year(Sys.Date()))
+  years <- 2010:lubridate::year(Sys.Date())
 
   url_descarga <- paste0(
     "https://cdn.bancentral.gov.do/documents/estadisticas/",
     "sector-externo/documents/Importaciones_Mensuales_",
-    periodo, "_6.xls?v=1571324085432")
+    years, "_6.xls")
 
-  files_path <- purrr::map_chr(
-    periodo,
-    ~tempfile(pattern = "", fileext = ".xls")
-  )
+  files_path <- tempfile(pattern = as.character(years), fileext = ".xls")
 
-  dw_check <- purrr::possibly(utils::download.file, otherwise = -1) # nolint
+  save_download <- purrr::possibly(utils::download.file, otherwise = NA) # nolint
 
-  suppressWarnings(
-    descarga <- purrr::map2(
-      url_descarga,
-      files_path,
-      ~dw_check(.x, .y, mode = "wb", quiet = TRUE))
-  )
+  purrr::walk2(
+    url_descarga,
+    files_path,
+    \(url, file) save_download(url, file, mode = "wb", quiet = TRUE)
+  ) |> suppressWarnings()
 
-  files_path <- files_path[as.logical(unlist(descarga) + 1)]
+  files_path <- files_path[file.exists(files_path)]
 
   suppressMessages(
     suppressWarnings(
       importaciones <- purrr::map(
         files_path,
-        readxl::read_excel, sheet = 1,
+        readxl::read_excel,
         col_names = TRUE, skip = 8, na = "n.d.",
         n_max = 70)  |>
-        stats::setNames(periodo[as.logical(unlist(descarga) + 1)])
+        stats::setNames(years[seq_along(files_path)])
     )
   )
 
