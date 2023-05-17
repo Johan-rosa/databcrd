@@ -2,7 +2,9 @@
 
 export(crear_mes)
 export(date_label)
+export(get_exportaciones)
 export(get_imae)
+export(get_importaciones)
 export(get_indicadores_monetarios_bcrd)
 export(get_ipc_data)
 export(get_pib_gasto)

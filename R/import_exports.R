@@ -46,7 +46,6 @@ get_exportaciones <- function(frecuencia = "mensual") {
 
   suppressMessages(
     suppressWarnings(
-      # importar archivos
       exportaciones <- purrr::map(
         files_path,
         readxl::read_excel, sheet = 1,
@@ -144,7 +143,6 @@ get_importaciones <- function(frecuencia = "mensual") {
 
   suppressMessages(
     suppressWarnings(
-      # importar archivos
       importaciones <- purrr::map(
         files_path,
         readxl::read_excel, sheet = 1,
