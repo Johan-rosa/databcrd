@@ -59,14 +59,16 @@ get_exportaciones <- function(frecuencia = "mensual") {
         tidyr::drop_na(x2) |>
         dplyr::select(-x1, -x2, -dplyr::last_col()) |>
         dplyr::bind_cols(exports_details) |>
-        tidyr::gather("mes", "valor_expor", -c(original_names, labels,
-                                               short_names, categoria,
-                                               nivel, direct_parent))
+        tidyr::pivot_longer(names_to = "mes",
+                            values_to = "valor_expor",
+                            cols = -c(original_names, labels, short_names,
+                                      categoria, nivel, direct_parent)
+                            )
       ) |>
         dplyr::bind_rows(.id = "year") |>
-        dplyr::mutate(mes = crear_mes(stringr::str_to_title(mes),
+        dplyr::mutate(mes = crear_mes(mes,
                                       type = "text_to_number"),
-                      fecha = as.Date(paste(year, mes, "1", sep = "-")),
+                      fecha = lubridate::make_date(year, mes, "1"),
                       trimestre = lubridate::quarter(fecha, with_year = TRUE))
 
   if (frecuencia == "mensual") {
@@ -152,15 +154,16 @@ get_importaciones <- function(frecuencia = "mensual") {
         tidyr::drop_na(ene) |>
         dplyr::select(-x1, -x2, -dplyr::last_col()) |>
         dplyr::bind_cols(imports_details) |>
-        tidyr::gather("mes", "valor_impor", -c(original_names, labels,
-                                               short_names, categoria,
-                                               nivel, direct_parent))
+        tidyr::pivot_longer(names_to = "mes",
+                            values_to = "valor_impor",
+                            cols = -c(original_names, labels, short_names,
+                                      categoria, nivel, direct_parent)
+        )
     ) |>
     dplyr::bind_rows(.id = "year") |>
-    dplyr::filter(!grepl("^x|^total", mes)) |>
-    dplyr::mutate(mes = crear_mes(stringr::str_to_title(mes),
+    dplyr::mutate(mes = crear_mes(mes,
                                   type = "text_to_number"),
-                  fecha = as.Date(paste(year, mes, "1", sep = "-")),
+                  fecha = lubridate::make_date(year, mes, "1"),
                   trimestre = lubridate::quarter(fecha, with_year = TRUE))
 
   if (frecuencia == "mensual") {
