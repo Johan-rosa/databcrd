@@ -161,6 +161,7 @@ get_importaciones <- function(frecuencia = "mensual") {
         )
     ) |>
     dplyr::bind_rows(.id = "year") |>
+    dplyr::filter(!grepl("^x|^total", mes)) |>
     dplyr::mutate(mes = crear_mes(mes,
                                   type = "text_to_number"),
                   fecha = lubridate::make_date(year, mes, "1"),
