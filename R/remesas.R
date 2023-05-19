@@ -52,15 +52,16 @@ get_remesas_mensuales <- function() {
 
   data <- suppressMessages(
     readxl::read_excel(file_path,
-                             skip = 7,
-                             n_max = 12)
+                       skip = 7,
+                       n_max = 12)
     ) |>
-    tidyr::pivot_longer(!PERIODOS,
+    dplyr::rename(mes = 'PERIODOS') |>
+    tidyr::pivot_longer(!mes,
                         names_to = "year",
                         values_to = "monto") |>
-    dplyr::mutate(mes = crear_mes(PERIODOS, type = "text_to_number"),
+    dplyr::mutate(mes = crear_mes(mes, type = "text_to_number"),
+                  year = as.numeric(year),
                   fecha = lubridate::make_date(year, mes, "1")) |>
-    dplyr::select(-PERIODOS) |>
     na.omit()
 
   data
@@ -84,12 +85,12 @@ get_remesas_pais <- function() {
                        skip = 5,
                        n_max = 13)
       ) |>
-      dplyr::mutate(dplyr::across(!País, as.numeric)) |>
+      dplyr::rename(partida = "País") |>
+      dplyr::mutate(dplyr::across(!partida, as.numeric)) |>
       na.omit() |>
-      tidyr::pivot_longer(!País,
+      tidyr::pivot_longer(!partida,
                         names_to = "year",
                         values_to = "proporcion") |>
-      dplyr::rename(partida = "País") |>
       dplyr::mutate(year = as.numeric(year))
   )
 
@@ -114,12 +115,12 @@ get_remesas_provincias <- function() {
       readxl::read_excel(file_path,
                          skip = 5,
                          n_max = 17) |>
-        dplyr::mutate(dplyr::across(!Provincia, as.numeric)) |>
+        dplyr::rename(partida = "Provincia") |>
+        dplyr::mutate(dplyr::across(!partida, as.numeric)) |>
         na.omit() |>
-        tidyr::pivot_longer(!Provincia,
+        tidyr::pivot_longer(!partida,
                             names_to = "year",
                             values_to = "proporcion") |>
-        dplyr::rename(partida = "Provincia") |>
         dplyr::mutate(year = as.numeric(year))
     )
   )
@@ -145,12 +146,13 @@ get_remesas_cnt <- function() {
       readxl::read_excel(file_path,
                          skip = 5,
                          n_max = 13) |>
-        dplyr::mutate(dplyr::across(!País, as.numeric)) |>
+        dplyr::rename(partida = "País") |>
+        dplyr::mutate(dplyr::across(!partida, as.numeric)) |>
         na.omit() |>
-        tidyr::pivot_longer(!País,
+        tidyr::pivot_longer(!partida,
                             names_to = "year",
                             values_to = "cantidad") |>
-        dplyr::rename(partida = "País") |>
+
         dplyr::mutate(year = as.numeric(year))
     )
   )
@@ -176,12 +178,12 @@ get_remesas_avg <- function() {
       readxl::read_excel(file_path,
                          skip = 5,
                          n_max = 12) |>
-        dplyr::mutate(dplyr::across(!País, as.numeric)) |>
+        dplyr::rename(partida = "País") |>
+        dplyr::mutate(dplyr::across(!partida, as.numeric)) |>
         na.omit() |>
-        tidyr::pivot_longer(!País,
+        tidyr::pivot_longer(!partida,
                             names_to = "year",
                             values_to = "monto") |>
-        dplyr::rename(partida = "País") |>
         dplyr::mutate(year = as.numeric(year))
     )
   )
@@ -206,12 +208,12 @@ get_remesas_currency <- function() {
       readxl::read_excel(file_path,
                          skip = 5,
                          n_max = 4) |>
-        dplyr::mutate(dplyr::across(!Detalle, as.numeric)) |>
+        dplyr::rename(partida = "Detalle") |>
+        dplyr::mutate(dplyr::across(!partida, as.numeric)) |>
         na.omit() |>
-        tidyr::pivot_longer(!Detalle,
+        tidyr::pivot_longer(!partida,
                             names_to = "year",
                             values_to = "proporcion") |>
-        dplyr::rename(partida = "Detalle") |>
         dplyr::mutate(year = as.numeric(year))
     )
   )
@@ -236,12 +238,12 @@ get_remesas_epa <- function() {
       readxl::read_excel(file_path,
                          skip = 5,
                          n_max = 4) |>
-        dplyr::mutate(dplyr::across(!Detalle, as.numeric)) |>
+        dplyr::rename(partida = "Detalle") |>
+        dplyr::mutate(dplyr::across(!partida, as.numeric)) |>
         na.omit() |>
-        tidyr::pivot_longer(!Detalle,
+        tidyr::pivot_longer(!partida,
                             names_to = "year",
                             values_to = "proporcion") |>
-        dplyr::rename(partida = "Detalle") |>
         dplyr::mutate(year = as.numeric(year))
     )
   )
@@ -266,12 +268,12 @@ get_remesas_genero <- function() {
       readxl::read_excel(file_path,
                          skip = 5,
                          n_max = 4) |>
-        dplyr::mutate(dplyr::across(!Genero, as.numeric)) |>
+        dplyr::rename(partida = "Genero") |>
+        dplyr::mutate(dplyr::across(!partida, as.numeric)) |>
         na.omit() |>
-        tidyr::pivot_longer(!Genero,
+        tidyr::pivot_longer(!partida,
                             names_to = "year",
                             values_to = "proporcion") |>
-        dplyr::rename(partida = "Genero") |>
         dplyr::mutate(year = as.numeric(year))
     )
   )
