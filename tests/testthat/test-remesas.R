@@ -1,14 +1,3 @@
-
-if (modalidad == "mensual") return(get_remesas_mensuales())
-if (modalidad == "por_pais_emisor") return(get_remesas_pais())
-if (modalidad == "por_provincia_receptora") return(get_remesas_provincias())
-if (modalidad == "cantidad_de_transacciones") return(get_remesas_cnt())
-if (modalidad == "promedio_transacciones") return(get_remesas_avg())
-if (modalidad == "segun_moneda") return(get_remesas_currency())
-if (modalidad == "entidad_pagadora") return(get_remesas_epa())
-if (modalidad == "genero_receptor") return(get_remesas_genero())
-
-
 # Remesas mensual ----
 remesas <- get_remesas(modalidad = "mensual")
 

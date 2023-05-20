@@ -55,7 +55,7 @@ get_remesas_mensuales <- function() {
                        skip = 7,
                        n_max = 12)
     ) |>
-    dplyr::rename(mes = 'PERIODOS') |>
+    dplyr::rename(mes = "PERIODOS") |>
     tidyr::pivot_longer(!mes,
                         names_to = "year",
                         values_to = "monto") |>
