@@ -85,7 +85,7 @@ get_remesas_pais <- function() {
                        skip = 5,
                        n_max = 13)
       ) |>
-      dplyr::rename(partida = "País") |>
+      dplyr::rename(partida = 1) |>
       dplyr::mutate(dplyr::across(!partida, as.numeric)) |>
       na.omit() |>
       tidyr::pivot_longer(!partida,
@@ -146,7 +146,7 @@ get_remesas_cnt <- function() {
       readxl::read_excel(file_path,
                          skip = 5,
                          n_max = 13) |>
-        dplyr::rename(partida = "País") |>
+        dplyr::rename(partida = 1) |>
         dplyr::mutate(dplyr::across(!partida, as.numeric)) |>
         na.omit() |>
         tidyr::pivot_longer(!partida,
@@ -178,7 +178,7 @@ get_remesas_avg <- function() {
       readxl::read_excel(file_path,
                          skip = 5,
                          n_max = 12) |>
-        dplyr::rename(partida = "País") |>
+        dplyr::rename(partida = 1) |>
         dplyr::mutate(dplyr::across(!partida, as.numeric)) |>
         na.omit() |>
         tidyr::pivot_longer(!partida,
