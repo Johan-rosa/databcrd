@@ -62,7 +62,7 @@ get_remesas_mensuales <- function() {
     dplyr::mutate(mes = crear_mes(mes, type = "text_to_number"),
                   year = as.numeric(year),
                   fecha = lubridate::make_date(year, mes, "1")) |>
-    na.omit()
+    stats::na.omit()
 
   data
 }
@@ -87,7 +87,7 @@ get_remesas_pais <- function() {
       ) |>
       dplyr::rename(partida = 1) |>
       dplyr::mutate(dplyr::across(!partida, as.numeric)) |>
-      na.omit() |>
+      stats::na.omit() |>
       tidyr::pivot_longer(!partida,
                         names_to = "year",
                         values_to = "proporcion") |>
@@ -117,7 +117,7 @@ get_remesas_provincias <- function() {
                          n_max = 17) |>
         dplyr::rename(partida = "Provincia") |>
         dplyr::mutate(dplyr::across(!partida, as.numeric)) |>
-        na.omit() |>
+        stats::na.omit() |>
         tidyr::pivot_longer(!partida,
                             names_to = "year",
                             values_to = "proporcion") |>
@@ -148,7 +148,7 @@ get_remesas_cnt <- function() {
                          n_max = 13) |>
         dplyr::rename(partida = 1) |>
         dplyr::mutate(dplyr::across(!partida, as.numeric)) |>
-        na.omit() |>
+        stats::na.omit() |>
         tidyr::pivot_longer(!partida,
                             names_to = "year",
                             values_to = "cantidad") |>
@@ -180,7 +180,7 @@ get_remesas_avg <- function() {
                          n_max = 12) |>
         dplyr::rename(partida = 1) |>
         dplyr::mutate(dplyr::across(!partida, as.numeric)) |>
-        na.omit() |>
+        stats::na.omit() |>
         tidyr::pivot_longer(!partida,
                             names_to = "year",
                             values_to = "monto") |>
@@ -210,7 +210,7 @@ get_remesas_currency <- function() {
                          n_max = 4) |>
         dplyr::rename(partida = "Detalle") |>
         dplyr::mutate(dplyr::across(!partida, as.numeric)) |>
-        na.omit() |>
+        stats::na.omit() |>
         tidyr::pivot_longer(!partida,
                             names_to = "year",
                             values_to = "proporcion") |>
@@ -240,7 +240,7 @@ get_remesas_epa <- function() {
                          n_max = 4) |>
         dplyr::rename(partida = "Detalle") |>
         dplyr::mutate(dplyr::across(!partida, as.numeric)) |>
-        na.omit() |>
+        stats::na.omit() |>
         tidyr::pivot_longer(!partida,
                             names_to = "year",
                             values_to = "proporcion") |>
@@ -270,7 +270,7 @@ get_remesas_genero <- function() {
                          n_max = 4) |>
         dplyr::rename(partida = "Genero") |>
         dplyr::mutate(dplyr::across(!partida, as.numeric)) |>
-        na.omit() |>
+        stats::na.omit() |>
         tidyr::pivot_longer(!partida,
                             names_to = "year",
                             values_to = "proporcion") |>
