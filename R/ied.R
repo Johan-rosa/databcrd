@@ -44,10 +44,10 @@ get_ied_pais <- function(frecuencia = "trimestral") {
     )
   )
 
-  quarters <- seq(
+  quarters <- base::seq(
     as.Date("2010-01-01"),
     by = "quarter",
-    length.out = ncol(ied_data) - 1
+    length.out = base::ncol(ied_data) - 1
   )
 
   ied_data <- ied_data |>
@@ -95,10 +95,10 @@ get_ied_sector <- function(frecuencia = "trimestral") {
     )
   )
 
-  quarters <- seq(
+  quarters <- base::seq(
     as.Date("2010-01-01"),
     by = "quarter",
-    length.out = ncol(ied_data) - 1
+    length.out = base::ncol(ied_data) - 1
   )
 
   ied_data <- ied_data |>
