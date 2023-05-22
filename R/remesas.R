@@ -27,14 +27,19 @@ get_remesas <- function(modalidad = "mensual") {
                 "genero_receptor")
   )
 
-  if (modalidad == "mensual") return(get_remesas_mensuales())
-  if (modalidad == "por_pais_emisor") return(get_remesas_pais())
-  if (modalidad == "por_provincia_receptora") return(get_remesas_provincias())
-  if (modalidad == "cantidad_de_transacciones") return(get_remesas_cnt())
-  if (modalidad == "promedio_transacciones") return(get_remesas_avg())
-  if (modalidad == "segun_moneda") return(get_remesas_currency())
-  if (modalidad == "entidad_pagadora") return(get_remesas_epa())
-  if (modalidad == "genero_receptor") return(get_remesas_genero())
+  remesas_function <- switch(
+    modalidad,
+    "mensual" = get_remesas_mensuales,
+    "por_pais_emisor" = get_remesas_pais,
+    "por_provincia_receptora" = get_remesas_provincias,
+    "cantidad_de_transacciones" = get_remesas_cnt,
+    "promedio_transacciones" = get_remesas_avg,
+    "segun_moneda" = get_remesas_currency,
+    "entidad_pagadora" = get_remesas_epa,
+    "genero_receptor" = get_remesas_genero
+  )
+
+  remesas_function()
 
 }
 
