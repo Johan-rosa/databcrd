@@ -93,6 +93,47 @@ get_exportaciones <- function(frecuencia = "mensual") {
   return(data)
 }
 
+#' Free Trade Exports
+#'
+#' This function returns Free Trade exports from the Dominican Republic
+#' by goods
+#'
+#' @return A data frame
+#' @export
+#'
+#' @examples
+#' get_exportaciones_zf()
+get_exportaciones_zf <- function() {
+  file_url <- base::paste0("https://cdn.bancentral.gov.do/documents/",
+                     "estadisticas/sector-externo/",
+                     "documents/Exportaciones_Zonas_Francas_6.xls")
+  file_path <- base::tempfile(pattern = "", fileext = ".xls")
+
+  utils::download.file(file_url,
+                       file_path,
+                       mode = "wb",
+                       quiet = TRUE)
+
+
+  data <- suppressMessages(
+    readxl::read_excel(path = file_path,
+                       skip = 8) |>
+      janitor::clean_names() |>
+      dplyr::filter(!is.na(confecciones_textiles),
+                    !grepl("^2", x3)) |>
+      dplyr::mutate(fecha = seq(
+        as.Date("2010-01-01"),
+        length.out = dplyr::n(),
+        by = "month")) |>
+      dplyr::select(-c(x1, x2, x3)) |>
+      tidyr::pivot_longer(!fecha,
+                          names_to = "partida",
+                          values_to = "valor_expor")
+  )
+
+  return(data)
+
+}
 
 #' Total imports by sectors
 #'
@@ -187,4 +228,61 @@ get_importaciones <- function(frecuencia = "mensual") {
   }
 
   return(data)
+}
+
+#' Oil Imports
+#'
+#' This function returns oil imports to the Dominican Republic
+#' by type
+#'
+#' @return A data frame
+#' @export
+#'
+#' @examples
+#' get_exportaciones_zf()
+get_importaciones_petroleo <- function() {
+  file_url <- base::paste0("https://cdn.bancentral.gov.do/documents/",
+                           "estadisticas/sector-externo/",
+                           "documents/Importaciones_Crudo_6.xls")
+  file_path <- base::tempfile(pattern = "", fileext = ".xls")
+
+  utils::download.file(file_url,
+                       file_path,
+                       mode = "wb",
+                       quiet = TRUE)
+
+  headers <- c("Fecha",
+               "PetroleoCrudo/Volumen", "PetroleoCrudo/Precio",
+               "PetroleoCrudo/Valor",
+               "Gasolina/Volumen", "Gasolina/Precio", "Gasolina/Valor",
+               "Gasoil/Volumen", "Gasoil/Precio", "Gasoil/Valor",
+               "GLP/Volumen", "GLP/Precio", "GLP/Valor",
+               "GasNatural/Volumen", "GasNatural/Precio", "GasNatural/Valor",
+               "FuelOil/Volumen", "FuelOil/Precio", "FuelOil/Valor",
+               "GasolinadeAviación/Volumen", "GasolinadeAviación/Precio",
+               "GasolinadeAviación/Valor",
+               "Avtur/Volumen", "Avtur/Precio", "Avtur/Valor",
+               "Otros/Volumen", "Otros/Precio", "Otros/Valor",
+               "Total/Volumen", "Total/Precio", "Total/Valor")
+
+
+  data <- readxl::read_excel(path = file_path,
+                             skip = 8,
+                             col_names = headers) |>
+    dplyr::filter(!is.na(`PetroleoCrudo/Precio`),
+                  !grepl("^2", Fecha)) |>
+    dplyr::mutate(fecha = seq(as.Date("2010-01-01"),
+                              length.out = dplyr::n(),
+                              by = "month"),
+                  `PetroleoCrudo/Volumen` = base::as.numeric(`PetroleoCrudo/Volumen`)) |>
+    dplyr::select(-Fecha) |>
+    tidyr::pivot_longer(!fecha,
+                        names_to = "partida",
+                        values_to = "valor_impor") |>
+    tidyr::separate_wider_delim(cols = partida,
+                                delim = "/",
+                                names = c("categoria", "partida"))
+
+  return(data)
+
 }
