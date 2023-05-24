@@ -252,35 +252,35 @@ get_importaciones_petroleo <- function() {
                        quiet = TRUE)
 
   headers <- c("Fecha",
-               "PetroleoCrudo/Volumen", "PetroleoCrudo/Precio",
-               "PetroleoCrudo/Valor",
-               "Gasolina/Volumen", "Gasolina/Precio", "Gasolina/Valor",
-               "Gasoil/Volumen", "Gasoil/Precio", "Gasoil/Valor",
-               "GLP/Volumen", "GLP/Precio", "GLP/Valor",
-               "GasNatural/Volumen", "GasNatural/Precio", "GasNatural/Valor",
-               "FuelOil/Volumen", "FuelOil/Precio", "FuelOil/Valor",
-               "GasolinadeAviación/Volumen", "GasolinadeAviación/Precio",
-               "GasolinadeAviación/Valor",
-               "Avtur/Volumen", "Avtur/Precio", "Avtur/Valor",
-               "Otros/Volumen", "Otros/Precio", "Otros/Valor",
-               "Total/Volumen", "Total/Precio", "Total/Valor")
+               "PetroleoCrudoXVolumen", "PetroleoCrudoXPrecio",
+               "PetroleoCrudoXValor",
+               "GasolinaXVolumen", "GasolinaXPrecio", "GasolinaXValor",
+               "GasoilXVolumen", "GasoilXPrecio", "GasoilXValor",
+               "GLPXVolumen", "GLPXPrecio", "GLPXValor",
+               "GasNaturalXVolumen", "GasNaturalXPrecio", "GasNaturalXValor",
+               "FuelOilXVolumen", "FuelOilXPrecio", "FuelOilXValor",
+               "GasolinadeAviaciónXVolumen", "GasolinadeAviaciónXPrecio",
+               "GasolinadeAviaciónXValor",
+               "AvturXVolumen", "AvturXPrecio", "AvturXValor",
+               "OtrosXVolumen", "OtrosXPrecio", "OtrosXValor",
+               "TotalXVolumen", "TotalXPrecio", "TotalXValor")
 
 
   data <- readxl::read_excel(path = file_path,
                              skip = 8,
                              col_names = headers) |>
-    dplyr::filter(!is.na(`PetroleoCrudo/Precio`),
+    dplyr::filter(!is.na(PetroleoCrudoXPrecio),
                   !grepl("^2", Fecha)) |>
     dplyr::mutate(fecha = seq(as.Date("2010-01-01"),
                               length.out = dplyr::n(),
                               by = "month"),
-                  `PetroleoCrudo/Volumen` = base::as.numeric(`PetroleoCrudo/Volumen`)) |>
+                  PetroleoCrudoXVolumen = as.numeric(PetroleoCrudoXVolumen)) |>
     dplyr::select(-Fecha) |>
     tidyr::pivot_longer(!fecha,
                         names_to = "partida",
                         values_to = "valor_impor") |>
     tidyr::separate_wider_delim(cols = partida,
-                                delim = "/",
+                                delim = "X",
                                 names = c("categoria", "partida"))
 
   return(data)
