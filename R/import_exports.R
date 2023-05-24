@@ -259,12 +259,11 @@ get_importaciones_petroleo <- function() {
                "GLPXVolumen", "GLPXPrecio", "GLPXValor",
                "GasNaturalXVolumen", "GasNaturalXPrecio", "GasNaturalXValor",
                "FuelOilXVolumen", "FuelOilXPrecio", "FuelOilXValor",
-               "GasolinadeAviaciónXVolumen", "GasolinadeAviaciónXPrecio",
-               "GasolinadeAviaciónXValor",
+               "GasolinadeAviacionXVolumen", "GasolinadeAviacionXPrecio",
+               "GasolinadeAviacionXValor",
                "AvturXVolumen", "AvturXPrecio", "AvturXValor",
                "OtrosXVolumen", "OtrosXPrecio", "OtrosXValor",
                "TotalXVolumen", "TotalXPrecio", "TotalXValor")
-
 
   data <- readxl::read_excel(path = file_path,
                              skip = 8,
