@@ -120,7 +120,7 @@ get_ecc <- function() {
     dplyr::ungroup() |>
     dplyr::filter(remove) |>
     dplyr::select(-(tidyr::last_col(offset = 5):tidyr::last_col())) |>
-    dplyr::bind_cols(expectativas_details)
+    dplyr::bind_cols(expectativas_details) # nolint
 
   data <- data |>
     tidyr::pivot_longer(
@@ -128,7 +128,7 @@ get_ecc <- function() {
         descripcion, short_names, categoria, nivel,
         original_names, labels, direct_parent
       ),
-      names_to = "fecha", values_to = "values") |>
+      names_to = "fecha", values_to = "valor") |>
     dplyr::group_by(direct_parent, categoria, short_names) |>
     dplyr::mutate(
       fecha = seq(
