@@ -27,8 +27,8 @@ get_imae <- function(variaciones = TRUE) {
   header_imae <- c(
     "mes",
     "indice_original", "original_vi", "origianl_va", "original_p12m",
-    "indice_desetacionalizado", "desestacionalizado_vm",
-    "desetacionalizado_vi", "desestacionalizado_va",
+    "indice_desestacionalizado", "desestacionalizado_vm",
+    "desestacionalizado_vi", "desestacionalizado_va",
     "desestacionalizado_p12m", "indice_tc", "tc_vm",
     "tc_vi", "tc_va", "tc_p12m"
   )
