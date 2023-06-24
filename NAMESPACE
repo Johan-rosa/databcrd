@@ -2,10 +2,12 @@
 
 export(crear_mes)
 export(date_label)
+export(get_fbkf)
 export(get_imae)
 export(get_indicadores_monetarios_bcrd)
 export(get_ipc_data)
 export(get_pib_gasto)
+export(get_remesas)
 export(get_tasas_activas)
 export(get_tasas_pasivas)
 export(get_tc_eif)
