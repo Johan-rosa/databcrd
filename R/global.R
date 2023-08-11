@@ -4,5 +4,5 @@ utils::globalVariables(
     "descripcion", "short_names", "categoria", "nivel", "original_names",
     "labels", "direct_parent", "indicadores_bcrd_details",
     "monto", "variacion_interanual", "proporcion", "cantidad",
-    "short_names", "categoria", "nivel", "original_names", "direct_parent"
+    "short_names", "categoria", "nivel", "original_names", "sector"
     ))
