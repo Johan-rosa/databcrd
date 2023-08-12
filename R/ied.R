@@ -1,7 +1,8 @@
-#' Foreing direct investment to the Dominican Republic
+#' Foreign direct investment to the Dominican Republic
 #'
-#' This function returns the  Foreing direct investment to the
-#' Dominican Republicthe based on the specified frequency.
+#' This function returns the  Foreign direct investment to the
+#' This function returns the  Foreign direct investment to the
+#' Dominican Republic based on the specified frequency.
 #'
 #' @param modalidad A character string. Options are "pais_origen" or
 #' "sector_destino".

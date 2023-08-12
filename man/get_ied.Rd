@@ -2,7 +2,7 @@
 % Please edit documentation in R/ied.R
 \name{get_ied}
 \alias{get_ied}
-\title{Foreing direct investment to the Dominican Republic}
+\title{Foreign direct investment to the Dominican Republic}
 \usage{
 get_ied(modalidad = "pais_origen", frecuencia = "trimestral")
 }
@@ -17,8 +17,9 @@ exchange rates to be downloaded. Valid options are "trimestral",  or "anual".}
 A data frame
 }
 \description{
-This function returns the  Foreing direct investment to the
-Dominican Republicthe based on the specified frequency.
+This function returns the  Foreign direct investment to the
+This function returns the  Foreign direct investment to the
+Dominican Republic based on the specified frequency.
 }
 \examples{
 get_tc_eif("mensual")
