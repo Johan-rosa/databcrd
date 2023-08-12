@@ -28,7 +28,7 @@ get_ied <- function(
 
 }
 
-#' Get Foreign Direct Investment by country of origin
+# Get Foreign Direct Investment by country of origin
 get_ied_pais <- function(frecuencia = "trimestral") {
   checkmate::assert_choice(frecuencia, c("trimestral", "anual"))
 
@@ -82,7 +82,7 @@ get_ied_pais <- function(frecuencia = "trimestral") {
   ied_data
 }
 
-#' Get Foreign Direct Investment by sector
+# Get Foreign Direct Investment by sector
 get_ied_sector <- function(frecuencia = "trimestral") {
   checkmate::assert_choice(frecuencia, c("trimestral", "anual"))
 

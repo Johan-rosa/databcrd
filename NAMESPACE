@@ -2,6 +2,8 @@
 
 export(crear_mes)
 export(date_label)
+export(get_fbkf)
+export(get_ied)
 export(get_imae)
 export(get_indicadores_monetarios_bcrd)
 export(get_ipc_data)
