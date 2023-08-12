@@ -16,8 +16,10 @@
 #'get_tc_eif("mensual")
 #'get_tc_eif("anual")
 
-get_ied <- function(modalidad = "pais_origen",
-                    frecuencia = "trimestral") {
+get_ied <- function(
+    modalidad = "pais_origen",
+    frecuencia = "trimestral"
+  ) {
   checkmate::assert_choice(modalidad, c("pais_origen", "sector_destino"))
   checkmate::assert_choice(frecuencia, c("trimestral", "anual"))
 
@@ -30,10 +32,13 @@ get_ied <- function(modalidad = "pais_origen",
 get_ied_pais <- function(frecuencia = "trimestral") {
   checkmate::assert_choice(frecuencia, c("trimestral", "anual"))
 
-  file_url <- paste0("https://cdn.bancentral.gov.do/documents/",
-                     "estadisticas/sector-externo/",
-                     "documents/inversion_ext_pais_6.xls")
-  file_path <- base::tempfile(pattern = "", fileext = ".xls")
+  file_url <- paste0(
+    "https://cdn.bancentral.gov.do/documents/",
+    "estadisticas/sector-externo/",
+    "documents/inversion_ext_pais_6.xls"
+  )
+
+  file_path <- base::tempfile(fileext = ".xls")
   utils::download.file(file_url, file_path, mode = "wb", quiet = TRUE)
 
   suppressMessages(
@@ -51,9 +56,9 @@ get_ied_pais <- function(frecuencia = "trimestral") {
   )
 
   ied_data <- ied_data |>
-    stats::setNames(c("partida", quarters)) |>
+    stats::setNames(c("pais", quarters)) |>
     tidyr::pivot_longer(
-      cols = -partida,
+      cols = -pais,
       names_to = "trimestre",
       values_to = "monto") |>
     dplyr::mutate(
@@ -61,30 +66,32 @@ get_ied_pais <- function(frecuencia = "trimestral") {
       fecha = lubridate::as_date(trimestre),
       year = lubridate::year(fecha),
       trimestre = lubridate::quarter(fecha)
-    )
+    ) |>
+    dplyr::select(pais, year, trimestre, fecha, monto)
 
   if (frecuencia == "anual") {
-    ied <- suppressMessages(
+    ied_anual <- suppressMessages(
       ied_data |>
         dplyr::select(-c(trimestre, fecha)) |>
-        dplyr::group_by(partida, year) |>
+        dplyr::group_by(pais, year) |>
         dplyr::summarise(monto = sum(monto))
     )
-  } else if (frecuencia == "trimestral") {
-    ied <- ied_data
+    return(ied_anual)
   }
 
-  ied
+  ied_data
 }
 
 #' Get Foreign Direct Investment by sector
 get_ied_sector <- function(frecuencia = "trimestral") {
   checkmate::assert_choice(frecuencia, c("trimestral", "anual"))
 
-  file_url <- paste0("https://cdn.bancentral.gov.do/documents/",
-                     "estadisticas/sector-externo/",
-                     "documents/inversion_ext_sector_6.xls")
-  file_path <- base::tempfile(pattern = "", fileext = ".xls")
+  file_url <- paste0(
+    "https://cdn.bancentral.gov.do/documents/",
+    "estadisticas/sector-externo/",
+    "documents/inversion_ext_sector_6.xls"
+  )
+  file_path <- base::tempfile(fileext = ".xls")
   utils::download.file(file_url, file_path, mode = "wb", quiet = TRUE)
 
   suppressMessages(
@@ -102,9 +109,9 @@ get_ied_sector <- function(frecuencia = "trimestral") {
   )
 
   ied_data <- ied_data |>
-    stats::setNames(c("partida", quarters)) |>
+    stats::setNames(c("sector", quarters)) |>
     tidyr::pivot_longer(
-      cols = -partida,
+      cols = -sector,
       names_to = "trimestre",
       values_to = "monto") |>
     dplyr::mutate(
@@ -115,15 +122,14 @@ get_ied_sector <- function(frecuencia = "trimestral") {
     )
 
   if (frecuencia == "anual") {
-    ied <- suppressMessages(
+    ied_anual <- suppressMessages(
       ied_data |>
         dplyr::select(-c(trimestre, fecha)) |>
-        dplyr::group_by(partida, year) |>
+        dplyr::group_by(sector, year) |>
         dplyr::summarise(monto = sum(monto))
     )
-  } else if (frecuencia == "trimestral") {
-    ied <- ied_data
+    return(ied_anual)
   }
 
-  ied
+  ied_data
 }
