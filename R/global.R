@@ -22,6 +22,7 @@ utils::globalVariables(
     "variacion_interanual",
     "proporcion",
     "pais",
-    "sector"
+    "sector",
+    "cantidad"
     )
 )
