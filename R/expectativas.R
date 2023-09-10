@@ -33,10 +33,12 @@ expectativas_function()
 
 #' Get EEM
 get_eem <- function() {
-  file_url <- paste0("https://cdn.bancentral.gov.do/documents/",
-                     "politica-monetaria/expectativas-macroeconomicas/",
-                     "documents/Historico-EEM.xlsx")
-  file_path <- tempfile(pattern = "", fileext = ".xlsx")
+  file_url <- paste0(
+    "https://cdn.bancentral.gov.do/documents/",
+    "politica-monetaria/expectativas-macroeconomicas/",
+    "documents/Historico-EEM.xlsx"
+  )
+  file_path <- tempfile(fileext = ".xlsx")
   utils::download.file(file_url, file_path, mode = "wb", quiet = TRUE)
 
   header_expectativas <- c(
@@ -44,28 +46,53 @@ get_eem <- function() {
     "inf_anio_actual", "inf_12m", "inf_anio_siguiente", "inf_24",
     "tc_anio_actual", "tc_12m", "tc_anio_siguiente", "tc_24",
     "pib_trim_actual", "pib_anio_actual", "pib_anio_siguiente",
-    "tpm_mes_actual", "tpm_trim_acutual", "tpm_anio_actual", "tpm_12m"
+    "tpm_mes_actual", "tpm_trim_actual", "tpm_anio_actual", "tpm_12m"
   )
 
   sheet_names <- readxl::excel_sheets(file_path)[-4]
 
-  data <- suppressMessages(
-    purrr::map(sheet_names,
-               \(.x) readxl::read_excel(file_path,
-                                        sheet = .x,
-                                        skip = 9,
-                                        col_names = header_expectativas) |>
-                 tidyr::pivot_longer(!c(year, mes),
-                                     names_to = "short_names",
-                                     values_to = "valor") |>
-                 dplyr::mutate(descripcion = .x)
+  suppressMessages(
+    purrr::map(
+      sheet_names,
+      \(sheet) {
+        readxl::read_excel(
+          file_path,
+          sheet = sheet,
+          skip = 9,
+          col_names = header_expectativas
+        ) |>
+          tidyr::pivot_longer(
+            !c(year, mes),
+            names_to = "short_names",
+            values_to = "valor"
+          ) |>
+          dplyr::mutate(descripcion = sheet)
+      }
     )
   ) |>
     purrr::list_rbind() |>
-    dplyr::mutate(fecha = lubridate::make_date(year, mes, 1))
-
-  data
-
+    dplyr::mutate(
+      fecha = lubridate::make_date(year, mes, 1),
+      variable_key = stringr::str_extract(short_names, "^[a-z]+(?=_)"),
+      variable = dplyr::case_when(
+        stringr::str_detect(variable_key, "inf") ~ "Inflación",
+        stringr::str_detect(variable_key, "tc") ~ "Varición tipo de cambio",
+        stringr::str_detect(variable_key, "pib") ~ "Crecimiento del PIB",
+        stringr::str_detect(variable_key, "tpm") ~ "Tasa de Política Monetaria"
+      ),
+      horizonte = dplyr::case_when(
+        stringr::str_detect(short_names, "mes_actual$") ~ "Mes actual",
+        stringr::str_detect(short_names, "trim_actual$") ~ "Trimestre actual",
+        stringr::str_detect(short_names, "anio_actual$") ~ "Año actual",
+        stringr::str_detect(short_names, "12m$") ~ "12 meses",
+        stringr::str_detect(short_names, "anio_siguiente$") ~ "Año siguiente",
+        stringr::str_detect(short_names, "24$") ~ "24 meses",
+      )
+    ) |>
+    dplyr::select(
+      fecha, year, mes, short_names, variable_key,
+      variable, horizonte, expectativa = valor
+    )
 }
 
 #' Get EOE
