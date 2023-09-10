@@ -90,7 +90,7 @@ get_eem <- function() {
       )
     ) |>
     dplyr::select(
-      fecha, year, mes, short_names, variable_key,
+      fecha, year, mes, descripcion, short_names, variable_key,
       variable, horizonte, expectativa = valor
     )
 }
