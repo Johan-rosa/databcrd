@@ -1,20 +1,20 @@
-expectativas <- get_expectativas(modalidad = "eem")
+eem_data <- get_expectativas(modalidad = "eem")
 
 test_that("All indicators have the same number of rows", {
-  count <- expectativas |>
-    dplyr::count(short_names, descripcion)
+  count <- eem_data |>
+    dplyr::count(short_names, medida)
 
   testthat::expect_equal(min(count$n), max(count$n))
 })
 
 test_that("There aren't dates in the future", {
   testthat::expect_true(
-    max(expectativas$fecha) <= lubridate::today())
+    max(eem_data$fecha) <= lubridate::today())
 })
 
 test_that("There aren't missing dates", {
-  months_diff <- expectativas |>
-    dplyr::group_by(short_names, descripcion) |>
+  months_diff <- eem_data |>
+    dplyr::group_by(short_names, medida) |>
     dplyr::arrange(fecha) |>
     dplyr::mutate(lag_fecha = dplyr::lag(fecha)) |>
     dplyr::filter(!is.na(lag_fecha)) |>
@@ -23,10 +23,10 @@ test_that("There aren't missing dates", {
   testthat::expect_true(all(months_diff$one_month_diff))
 })
 
-expectativas <- get_expectativas(modalidad = "eoe")
+eoe_data <- get_expectativas(modalidad = "eoe")
 
 test_that("All indicators have the same number of rows", {
-  count <- expectativas |>
+  count <- eoe_data |>
     dplyr::count(descripcion)
 
   testthat::expect_equal(min(count$n), max(count$n))
@@ -34,11 +34,11 @@ test_that("All indicators have the same number of rows", {
 
 test_that("There aren't dates in the future", {
   testthat::expect_true(
-    max(expectativas$fecha) <= lubridate::today())
+    max(eoe_data$fecha) <= lubridate::today())
 })
 
 test_that("There aren't missing dates", {
-  months_diff <- expectativas |>
+  months_diff <- eoe_data |>
     dplyr::group_by(descripcion) |>
     dplyr::arrange(fecha) |>
     dplyr::mutate(lag_fecha = dplyr::lag(fecha)) |>
@@ -48,10 +48,10 @@ test_that("There aren't missing dates", {
   testthat::expect_true(all(months_diff$one_month_diff))
 })
 
-expectativas <- get_expectativas(modalidad = "ecc")
+ecc_data <- get_expectativas(modalidad = "ecc")
 
 test_that("All indicators have the same number of rows", {
-  count <- expectativas |>
+  count <- ecc_data |>
     dplyr::count(direct_parent, categoria, short_names)
 
   testthat::expect_equal(min(count$n), max(count$n))
@@ -59,11 +59,11 @@ test_that("All indicators have the same number of rows", {
 
 test_that("There aren't dates in the future", {
   testthat::expect_true(
-    max(expectativas$fecha) <= lubridate::today())
+    max(ecc_data$fecha) <= lubridate::today())
 })
 
 test_that("There aren't missing dates", {
-  months_diff <- expectativas |>
+  months_diff <- ecc_data |>
     dplyr::group_by(direct_parent, categoria, short_names) |>
     dplyr::arrange(fecha) |>
     dplyr::mutate(lag_fecha = dplyr::lag(fecha)) |>

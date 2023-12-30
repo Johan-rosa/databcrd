@@ -15,20 +15,19 @@
 #' get_expectativas("ecc")
 #'
 get_expectativas <- function(modalidad = "eem") {
-checkmate::assert_choice(
-  modalidad,
-  choices = c("eem", "eoe", "ecc")
-)
+  checkmate::assert_choice(
+    modalidad,
+    choices = c("eem", "eoe", "ecc")
+  )
 
-expectativas_function <- switch(
-  modalidad,
-  "eem" = get_eem,
-  "eoe" = get_eoe,
-  "ecc" = get_ecc
-)
+  expectativas_function <- switch(
+    modalidad,
+    "eem" = get_eem,
+    "eoe" = get_eoe,
+    "ecc" = get_ecc
+  )
 
-expectativas_function()
-
+  expectativas_function()
 }
 
 #' Get EEM
@@ -38,16 +37,11 @@ get_eem <- function() {
     "politica-monetaria/expectativas-macroeconomicas/",
     "documents/Historico-EEM.xlsx"
   )
+
   file_path <- tempfile(fileext = ".xlsx")
   utils::download.file(file_url, file_path, mode = "wb", quiet = TRUE)
 
-  header_expectativas <- c(
-    "year", "mes",
-    "inf_anio_actual", "inf_12m", "inf_anio_siguiente", "inf_24",
-    "tc_anio_actual", "tc_12m", "tc_anio_siguiente", "tc_24",
-    "pib_trim_actual", "pib_anio_actual", "pib_anio_siguiente",
-    "tpm_mes_actual", "tpm_trim_actual", "tpm_anio_actual", "tpm_12m"
-  )
+  header_expectativas <- eem_details$headers
 
   sheet_names <- readxl::excel_sheets(file_path)[-4]
 
@@ -74,52 +68,58 @@ get_eem <- function() {
     dplyr::mutate(
       fecha = lubridate::make_date(year, mes, 1),
       variable_key = stringr::str_extract(short_names, "^[a-z]+(?=_)"),
-      variable = dplyr::case_when(
-        stringr::str_detect(variable_key, "inf") ~ "Inflación",
-        stringr::str_detect(variable_key, "tc") ~ "Varición tipo de cambio",
-        stringr::str_detect(variable_key, "pib") ~ "Crecimiento del PIB",
-        stringr::str_detect(variable_key, "tpm") ~ "Tasa de Política Monetaria"
+      variable = factor(
+        variable_key,
+        eem_details$variables$levels,
+        eem_details$variables$labels
       ),
-      horizonte = dplyr::case_when(
-        stringr::str_detect(short_names, "mes_actual$") ~ "Mes actual",
-        stringr::str_detect(short_names, "trim_actual$") ~ "Trimestre actual",
-        stringr::str_detect(short_names, "anio_actual$") ~ "Año actual",
-        stringr::str_detect(short_names, "12m$") ~ "12 meses",
-        stringr::str_detect(short_names, "anio_siguiente$") ~ "Año siguiente",
-        stringr::str_detect(short_names, "24$") ~ "24 meses",
+      horizonte = factor(
+        stringr::str_remove(short_names, "^\\w+?_"),
+        eem_details$horizontes$levels,
+        eem_details$horizontes$labels
       )
     ) |>
     dplyr::select(
-      fecha, year, mes, descripcion, short_names, variable_key,
-      variable, horizonte, expectativa = valor
+      fecha,
+      year,
+      mes,
+      medida = descripcion,
+      short_names,
+      variable_key,
+      variable,
+      horizonte,
+      expectativa = valor
     )
 }
 
 #' Get EOE
 get_eoe <- function() {
-  file_url <- paste0("https://cdn.bancentral.gov.do/documents/",
-                     "politica-monetaria/expectativas-macroeconomicas/",
-                     "documents/Historico-EOE-(Mensual).xlsx")
+  file_url <- paste0(
+    "https://cdn.bancentral.gov.do/documents/",
+    "politica-monetaria/expectativas-macroeconomicas/",
+    "documents/Historico-EOE-(Mensual).xlsx"
+  )
+
   file_path <- tempfile(pattern = "", fileext = ".xlsx")
   utils::download.file(file_url, file_path, mode = "wb", quiet = TRUE)
 
-  data <- suppressMessages(
-    readxl::read_excel(file_path,
-                             skip = 5)
-    ) |>
+  data <- readxl::read_excel(file_path, skip = 5) |>
+    suppressMessages() |>
     janitor::clean_names() |>
     dplyr::rename(year = "ano") |>
-    tidyr::pivot_longer(!c(year, mes),
-                        names_to = "descripcion",
-                        values_to = "valor") |>
-    dplyr::mutate(fecha = lubridate::make_date(
-      year,
-      crear_mes(mes, type = "text_to_number")
-      , 1)
+    tidyr::pivot_longer(
+      !c(year, mes),
+      names_to = "descripcion",
+      values_to = "valor"
+    ) |>
+    dplyr::mutate(
+      fecha = lubridate::make_date(
+        year,
+        crear_mes(mes, type = "text_to_number"),
+        1)
       )
 
   data
-
 }
 
 #' Get ECC

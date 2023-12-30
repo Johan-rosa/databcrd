@@ -14,9 +14,10 @@ get_pib_sectores <- function(
   checkmate::assert_choice(modalidad, c("nominal", "real"))
   checkmate::assert_logical(acumulado, any.missing = FALSE, max.len = 1)
   checkmate::assert_logical(homogenea_91, any.missing = FALSE, max.len = 1)
-
+  # nolint start
   url_2007 <- "https://cdn.bancentral.gov.do/documents/estadisticas/sector-real/documents/pib_origen_2007.xlsx"
   url_retro <- "https://cdn.bancentral.gov.do/documents/estadisticas/sector-real/documents/pib_origen_retro.xlsx"
+  # nolint end
 
   temp_file <- tempfile(fileext = ".xlsx")
   url <- if (homogenea_91) url_retro else url_2007
