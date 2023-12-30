@@ -23,6 +23,11 @@ utils::globalVariables(
     "proporcion",
     "pais",
     "sector",
-    "cantidad"
+    "cantidad",
+    "expectativas_details",
+    "variable_key",
+    "variable",
+    "horizonte",
+    "valor"
     )
 )
