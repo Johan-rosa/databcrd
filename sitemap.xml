@@ -22,6 +22,21 @@
     <loc>https://johan-rosa.github.io/databcrd/reference/date_label.html</loc>
   </url>
   <url>
+    <loc>https://johan-rosa.github.io/databcrd/reference/expectativas_details.html</loc>
+  </url>
+  <url>
+    <loc>https://johan-rosa.github.io/databcrd/reference/get_ecc.html</loc>
+  </url>
+  <url>
+    <loc>https://johan-rosa.github.io/databcrd/reference/get_eem.html</loc>
+  </url>
+  <url>
+    <loc>https://johan-rosa.github.io/databcrd/reference/get_eoe.html</loc>
+  </url>
+  <url>
+    <loc>https://johan-rosa.github.io/databcrd/reference/get_expectativas.html</loc>
+  </url>
+  <url>
     <loc>https://johan-rosa.github.io/databcrd/reference/get_fbkf.html</loc>
   </url>
   <url>
@@ -53,6 +68,9 @@
   </url>
   <url>
     <loc>https://johan-rosa.github.io/databcrd/reference/get_pib_gasto.html</loc>
+  </url>
+  <url>
+    <loc>https://johan-rosa.github.io/databcrd/reference/get_pib_sectores.html</loc>
   </url>
   <url>
     <loc>https://johan-rosa.github.io/databcrd/reference/get_remesas.html</loc>
@@ -101,6 +119,9 @@
   </url>
   <url>
     <loc>https://johan-rosa.github.io/databcrd/reference/indicadores_bcrd_details.html</loc>
+  </url>
+  <url>
+    <loc>https://johan-rosa.github.io/databcrd/reference/read_details.html</loc>
   </url>
   <url>
     <loc>https://johan-rosa.github.io/databcrd/reference/rescale.html</loc>
