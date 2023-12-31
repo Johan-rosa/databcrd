@@ -28,6 +28,15 @@ utils::globalVariables(
     "variable_key",
     "variable",
     "horizonte",
-    "valor"
+    "valor",
+    "Fecha",
+    "PetroleoCrudoXPrecio",
+    "PetroleoCrudoXVolumen",
+    "confecciones_textiles",
+    "valor_expor",
+    "valor_impor",
+    "x1",
+    "x2",
+    "x3"
     )
 )
