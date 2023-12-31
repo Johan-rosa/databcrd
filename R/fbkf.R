@@ -13,8 +13,9 @@
 get_fbkf <- function() {
   file_url <- paste0("https://cdn.bancentral.gov.do/documents/",
                      "estadisticas/sector-real/",
-                     "documents/fbkf.xlsx?v=1634051828540")
-  file_path <- tempfile(pattern = "", fileext = "")
+                     "documents/fbkf.xlsx")
+
+  file_path <- base::tempfile(pattern = "", fileext = "")
   utils::download.file(file_url, file_path, mode = "wb", quiet = TRUE)
 
   skip_lines <- c(6, 20, 34)

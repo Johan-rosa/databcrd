@@ -1,0 +1,26 @@
+eem:
+  headers: [
+    "year",
+    "mes",
+    "inf_anio_actual",
+    "inf_12m",
+    "inf_anio_siguiente",
+    "inf_24m",
+    "tc_anio_actual",
+    "tc_12m",
+    "tc_anio_siguiente",
+    "tc_24m",
+    "pib_trim_actual",
+    "pib_anio_actual",
+    "pib_anio_siguiente",
+    "tpm_mes_actual",
+    "tpm_trim_actual",
+    "tpm_anio_actual",
+    "tpm_12m"
+  ]
+  variables:
+    levels: ["inf", "tc", "pib", "tpm"]
+    labels: ["Inflacion", "Variación tipo de cambio", "Crecimiento del PIB", "Tasa de Política Monetaria"]
+  horizontes:
+    levels: ["mes_actual", "trim_actual", "anio_actual", "12m", "anio_siguiente", "24m"]
+    labels: ["Mes actual", "Trimestre actual", "Año actual", "12 meses", "Año siguiente", "24 meses"]

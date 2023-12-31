@@ -39,3 +39,9 @@
 #'   \item{direct_parent}{Direct parent}
 #' }
 "imports_details"
+
+#' Utility complement to handle the macroeconomic expectations
+#'
+#' @format ## `expectativas_details`
+#' A data frame with 39 rows and 6 columns:
+"expectativas_details"

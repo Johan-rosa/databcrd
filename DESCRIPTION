@@ -2,7 +2,8 @@ Package: databcrd
 Title: Get Dominican Republic's Central Bank data
 Version: 0.0.0.9000
 Authors@R: 
-    person("Johan", "Rosa", , "johan.rosaperez@gmail.com", role = c("aut", "cre"))
+    person("Johan", "Rosa", , "johan.rosaperez@gmail.com", role = c("aut", "cre")),
+    person("Juan", "Quiñones", , "juansqw@gmail.com", role = c("aut", "cre"))
 Description: Download, clean and import data from the Central Bank of the Dominican Republic.
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -17,7 +18,8 @@ Imports:
     readxl,
     stringr,
     usethis,
-    tidyr
+    tidyr,
+    yaml
 Suggests:
     covr,
     lintr,
@@ -28,3 +30,4 @@ Config/testthat/edition: 3
 Depends: 
     R (>= 2.10)
 LazyData: true
+URL: https://johan-rosa.github.io/databcrd/

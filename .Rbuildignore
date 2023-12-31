@@ -3,3 +3,8 @@
 ^LICENSE\.md$
 ^\.github$
 ^data-raw$
+.Renviron
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+.lintr
