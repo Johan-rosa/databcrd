@@ -1,0 +1,120 @@
+---
+title: "Data de inflación dominicana"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{ipc_data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, message=FALSE, warning=FALSE}
+library(databcrd)
+library(ggplot2)
+library(dplyr)
+```
+
+La inflación es sin duda una de las variables macroeconómicas más importantes y el centro
+de la política monetaria de República Dominicana. De su evolución dependen la estábilidad
+de variable reales como el consumo y la inversión, atrayendo la atención de los analistas
+y siendo consultada frecuentemente.
+
+Este artículo muestra cómo acceder rápidamente a las expectativas de inflación de República
+Dominicana usando el paquete `{databcrd}`, específicamente la función `get_ipc_data()`.
+
+## Desagregaciones de la inflación que se publican
+
+1. General: inflación nacional sin desagregaciones
+2. Por grupos: desagregación por grupos de bienes y servicios
+3. Por regiones: inflación específica para las macroregiones del territorio nacional
+4. Por componentes: inflación de bienes transables y no transables
+5. Subyacente: inflación núcleo, excluyendo artículos volátiles.
+6. Artículos: 
+
+Cón el paquete se puede acceder A todas las desagregaciones de la inflación usando la 
+función `get_ipc_data()`, solo hay que específicar el argumento `desagregacion`, los 
+posibles valores son: `"general"`, `"grupos"`, `"subyacente"`, `"regiones"`, `"tnt"` y 
+`"articulos"`.
+
+## Inflación general
+
+Con `get_ipc_data("general")` se descarga la inflación general actualizada, con el ídice (`ipc`),
+la variación mensual (`ipc_vm`), la variación interanual (`ipc_vi`), la variación con diciembre (`ipc_vd`)
+y la variación promedio de los últimos 12 meses (`ipc_p12`).
+
+```{r showcase_get_ipc}
+inflacion_general <- get_ipc_data("general")
+inflacion_general
+```
+
+Vamos a general gráficos de cada una.
+
+```{r plot_function}
+# Función para gráficar la inflación
+plot_ipc_data <- function(data, variable, title, start_year = 2018) {
+  data |>
+    filter(year == start_year) |> 
+    ggplot(aes(x = fecha, y = {{ variable }})) +
+    geom_line() +
+    theme_minimal() +
+    ggtitle(title) +
+    theme(
+      axis.title = element_blank(),
+      plot.title.position = "plot"
+    )
+}
+```
+
+```{r plot_ipc, fig.width=6, fig.height=3, fig.align='center'}
+plot_ipc_data(inflacion_general, ipc, "Índice de precios al consumidor")
+```
+
+```{r plot_ipc_vm, fig.width=6, fig.height=3, fig.align='center'}
+plot_ipc_data(inflacion_general, ipc_vm, "Variación mensual del IPC") +
+  scale_y_continuous(labels = \(x) scales::comma(x, accuracy = 0.1, suffix = "%"))
+```
+
+```{r plot_ipc_vis, fig.width=6, fig.height=3, fig.align='center'}
+plot_ipc_data(inflacion_general, ipc_vi, "Variación interanual del IPC") +
+  scale_y_continuous(labels = \(x) scales::comma(x, accuracy = 0.1, suffix = "%"))
+```
+
+## Ahora un pronóstico _naive_ de la iflación
+
+```{r forecasting}
+library(tsibble)
+library(fable)
+library(feasts)
+
+
+ts_ipc <- inflacion_general |>
+  mutate(fecha = yearmonth(fecha)) |>
+  select(-mes) |>
+  as_tsibble(index = fecha)
+
+modelos <- ts_ipc |>
+  model(
+    ets   = ETS(box_cox(ipc_vm, 0.3)),
+    arima = ARIMA(ipc_vm),
+    naive = SNAIVE(ipc_vm)
+  )
+
+modelos
+```
+
+```{r forecast_plots, fig.width=6, fig.height=3, fig.align='center'}
+modelos |>
+  forecast(h = "6 months") %>% 
+  autoplot(filter(ts_ipc, year > 2018), level = NULL) +
+  theme_minimal()
+```
+
+
+
+
