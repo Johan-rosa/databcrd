@@ -71,23 +71,23 @@ Dominican Republic.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">get_expectativas</span><span class="op">(</span><span class="st">"eem"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 7,875 × 9</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    fecha       year   mes medida   short_names   variable_key variable horizonte</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2009-06-01  <span style="text-decoration: underline;">2</span>009     6 Promedio inf_anio_act… inf          Inflaci… Año actu…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2009-06-01  <span style="text-decoration: underline;">2</span>009     6 Promedio inf_12m       inf          Inflaci… 12 meses </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2009-06-01  <span style="text-decoration: underline;">2</span>009     6 Promedio inf_anio_sig… inf          Inflaci… Año sigu…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2009-06-01  <span style="text-decoration: underline;">2</span>009     6 Promedio inf_24m       inf          Inflaci… 24 meses </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2009-06-01  <span style="text-decoration: underline;">2</span>009     6 Promedio tc_anio_actu… tc           Variaci… Año actu…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2009-06-01  <span style="text-decoration: underline;">2</span>009     6 Promedio tc_12m        tc           Variaci… 12 meses </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2009-06-01  <span style="text-decoration: underline;">2</span>009     6 Promedio tc_anio_sigu… tc           Variaci… Año sigu…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2009-06-01  <span style="text-decoration: underline;">2</span>009     6 Promedio tc_24m        tc           Variaci… 24 meses </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2009-06-01  <span style="text-decoration: underline;">2</span>009     6 Promedio pib_trim_act… pib          Crecimi… Trimestr…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2009-06-01  <span style="text-decoration: underline;">2</span>009     6 Promedio pib_anio_act… pib          Crecimi… Año actu…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 7,865 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 7,965 × 9</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    fecha       year   mes medida  short_names    variable_key variable horizonte</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2009-06-01  <span style="text-decoration: underline;">2</span>009     6 Mediana inf_anio_actu… inf          Inflaci… Año actu…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2009-06-01  <span style="text-decoration: underline;">2</span>009     6 Mediana inf_12m        inf          Inflaci… 12 meses </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2009-06-01  <span style="text-decoration: underline;">2</span>009     6 Mediana inf_anio_sigu… inf          Inflaci… Año sigu…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2009-06-01  <span style="text-decoration: underline;">2</span>009     6 Mediana inf_24m        inf          Inflaci… 24 meses </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2009-06-01  <span style="text-decoration: underline;">2</span>009     6 Mediana tc_anio_actual tc           Variaci… Año actu…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2009-06-01  <span style="text-decoration: underline;">2</span>009     6 Mediana tc_12m         tc           Variaci… 12 meses </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2009-06-01  <span style="text-decoration: underline;">2</span>009     6 Mediana tc_anio_sigui… tc           Variaci… Año sigu…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2009-06-01  <span style="text-decoration: underline;">2</span>009     6 Mediana tc_24m         tc           Variaci… 24 meses </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2009-06-01  <span style="text-decoration: underline;">2</span>009     6 Mediana pib_trim_actu… pib          Crecimi… Trimestr…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2009-06-01  <span style="text-decoration: underline;">2</span>009     6 Mediana pib_anio_actu… pib          Crecimi… Año actu…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 7,955 more rows</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1 more variable: expectativa &lt;dbl&gt;</span></span>
 <span class="r-in"><span><span class="fu">get_expectativas</span><span class="op">(</span><span class="st">"eoe"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2,299 × 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2,332 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     year mes   descripcion                      valor fecha     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>  <span style="text-decoration: underline;">2</span>006 Julio situacion_economica              36.5  2006-07-01</span>
@@ -100,9 +100,9 @@ Dominican Republic.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>  <span style="text-decoration: underline;">2</span>006 Julio expectativa_situacion_economica  44.2  2006-07-01</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>  <span style="text-decoration: underline;">2</span>006 Julio expectativa_empleo               <span style="color: #BB0000;">NA</span>    2006-07-01</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>  <span style="text-decoration: underline;">2</span>006 Julio indice_de_confianza_industrial   54.5  2006-07-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2,289 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2,322 more rows</span></span>
 <span class="r-in"><span><span class="fu">get_expectativas</span><span class="op">(</span><span class="st">"ecc"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1,804 × 9</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1,848 × 9</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    descripcion   original_names labels short_names categoria nivel direct_parent</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> Evolución de… Evolución de … Evolu… evolucion_… situacio…     2 situacion_ac…</span>
@@ -115,7 +115,7 @@ Dominican Republic.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> Evolución de… Evolución de … Evolu… evolucion_… situacio…     2 situacion_ac…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> Evolución de… Evolución de … Evolu… evolucion_… situacio…     2 situacion_ac…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> Evolución de… Evolución de … Evolu… evolucion_… situacio…     2 situacion_ac…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1,794 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1,838 more rows</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2 more variables: fecha &lt;date&gt;, valor &lt;dbl&gt;</span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
