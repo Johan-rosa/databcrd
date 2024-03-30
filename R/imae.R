@@ -44,6 +44,7 @@ get_imae <- function(variaciones = TRUE) {
   imae <- imae |>
     janitor::clean_names() |>
     dplyr::select(-1) |>
+    dplyr::select(where(~!all(is.na(.)))) |>
     stats::setNames(header_imae) |>
     dplyr::filter(!is.na(mes)) |>
     dplyr::mutate(
