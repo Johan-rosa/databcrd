@@ -199,7 +199,7 @@ get_ipc_subyacente <- function() {
     ))
 
   ipc_subyacente <-
-    ipc_subyacente[complete.cases(ipc_subyacente$`...2`), ] |>
+    ipc_subyacente[tidyr::complete.cases(ipc_subyacente$`...2`), ] |>
     janitor::clean_names() |>
     dplyr::select(1:6) |>
     stats::setNames(header_ipc_subyacente) |>
@@ -207,7 +207,7 @@ get_ipc_subyacente <- function() {
     dplyr::mutate(
       mes = crear_mes(mes),
       fecha = lubridate::make_date(year, mes),
-      across(c("year","ipc_subyacente", "ipc_subyacente_vm",
+      dplyr::across(c("year","ipc_subyacente", "ipc_subyacente_vm",
                "ipc_subyacente_vd", "ipc_subyacente_vi"),
              as.numeric)
     ) |>

@@ -3,6 +3,8 @@ utils::globalVariables(
     "fecha",
     "mes",
     "year",
+    "anual",
+    "diaria",
     "ipc_ayb",
     "ano",
     "dia",
@@ -18,6 +20,9 @@ utils::globalVariables(
     "labels",
     "direct_parent",
     "indicadores_bcrd_details",
+    "fiscal_details",
+    "imports_details",
+    "exports_details",
     "monto",
     "variacion_interanual",
     "proporcion",
@@ -37,6 +42,8 @@ utils::globalVariables(
     "valor_impor",
     "x1",
     "x2",
-    "x3"
+    "x3",
+    "compra",
+    "venta"
     )
 )

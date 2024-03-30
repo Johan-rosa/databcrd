@@ -33,16 +33,16 @@ get_fiscal <- function(
       )
     )
 
-  vars <- data.frame(yr = t(data[1,]),
-                     mn = t(data[2,])) |>
-    tidyr::fill(yr) |>
+  vars <- data.frame(year = t(data[1,]),
+                     mes = t(data[2,])) |>
+    tidyr::fill(year) |>
     dplyr::mutate(
-      yr = stringr::str_remove(
-        string = yr,
+      year = stringr::str_remove(
+        string = year,
         pattern = "\\*"
         ),
       date = paste(
-        yr, mn,
+        year, mes,
         sep = "_"
         )
       ) |>
@@ -51,7 +51,7 @@ get_fiscal <- function(
   colnames(data) <- vars
 
   data <- data |>
-    dplyr::filter(!is.na(`2000_Enero`)) |>
+    dplyr::filter(!is.na(`2000_Enero`)) |> #nolint
     dplyr::select(-c(1, 2)) |>
     dplyr::slice(-c(1:2)) |>
     dplyr::bind_cols(fiscal_details) |>
@@ -67,11 +67,11 @@ get_fiscal <- function(
         )
       ) |>
     dplyr::mutate(
-      valor = readr::parse_number(valor),
+      valor = as.numeric(valor),
       year = stringr::str_extract(
         string = fecha,
         pattern = "[:digit:]{4}"
-      ) |> readr::parse_number(),
+      ) |> as.numeric(),
       fecha = lubridate::make_date(
         year = year,
         month = stringr::str_remove(

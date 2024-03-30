@@ -38,7 +38,7 @@ get_encaje <- function() {
   )
 
   encaje <- encaje |>
-    na.omit() |>
+    na.omit() |> #nolint
     dplyr::mutate(
       mes = crear_mes(mes),
       fecha = lubridate::make_date(year, mes)
