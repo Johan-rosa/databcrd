@@ -25,7 +25,7 @@ Suggests:
     tsibble,
     feasts,
     ggplot2,
-    scales
+    scales,
     fable,
     covr,
     knitr,
