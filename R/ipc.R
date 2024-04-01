@@ -198,8 +198,8 @@ get_ipc_subyacente <- function() {
       col_names = FALSE, na = c("-")
     ))
 
-  ipc_subyacente <-
-    ipc_subyacente[tidyr::complete.cases(ipc_subyacente$`...2`), ] |>
+  ipc_subyacente <- ipc_subyacente |>
+    dplyr::filter(!is.na(ipc_subyacente[[2]])) |>
     janitor::clean_names() |>
     dplyr::select(1:6) |>
     stats::setNames(header_ipc_subyacente) |>

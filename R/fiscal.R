@@ -51,10 +51,10 @@ get_fiscal <- function(
   colnames(data) <- vars
 
   data <- data |>
-    dplyr::filter(!is.na(`2000_Enero`)) |> #nolint
+    dplyr::filter(!is.na(data[[3]])) |>
     dplyr::select(-c(1, 2)) |>
     dplyr::slice(-c(1:2)) |>
-    dplyr::bind_cols(fiscal_details) |>
+    dplyr::bind_cols(fiscal_details) |> # nolint
     tidyr::pivot_longer(
       cols = -c(short_names, categoria, nivel,
                 original_names, labels, direct_parent),
