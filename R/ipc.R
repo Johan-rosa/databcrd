@@ -261,4 +261,3 @@ get_ipc_tnt <- function() {
 
   ipc_tnt
 }
-
