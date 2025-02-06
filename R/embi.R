@@ -49,7 +49,7 @@ get_embi <- function(periodicidad = "mensual") {
         skip = 1,
         na = "N/A"
       ) |>
-        dplyr::select(1:`RD-LATINO`) |>
+        dplyr::select(Fecha:`RD-LATINO`) |>
         dplyr::mutate(
           Fecha = dplyr::case_when(
             stringr::str_detect(Fecha, "^\\d+$") ~ janitor::excel_numeric_to_date(as.numeric(Fecha)),
