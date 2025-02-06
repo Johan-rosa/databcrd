@@ -24,6 +24,8 @@ Suggests:
     urca,
     tsibble,
     feasts,
+    ggplot2,
+    scales,
     fable,
     covr,
     knitr,

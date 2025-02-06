@@ -41,7 +41,7 @@ test_that("No empty rows", {
 })
 
 test_that("No dates in the future", {
-  testthat::expect_true(max(remesas$year) <= lubridate::today())
+  testthat::expect_true(max(remesas$year, na.rm = TRUE) <= lubridate::today())
 })
 
 # Remesas por provincia receptora ----
@@ -64,7 +64,7 @@ test_that("No empty rows", {
 })
 
 test_that("No dates in the future", {
-  testthat::expect_true(max(remesas$year) <= lubridate::today())
+  testthat::expect_true(max(remesas$year, na.rm = TRUE) <= lubridate::today())
 })
 
 # Remesas cantidad ----
@@ -87,7 +87,7 @@ test_that("No empty rows", {
 })
 
 test_that("No dates in the future", {
-  testthat::expect_true(max(remesas$year) <= lubridate::today())
+  testthat::expect_true(max(remesas$year, na.rm = TRUE) <= lubridate::today())
 })
 
 # Remesas promedio ----
@@ -110,7 +110,7 @@ test_that("No empty rows", {
 })
 
 test_that("No dates in the future", {
-  testthat::expect_true(max(remesas$year) <= lubridate::today())
+  testthat::expect_true(max(remesas$year, na.rm = TRUE) <= lubridate::today())
 })
 
 # Remesas por moneda ----
@@ -133,7 +133,7 @@ test_that("No empty rows", {
 })
 
 test_that("No dates in the future", {
-  testthat::expect_true(max(remesas$year) <= lubridate::today())
+  testthat::expect_true(max(remesas$year, na.rm = TRUE) <= lubridate::today())
 })
 
 # Remesas por entidad pagadora ----
@@ -156,7 +156,7 @@ test_that("No empty rows", {
 })
 
 test_that("No dates in the future", {
-  testthat::expect_true(max(remesas$year) <= lubridate::today())
+  testthat::expect_true(max(remesas$year, na.rm = TRUE) <= lubridate::today())
 })
 
 # Remesas por genero ----
@@ -179,5 +179,5 @@ test_that("No empty rows", {
 })
 
 test_that("No dates in the future", {
-  testthat::expect_true(max(remesas$year) <= lubridate::today())
+  testthat::expect_true(max(remesas$year, na.rm = TRUE) <= lubridate::today())
 })
