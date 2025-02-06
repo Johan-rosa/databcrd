@@ -8,7 +8,6 @@
 #' @return a tibble
 #' @examples
 #' get_fiscal()
-
 get_fiscal <- function(
     frecuencia = "Mensual"
     ) {
