@@ -15,6 +15,11 @@ venta
 trimestral
 mensual
 fp
+ecc
+ECC
+eem
+EEM
+eoe
 cantidad
 de
 emisor
@@ -30,3 +35,8 @@ receptora
 segun
 transancciones
 transacciones
+destino
+origen
+eif
+serie
+tradable
