@@ -1,6 +1,6 @@
 #' Download Statement of Operations of the non-financial public sector
 #'
-#'#' @param frecuencia A character string that specifies the frequency of the
+#' @param frecuencia A character string that specifies the frequency of the
 #' exchange rates to be downloaded. Valid options are "Mensual",  or "Anual".
 #'
 #' @export

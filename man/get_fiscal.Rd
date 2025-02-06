@@ -6,12 +6,15 @@
 \usage{
 get_fiscal(frecuencia = "Mensual")
 }
+\arguments{
+\item{frecuencia}{A character string that specifies the frequency of the
+exchange rates to be downloaded. Valid options are "Mensual",  or "Anual".}
+}
 \value{
 a tibble
 }
 \description{
-#' @param frecuencia A character string that specifies the frequency of the
-exchange rates to be downloaded. Valid options are "Mensual",  or "Anual".
+Download Statement of Operations of the non-financial public sector
 }
 \examples{
 get_fiscal()
