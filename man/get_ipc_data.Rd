@@ -9,8 +9,7 @@ get_ipc_data(desagregacion)
 \arguments{
 \item{desagregacion}{string with the desired disaggregation. options:
 "general", "grupos", "regiones", "subyacente", "tnt" (transable y no
-transable),
-"articulos"}
+transable), "articulos"}
 }
 \value{
 a tibble

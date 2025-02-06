@@ -5,8 +5,7 @@
 #'
 #' @param desagregacion string with the desired disaggregation. options:
 #' "general", "grupos", "regiones", "subyacente", "tnt" (transable y no
-#' transable),
-#' "articulos"
+#' transable), "articulos"
 #'
 #' @export
 #'

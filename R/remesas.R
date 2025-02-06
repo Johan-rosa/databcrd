@@ -60,6 +60,7 @@ get_remesas_mensuales <- function() {
       year = as.numeric(year),
       fecha = lubridate::make_date(year, mes, "1")
     ) |>
+    dplyr::relocate(fecha) |>
     stats::na.omit() |>
     dplyr::arrange(fecha)
 
@@ -77,7 +78,9 @@ read_remesa_file <- function(url, skip, n_max, values_to = "proporcion") {
     dplyr::mutate(dplyr::across(-partida, as.numeric)) |>
     stats::na.omit() |>
     tidyr::pivot_longer(-partida, names_to = "year", values_to = values_to) |>
-    dplyr::mutate(year = as.numeric(year))
+    dplyr::mutate(
+      year = stringr::str_extract(year, "\\d{4}") |>  as.numeric()
+    )
 }
 
 #' Get remittances by country
