@@ -63,5 +63,5 @@ get_embi <- function(periodicidad = "mensual") {
   embi |>
     dplyr::mutate(Fecha = lubridate::floor_date(Fecha, periodicidad)) |>
     dplyr::group_by(Fecha) |>
-    dplyr::summarise(dplyr::across(tidyselect::everything(), .f = \(x) mean(x, na.rm = TRUE)))
+    dplyr::summarise(dplyr::across(dplyr::everything(), .f = \(x) mean(x, na.rm = TRUE)))
 }
