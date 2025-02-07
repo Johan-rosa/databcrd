@@ -19,8 +19,7 @@ Imports:
     stringr,
     usethis,
     tidyr,
-    yaml,
-    roxygen2
+    yaml
 Suggests:
     urca,
     tsibble,
