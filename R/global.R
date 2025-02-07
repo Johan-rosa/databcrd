@@ -45,6 +45,7 @@ utils::globalVariables(
     "x3",
     "compra",
     "venta",
-    "RD-LATINO"
+    "RD-LATINO",
+    "sectores"
     )
 )
