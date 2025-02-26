@@ -66,7 +66,7 @@
 #' A data frame with 612 rows and 26 columns:
 #'
 #' \describe{
-#'   \item{posicion}{Order in the orinal excel}
+#'   \item{posicion}{Order in the original excel}
 #'   \item{nombre}{Item name, it can be a group, class or other level}
 #'   \item{agregacion}{This is the level of the given item}
 #'   \item{group}{Group name}
@@ -91,17 +91,17 @@
 #'   \item{is_resto}{Boolean: is others?}
 #'   \item{is_nuevo}{Boolean: was introduced in the most recent basket?}
 #'   \item{codigo_articulo}{id of the item}
-#'   \item{ponderacion_ipc}{weigth of the element as proportion of the general basket}
+#'   \item{ponderacion_ipc}{weight of the element as proportion of the general basket}
 #' }
 "ipc_articulos_details"
 
-#' CPI by item data, from octuber 2020 to december 2024
+#' CPI by item data, from October 2020 to December 2024
 #'
 #' @format ## `data_ipc_articulos_2020_2024`
 #' A data frame with 612 rows and 26 columns:
 #'
 #' \describe{
-#'   \item{id}{Order in the orinal excel}
+#'   \item{id}{Order in the original excel}
 #'   \item{nombre}{Item name, it can be a group, class or other level}
 #'   \item{agregacion}{This is the level of the given item}
 #'   \item{group}{Group name}
@@ -113,18 +113,18 @@
 #'   \item{date}{Date}
 #'   \item{year}{Year}
 #'   \item{mes}{Month}
-#'   \item{ponderacion_ipc}{weigth of the element as proportion of the general basket}
+#'   \item{ponderacion_ipc}{Weight of the element as proportion of the general basket}
 #'   \item{indice}{item index}
 #' }
 "data_ipc_articulos_2020_2024"
 
-#' CPI by item data, from 2010 to december 2024
+#' CPI by item data, from 2010 to December 2024
 #'
 #' @format ## `data_ipc_articulos_long_2010_2024`
 #' A data frame with 612 rows and 26 columns:
 #'
 #' \describe{
-#'   \item{id}{Order in the orinal excel}
+#'   \item{id}{Order in the original excel}
 #'   \item{nombre}{Item name, it can be a group, class or other level}
 #'   \item{agregacion}{This is the level of the given item}
 #'   \item{group}{Group name}
@@ -136,7 +136,7 @@
 #'   \item{date}{Date}
 #'   \item{year}{Year}
 #'   \item{mes}{Month}
-#'   \item{ponderacion_ipc}{weigth of the element as proportion of the general basket}
+#'   \item{ponderacion_ipc}{Weight of the element as proportion of the general basket}
 #'   \item{indice}{item index}
 #' }
 "data_ipc_articulos_long_2010_2024"

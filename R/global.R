@@ -52,6 +52,7 @@ utils::globalVariables(
     "grupo",
     "subgrupo",
     "clase",
+    "subclase",
     "articulo",
     "name",
     "id",
