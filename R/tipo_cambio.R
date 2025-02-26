@@ -184,35 +184,49 @@ get_tc_spot <- function(frecuencia = "mensual", average_or_fp = "average") {
 #'get_tc(frecuencia = "diaria", entidad = "spot", average_or_fp = "average")
 #'get_tc(frecuencia = "mensual", entidad = "eif", average_or_fp = "average")
 #'get_tc(frecuencia = "trimestral", entidad = "ac", average_or_fp = "fp")
-
-get_tc <- function(frecuencia = "diaria",
-                   entidad = "spot",
-                   average_or_fp = "average") {
+get_tc <- function(
+    frecuencia = "diaria",
+    entidad = "spot",
+    average_or_fp = "average"
+) {
   checkmate::assert_choice(
     frecuencia,
     choices = c("diaria", "mensual", "trimestral", "anual")
     )
+
   checkmate::assert_choice(
     entidad,
     choices = c("eif", "ac", "spot")
   )
+
   checkmate::assert_choice(
     average_or_fp,
     choices = c("average", "fp")
   )
 
+  url_spot <- paste0(
+    "https://cdn.bancentral.gov.do/documents/",
+    "estadisticas/mercado-cambiario/documents/",
+    "TASA_DOLAR_REFERENCIA_MC.xlsx"
+  )
+
+  url_eif <- paste0(
+    "https://cdn.bancentral.gov.do/documents/estadisticas/",
+    "mercado-cambiario/documents/",
+    "TASA_ENTIDADES_FINANCIERAS.xls"
+  )
+
+  url_ac <- paste0(
+    "https://cdn.bancentral.gov.do/documents/estadisticas/",
+    "mercado-cambiario/documents/",
+    "TASAS_AGENTES_CAMBIO.xls"
+  )
 
   url <- dplyr::case_when(
-    entidad == "spot" ~ paste0("https://cdn.bancentral.gov.do/documents/",
-                               "estadisticas/mercado-cambiario/documents/",
-                               "TASA_DOLAR_REFERENCIA_MC.xlsx"),
-    entidad == "eif" ~ paste0("https://cdn.bancentral.gov.do/documents/estadisticas/",
-                              "mercado-cambiario/documents/",
-                              "TASA_ENTIDADES_FINANCIERAS.xls"),
-    entidad == "ac" ~ paste0("https://cdn.bancentral.gov.do/documents/estadisticas/",
-                             "mercado-cambiario/documents/",
-                             "TASAS_AGENTES_CAMBIO.xls")
-    )
+    entidad == "spot" ~ url_spot,
+    entidad == "eif" ~ url_eif,
+    entidad == "ac" ~ url_ac
+  )
 
   path <- tempfile(
     pattern = "",
@@ -225,9 +239,9 @@ get_tc <- function(frecuencia = "diaria",
   utils::download.file(url, path, mode = "wb", quiet = TRUE)
 
   tipo_cambio <- readxl::read_excel(
-    path,
-    sheet = "Diaria",
-    skip = 2
+      path,
+      sheet = "Diaria",
+      skip = 2
     ) |>
     janitor::clean_names() |>
     dplyr::rename(anual = ano) |>
@@ -255,13 +269,14 @@ get_tc <- function(frecuencia = "diaria",
       .by = {{ frecuencia }}
     )
 
-    tipo_cambio <- dplyr::left_join(x = fp_dates,
-                                    y = tipo_cambio |>
-                                      dplyr::select(diaria, compra, venta),
-                                    by = c("diaria" = "diaria")) |>
+    tipo_cambio <- dplyr::left_join(
+      x = fp_dates,
+      y = dplyr::select(tipo_cambio, diaria, compra, venta),
+      by = c("diaria" = "diaria")
+    ) |>
       dplyr::rename(fecha = diaria) |>
       dplyr::select(fecha, compra, venta)
   }
 
-  return(tipo_cambio)
+  tipo_cambio
 }
