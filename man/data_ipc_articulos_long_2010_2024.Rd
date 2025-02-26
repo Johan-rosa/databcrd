@@ -3,14 +3,14 @@
 \docType{data}
 \name{data_ipc_articulos_long_2010_2024}
 \alias{data_ipc_articulos_long_2010_2024}
-\title{CPI by item data, from 2010 to december 2024}
+\title{CPI by item data, from 2010 to December 2024}
 \format{
 \subsection{\code{data_ipc_articulos_long_2010_2024}}{
 
 A data frame with 612 rows and 26 columns:
 
 \describe{
-\item{id}{Order in the orinal excel}
+\item{id}{Order in the original excel}
 \item{nombre}{Item name, it can be a group, class or other level}
 \item{agregacion}{This is the level of the given item}
 \item{group}{Group name}
@@ -22,7 +22,7 @@ A data frame with 612 rows and 26 columns:
 \item{date}{Date}
 \item{year}{Year}
 \item{mes}{Month}
-\item{ponderacion_ipc}{weigth of the element as proportion of the general basket}
+\item{ponderacion_ipc}{Weight of the element as proportion of the general basket}
 \item{indice}{item index}
 }
 }
@@ -31,6 +31,6 @@ A data frame with 612 rows and 26 columns:
 data_ipc_articulos_long_2010_2024
 }
 \description{
-CPI by item data, from 2010 to december 2024
+CPI by item data, from 2010 to December 2024
 }
 \keyword{datasets}

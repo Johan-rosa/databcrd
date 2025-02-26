@@ -10,7 +10,7 @@
 A data frame with 612 rows and 26 columns:
 
 \describe{
-\item{posicion}{Order in the orinal excel}
+\item{posicion}{Order in the original excel}
 \item{nombre}{Item name, it can be a group, class or other level}
 \item{agregacion}{This is the level of the given item}
 \item{group}{Group name}
@@ -35,7 +35,7 @@ A data frame with 612 rows and 26 columns:
 \item{is_resto}{Boolean: is others?}
 \item{is_nuevo}{Boolean: was introduced in the most recent basket?}
 \item{codigo_articulo}{id of the item}
-\item{ponderacion_ipc}{weigth of the element as proportion of the general basket}
+\item{ponderacion_ipc}{weight of the element as proportion of the general basket}
 }
 }
 }
