@@ -9,7 +9,6 @@
 #'
 #' @examples
 #' get_fbkf()
-
 get_fbkf <- function() {
   file_url <- paste0("https://cdn.bancentral.gov.do/documents/",
                      "estadisticas/sector-real/",

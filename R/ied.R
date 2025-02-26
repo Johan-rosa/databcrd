@@ -16,7 +16,6 @@
 #' @examples
 #'get_tc_eif("mensual")
 #'get_tc_eif("anual")
-
 get_ied <- function(
     modalidad = "pais_origen",
     frecuencia = "trimestral"
