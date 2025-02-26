@@ -58,6 +58,6 @@ utils::globalVariables(
     "ponderacion",
     "agregacion",
     "data_ipc_articulos_long_2010_2024",
-    "setNames"
+    "ipc_articulos_details"
     )
 )

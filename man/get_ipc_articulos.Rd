@@ -14,5 +14,5 @@ Download the CPI inflacion series for the Dominican Republic by item level with 
 about the group, subgroup, class and subclass
 }
 \examples{
-get_ipc_articulos("general")
+get_ipc_articulos()
 }
