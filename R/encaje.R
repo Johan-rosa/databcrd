@@ -1,7 +1,5 @@
 #' Download legal reserve serie
 #'
-#'
-#'
 #' @export
 #'
 #' @return a tibble
@@ -37,10 +35,11 @@ get_encaje <- function() {
     )
   )
 
-  encaje <- encaje |>
+  encaje |>
     stats::na.omit() |> #nolint
     dplyr::mutate(
       mes = crear_mes(mes),
       fecha = lubridate::make_date(year, mes)
-      )
+      ) |>
+    dplyr::relocate(fecha)
 }
