@@ -63,7 +63,7 @@ get_ipc_articulos <- function() {
 #' get_ipc_long("general")
 #' get_ipc_long("grupo")
 get_ipc_long <- function(desagregacion = c("general", "grupo", "subgrupo", "clase", "subclase", "articulo")) {
-  desagregacion <- rlang::arg_match(desagregacion)
+  desagregacion <- match.arg(desagregacion)
 
   data <- get_ipc_articulos() |>
     dplyr::filter(agregacion == stringr::str_to_title(desagregacion))
