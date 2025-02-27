@@ -48,6 +48,44 @@ get_ipc_articulos <- function() {
     dplyr::arrange(date)
 }
 
+#' Download the CPI series in long format
+#'
+#' Download the CPI inflacion series for the Dominican Republic in any
+#' disaggregation
+#'
+#' @param desagregacion string with the desired disaggregation. options:
+#' "general", "grupo", "subgrupo", "clase", "subclase", "articulo"
+#'
+#' @export
+#'
+#' @return a tibble
+#' @examples
+#' get_ipc_long("general")
+#' get_ipc_long("grupos")
+get_ipc_long <- function(desagregacion = c("general", "grupo", "subgrupo", "clase", "subclase", "articulo")) {
+  desagregacion <- rlang::arg_match(desagregacion)
+
+  data <- get_ipc_articulos() |>
+    dplyr::filter(agregacion == stringr::str_to_title(desagregacion))
+
+  if (desagregacion != "articulo") {
+    to_remove <- switch (
+      desagregacion,
+      general = c("grupo", "subgrupo", "clase", "subclase", "articulo", "ponderacion"),
+      grupo = c("subgrupo", "clase", "subclase", "articulo"),
+      subgrupo = c("clase", "subclase", "articulo"),
+      clase = c("articulo", "subclase"),
+      subclase = c("articulo"),
+      stop("Wrong aggregation name")
+    )
+
+    data <- data |>
+      dplyr::select(-all_of(to_remove))
+  }
+
+  data
+}
+
 reshape_ipc_data <- function(raw_data, ref_year) {
   ipc_articulos_key <- ipc_articulos_details |>
     dplyr::select(id = posicion, nombre, agregacion, grupo, subgrupo, clase, subclase, articulo)
@@ -62,3 +100,5 @@ reshape_ipc_data <- function(raw_data, ref_year) {
     ) |>
     dplyr::relocate(date,year, mes, .before = ponderacion)
 }
+
+
