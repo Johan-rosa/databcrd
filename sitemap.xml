@@ -7,6 +7,8 @@
 <url><loc>https://johan-rosa.github.io/databcrd/authors.html</loc></url>
 <url><loc>https://johan-rosa.github.io/databcrd/index.html</loc></url>
 <url><loc>https://johan-rosa.github.io/databcrd/reference/crear_mes.html</loc></url>
+<url><loc>https://johan-rosa.github.io/databcrd/reference/data_ipc_articulos_2020_2024.html</loc></url>
+<url><loc>https://johan-rosa.github.io/databcrd/reference/data_ipc_articulos_long_2010_2024.html</loc></url>
 <url><loc>https://johan-rosa.github.io/databcrd/reference/date_label.html</loc></url>
 <url><loc>https://johan-rosa.github.io/databcrd/reference/expectativas_details.html</loc></url>
 <url><loc>https://johan-rosa.github.io/databcrd/reference/exports_details.html</loc></url>
@@ -27,9 +29,11 @@
 <url><loc>https://johan-rosa.github.io/databcrd/reference/get_importaciones.html</loc></url>
 <url><loc>https://johan-rosa.github.io/databcrd/reference/get_importaciones_petroleo.html</loc></url>
 <url><loc>https://johan-rosa.github.io/databcrd/reference/get_indicadores_monetarios_bcrd.html</loc></url>
+<url><loc>https://johan-rosa.github.io/databcrd/reference/get_ipc_articulos.html</loc></url>
 <url><loc>https://johan-rosa.github.io/databcrd/reference/get_ipc_data.html</loc></url>
 <url><loc>https://johan-rosa.github.io/databcrd/reference/get_ipc_general.html</loc></url>
 <url><loc>https://johan-rosa.github.io/databcrd/reference/get_ipc_grupos.html</loc></url>
+<url><loc>https://johan-rosa.github.io/databcrd/reference/get_ipc_long.html</loc></url>
 <url><loc>https://johan-rosa.github.io/databcrd/reference/get_ipc_regiones.html</loc></url>
 <url><loc>https://johan-rosa.github.io/databcrd/reference/get_ipc_subyacente.html</loc></url>
 <url><loc>https://johan-rosa.github.io/databcrd/reference/get_ipc_tnt.html</loc></url>
@@ -54,6 +58,7 @@
 <url><loc>https://johan-rosa.github.io/databcrd/reference/imports_details.html</loc></url>
 <url><loc>https://johan-rosa.github.io/databcrd/reference/index.html</loc></url>
 <url><loc>https://johan-rosa.github.io/databcrd/reference/indicadores_bcrd_details.html</loc></url>
+<url><loc>https://johan-rosa.github.io/databcrd/reference/ipc_articulos_details.html</loc></url>
 <url><loc>https://johan-rosa.github.io/databcrd/reference/read_details.html</loc></url>
 <url><loc>https://johan-rosa.github.io/databcrd/reference/rescale.html</loc></url>
 </urlset>

@@ -3,7 +3,7 @@ pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   ipc_data: ipc_data.html
-last_built: 2025-02-26T00:48Z
+last_built: 2025-02-27T09:56Z
 urls:
   reference: https://johan-rosa.github.io/databcrd/reference
   article: https://johan-rosa.github.io/databcrd/articles
