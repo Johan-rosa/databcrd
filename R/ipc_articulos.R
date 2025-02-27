@@ -80,7 +80,7 @@ get_ipc_long <- function(desagregacion = c("general", "grupo", "subgrupo", "clas
     )
 
     data <- data |>
-      dplyr::select(-all_of(to_remove))
+      dplyr::select(-dplyr::all_of(to_remove))
   }
 
   data
