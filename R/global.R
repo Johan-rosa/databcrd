@@ -46,6 +46,19 @@ utils::globalVariables(
     "compra",
     "venta",
     "RD-LATINO",
-    "sectores"
+    "sectores",
+    "posicion",
+    "nombre",
+    "grupo",
+    "subgrupo",
+    "clase",
+    "subclase",
+    "articulo",
+    "name",
+    "id",
+    "ponderacion",
+    "agregacion",
+    "data_ipc_articulos_long_2010_2024",
+    "ipc_articulos_details"
     )
 )
