@@ -61,7 +61,7 @@ get_ipc_articulos <- function() {
 #' @return a tibble
 #' @examples
 #' get_ipc_long("general")
-#' get_ipc_long("grupos")
+#' get_ipc_long("grupo")
 get_ipc_long <- function(desagregacion = c("general", "grupo", "subgrupo", "clase", "subclase", "articulo")) {
   desagregacion <- rlang::arg_match(desagregacion)
 

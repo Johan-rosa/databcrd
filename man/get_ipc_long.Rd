@@ -21,5 +21,5 @@ disaggregation
 }
 \examples{
 get_ipc_long("general")
-get_ipc_long("grupos")
+get_ipc_long("grupo")
 }
