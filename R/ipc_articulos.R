@@ -10,6 +10,7 @@
 #' @examples
 #' get_ipc_articulos()
 get_ipc_articulos <- function() {
+
   url_descarga <- paste0(
     "https://cdn.bancentral.gov.do/",
     "documents/estadisticas/precios/documents/",
@@ -27,19 +28,7 @@ get_ipc_articulos <- function() {
   new_data <- sheets |>
     purrr::map(
       \(ref_year) {
-        year_data <- readxl::read_excel(
-          file_path,
-          sheet = ref_year,
-          col_names = FALSE,
-          skip = 4
-        ) |>
-          suppressMessages()
-
-        data_names <- c("name", "ponderacion", crear_mes(seq_len(ncol(year_data) - 2), "number_to_text"))
-
-        year_data |>
-          stats::setNames(data_names) |>
-          reshape_ipc_data(as.numeric(ref_year))
+        read_ipc_articulos_sheet(ref_year, file_path)
       }
     ) |>
     purrr::list_rbind()
@@ -101,4 +90,18 @@ reshape_ipc_data <- function(raw_data, ref_year) {
     dplyr::relocate(date,year, mes, .before = ponderacion)
 }
 
+read_ipc_articulos_sheet <- function(ref_year, file_path) {
+  year_data <- readxl::read_excel(
+    file_path,
+    sheet = ref_year,
+    col_names = FALSE,
+    skip = 4
+  ) |>
+    suppressMessages()
 
+  data_names <- c("name", "ponderacion", crear_mes(seq_len(ncol(year_data) - 2), "number_to_text"))
+
+  year_data |>
+    stats::setNames(data_names) |>
+    reshape_ipc_data(as.numeric(ref_year))
+}
