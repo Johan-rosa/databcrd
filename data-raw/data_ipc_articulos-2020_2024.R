@@ -1,6 +1,6 @@
 # Utils ---------------------------------------------------------------------------------------
 # Load the package
-load("data/ipc_articulos_details.rda")
+ipc_articulos_details <- readRDS("inst/ipc_articulos_details.rds")
 
 ipc_articulos_key <- ipc_articulos_details |>
   dplyr::select(id = posicion, nombre, agregacion, grupo, subgrupo, clase, subclase, articulo)
