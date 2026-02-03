@@ -59,6 +59,8 @@ utils::globalVariables(
     "ponderacion",
     "agregacion",
     "data_ipc_articulos_long_2010_2024",
-    "ipc_articulos_details"
+    "ipc_articulos_details",
+    "code",
+    "all_of"
     )
 )

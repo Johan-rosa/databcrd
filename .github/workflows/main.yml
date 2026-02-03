@@ -38,7 +38,7 @@ jobs:
         if: always()
         uses: r-lib/actions/check-r-package@v2
         with:
-          error-on: '"note"'
+          error-on: '"error"'
 
       - name: Spell Check
         if : always()

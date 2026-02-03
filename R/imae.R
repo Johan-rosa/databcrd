@@ -48,7 +48,7 @@ get_imae <- function(variaciones = TRUE) {
     stats::setNames(header_imae) |>
     dplyr::filter(!is.na(mes)) |>
     dplyr::mutate(
-      fecha = seq(as.Date("2018-01-01"), by = "month", length.out = dplyr::n()),
+      fecha = seq(as.Date("2007-01-01"), by = "month", length.out = dplyr::n()),
       year = lubridate::year(fecha)
     ) |>
     dplyr::select(fecha, year, mes, dplyr::everything())

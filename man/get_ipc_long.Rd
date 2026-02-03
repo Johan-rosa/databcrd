@@ -16,7 +16,7 @@ get_ipc_long(
 a tibble
 }
 \description{
-Download the CPI inflacion series for the Dominican Republic in any
+Download the CPI inflation series for the Dominican Republic in any
 disaggregation
 }
 \examples{
