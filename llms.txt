@@ -1,0 +1,134 @@
+# databcrd
+
+The goal of {databcrd} is to make the data shared by the Central Bank of
+the Dominican Republic (DR) accessible to R users via an R packages.
+With the the functions contained in this package, downloading, cleaning
+and importing data about DR economy will be simple.
+
+## Installation
+
+You can install the development version of databcrd like so:
+
+``` r
+remotes::install_github("johan-rosa/databcrd")
+```
+
+# Package index
+
+## All functions
+
+- [`crear_mes()`](https://johan-rosa.github.io/databcrd/reference/crear_mes.md)
+  : Change month encoding
+- [`data_ipc_articulos_2020_2024`](https://johan-rosa.github.io/databcrd/reference/data_ipc_articulos_2020_2024.md)
+  : CPI by item data, from October 2020 to December 2024
+- [`data_ipc_articulos_long_2010_2024`](https://johan-rosa.github.io/databcrd/reference/data_ipc_articulos_long_2010_2024.md)
+  : CPI by item data, from 2010 to December 2024
+- [`date_label()`](https://johan-rosa.github.io/databcrd/reference/date_label.md)
+  : Create date label
+- [`expectativas_details`](https://johan-rosa.github.io/databcrd/reference/expectativas_details.md)
+  : Utility complement to handle the macroeconomic expectations
+- [`exports_details`](https://johan-rosa.github.io/databcrd/reference/exports_details.md)
+  : Utility complement to handle the total exports data
+- [`fiscal_details`](https://johan-rosa.github.io/databcrd/reference/fiscal_details.md)
+  : Utility complement to handle the total imports data
+- [`get_ecc()`](https://johan-rosa.github.io/databcrd/reference/get_ecc.md)
+  : Get ECC
+- [`get_eem()`](https://johan-rosa.github.io/databcrd/reference/get_eem.md)
+  : Get EEM
+- [`get_embi()`](https://johan-rosa.github.io/databcrd/reference/get_embi.md)
+  : Download EMBI
+- [`get_encaje()`](https://johan-rosa.github.io/databcrd/reference/get_encaje.md)
+  : Download legal reserve serie
+- [`get_eoe()`](https://johan-rosa.github.io/databcrd/reference/get_eoe.md)
+  : Get EOE
+- [`get_expectativas()`](https://johan-rosa.github.io/databcrd/reference/get_expectativas.md)
+  : Macroeconomic Expectations
+- [`get_exportaciones()`](https://johan-rosa.github.io/databcrd/reference/get_exportaciones.md)
+  : Total exports by sectors
+- [`get_exportaciones_zf()`](https://johan-rosa.github.io/databcrd/reference/get_exportaciones_zf.md)
+  : Free Trade Exports
+- [`get_fbkf()`](https://johan-rosa.github.io/databcrd/reference/get_fbkf.md)
+  : Download GROSS FIXED CAPITAL FORMATION BY SECTOR AND TYPE OF GOOD
+- [`get_fiscal()`](https://johan-rosa.github.io/databcrd/reference/get_fiscal.md)
+  : Download Statement of Operations of the non-financial public sector
+- [`get_ied()`](https://johan-rosa.github.io/databcrd/reference/get_ied.md)
+  : Foreign direct investment to the Dominican Republic
+- [`get_imae()`](https://johan-rosa.github.io/databcrd/reference/get_imae.md)
+  : Monthly Economic Activity Indicator, base 2018
+- [`get_imae_2007()`](https://johan-rosa.github.io/databcrd/reference/get_imae_2007.md)
+  : Monthly Economic Activity Indicator, base 2007
+- [`get_importaciones()`](https://johan-rosa.github.io/databcrd/reference/get_importaciones.md)
+  : Total imports by sectors
+- [`get_importaciones_petroleo()`](https://johan-rosa.github.io/databcrd/reference/get_importaciones_petroleo.md)
+  : Oil Imports
+- [`get_indicadores_monetarios_bcrd()`](https://johan-rosa.github.io/databcrd/reference/get_indicadores_monetarios_bcrd.md)
+  : Monetary Indicators of the Central Bank of the Dominican Republic
+- [`get_ipc_articulos()`](https://johan-rosa.github.io/databcrd/reference/get_ipc_articulos.md)
+  : Download the CPI series at item level
+- [`get_ipc_data()`](https://johan-rosa.github.io/databcrd/reference/get_ipc_data.md)
+  : Download the CPI series
+- [`get_ipc_general()`](https://johan-rosa.github.io/databcrd/reference/get_ipc_general.md)
+  : To get the general CPI data
+- [`get_ipc_grupos()`](https://johan-rosa.github.io/databcrd/reference/get_ipc_grupos.md)
+  : To get the CPI data by group of goods and services
+- [`get_ipc_long()`](https://johan-rosa.github.io/databcrd/reference/get_ipc_long.md)
+  : Download the CPI series in long format
+- [`get_ipc_regiones()`](https://johan-rosa.github.io/databcrd/reference/get_ipc_regiones.md)
+  : To get the CPI data by geographic region
+- [`get_ipc_subyacente()`](https://johan-rosa.github.io/databcrd/reference/get_ipc_subyacente.md)
+  : To get the CPI core inflation data
+- [`get_ipc_tnt()`](https://johan-rosa.github.io/databcrd/reference/get_ipc_tnt.md)
+  : To get the CPI data by transferable or not
+- [`get_pib_gasto()`](https://johan-rosa.github.io/databcrd/reference/get_pib_gasto.md)
+  : GDP by the expenditure approach, both real and nominal
+- [`get_pib_sectores()`](https://johan-rosa.github.io/databcrd/reference/get_pib_sectores.md)
+  : GDP by the sector of origin, both real and nominal
+- [`get_prestamos_osd()`](https://johan-rosa.github.io/databcrd/reference/get_prestamos_osd.md)
+  : Download the loans by sector series
+- [`get_remesas()`](https://johan-rosa.github.io/databcrd/reference/get_remesas.md)
+  : Remittances to the Dominican Republic
+- [`get_remesas_avg()`](https://johan-rosa.github.io/databcrd/reference/get_remesas_avg.md)
+  : Get average of remittances
+- [`get_remesas_cnt()`](https://johan-rosa.github.io/databcrd/reference/get_remesas_cnt.md)
+  : Get quantity of transactions of remittances
+- [`get_remesas_currency()`](https://johan-rosa.github.io/databcrd/reference/get_remesas_currency.md)
+  : Get remittances by currency
+- [`get_remesas_epa()`](https://johan-rosa.github.io/databcrd/reference/get_remesas_epa.md)
+  : Get remittances by payment company
+- [`get_remesas_genero()`](https://johan-rosa.github.io/databcrd/reference/get_remesas_genero.md)
+  : Get remittances by gender
+- [`get_remesas_mensuales()`](https://johan-rosa.github.io/databcrd/reference/get_remesas_mensuales.md)
+  : Get the monthly remittances
+- [`get_remesas_pais()`](https://johan-rosa.github.io/databcrd/reference/get_remesas_pais.md)
+  : Get remittances by country
+- [`get_remesas_provincias()`](https://johan-rosa.github.io/databcrd/reference/get_remesas_provincias.md)
+  : Get remittances by provinces
+- [`get_tasas_activas()`](https://johan-rosa.github.io/databcrd/reference/get_tasas_activas.md)
+  : Download interest rates for loans
+- [`get_tasas_pasivas()`](https://johan-rosa.github.io/databcrd/reference/get_tasas_pasivas.md)
+  : Download interest rates for savings
+- [`get_tc()`](https://johan-rosa.github.io/databcrd/reference/get_tc.md)
+  : Average exchange rate of the operations in financial institutions
+- [`get_tc_eif()`](https://johan-rosa.github.io/databcrd/reference/get_tc_eif.md)
+  : Average exchange rate of the operations in financial institutions
+- [`get_tc_spot()`](https://johan-rosa.github.io/databcrd/reference/get_tc_spot.md)
+  : Exchange rates in the spot market of the Dominican Republic
+- [`get_tpm()`](https://johan-rosa.github.io/databcrd/reference/get_tpm.md)
+  : Series of the Monetary Policy Rate of the Dominican Republic
+- [`imports_details`](https://johan-rosa.github.io/databcrd/reference/imports_details.md)
+  : Utility complement to handle the total imports data
+- [`indicadores_bcrd_details`](https://johan-rosa.github.io/databcrd/reference/indicadores_bcrd_details.md)
+  : Utility complement to handle the monetary indicators data
+- [`ipc_articulos_details`](https://johan-rosa.github.io/databcrd/reference/ipc_articulos_details.md)
+  : Utility complement to handle the CPI by item
+- [`read_details()`](https://johan-rosa.github.io/databcrd/reference/read_details.md)
+  : Function to read files metadata
+- [`rescale()`](https://johan-rosa.github.io/databcrd/reference/rescale.md)
+  : change the scale of a vector
+
+# Articles
+
+### All vignettes
+
+- [Dominican Inflation
+  Data](https://johan-rosa.github.io/databcrd/articles/ipc_data.md):

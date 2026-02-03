@@ -61,7 +61,7 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">get_embi</span><span class="op">(</span><span class="st">"diario"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4,326 × 21</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4,562 × 21</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Fecha      Global LATINO `REP DOM` Argentina Bolivia Brasil Chile Colombia</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2007-10-29   2.10   2.33      2.28      3.50     <span style="color: #BB0000;">NaN</span>   1.75  1.12     1.60</span>
@@ -74,12 +74,12 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2007-11-07   2.25   2.48      2.29      3.60     <span style="color: #BB0000;">NaN</span>   1.90  1.16     1.76</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2007-11-08   2.33   2.58      2.40      3.85     <span style="color: #BB0000;">NaN</span>   1.99  1.24     1.85</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2007-11-09   2.36   2.61      2.44      3.87     <span style="color: #BB0000;">NaN</span>   2.02  1.23     1.88</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 4,316 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 4,552 more rows</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 12 more variables: `Costa Rica` &lt;dbl&gt;, Ecuador &lt;dbl&gt;, `El Salvador` &lt;dbl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   Guatemala &lt;dbl&gt;, Honduras &lt;dbl&gt;, México &lt;dbl&gt;, Paraguay &lt;dbl&gt;, Perú &lt;dbl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   Panamá &lt;dbl&gt;, Uruguay &lt;dbl&gt;, Venezuela &lt;dbl&gt;, `RD-LATINO` &lt;dbl&gt;</span></span>
 <span class="r-in"><span><span class="fu">get_embi</span><span class="op">(</span><span class="st">"semanal"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 906 × 21</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 953 × 21</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Fecha      Global LATINO `REP DOM` Argentina Bolivia Brasil Chile Colombia</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2007-10-28   2.11   2.31      2.25      3.34     <span style="color: #BB0000;">NaN</span>   1.75  1.12     1.59</span>
@@ -92,12 +92,12 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2007-12-16   2.51   2.80      2.71      4.06     <span style="color: #BB0000;">NaN</span>   2.18  1.53     1.88</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2007-12-23   2.41   2.69      2.62      3.94     <span style="color: #BB0000;">NaN</span>   2.06  1.49     1.80</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2007-12-30   2.64   2.91      2.91      4.23     <span style="color: #BB0000;">NaN</span>   2.26  1.52     2.08</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 896 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 943 more rows</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 12 more variables: `Costa Rica` &lt;dbl&gt;, Ecuador &lt;dbl&gt;, `El Salvador` &lt;dbl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   Guatemala &lt;dbl&gt;, Honduras &lt;dbl&gt;, México &lt;dbl&gt;, Paraguay &lt;dbl&gt;, Perú &lt;dbl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   Panamá &lt;dbl&gt;, Uruguay &lt;dbl&gt;, Venezuela &lt;dbl&gt;, `RD-LATINO` &lt;dbl&gt;</span></span>
 <span class="r-in"><span><span class="fu">get_embi</span><span class="op">(</span><span class="st">"mensual"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 210 × 21</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 220 × 21</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Fecha      Global LATINO `REP DOM` Argentina Bolivia Brasil Chile Colombia</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2007-10-01   2.07   2.28      2.23      3.34     <span style="color: #BB0000;">NaN</span>   1.71  1.12     1.55</span>
@@ -110,12 +110,12 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2008-05-01   2.74   2.98      4.02      5.53     <span style="color: #BB0000;">NaN</span>   2.04  1.59     1.79</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2008-06-01   2.74   2.93      4.09      5.62     <span style="color: #BB0000;">NaN</span>   1.94  1.66     1.81</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2008-07-01   3.10   3.35      4.89      6.27     <span style="color: #BB0000;">NaN</span>   2.32  1.81     2.17</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 200 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 210 more rows</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 12 more variables: `Costa Rica` &lt;dbl&gt;, Ecuador &lt;dbl&gt;, `El Salvador` &lt;dbl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   Guatemala &lt;dbl&gt;, Honduras &lt;dbl&gt;, México &lt;dbl&gt;, Paraguay &lt;dbl&gt;, Perú &lt;dbl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   Panamá &lt;dbl&gt;, Uruguay &lt;dbl&gt;, Venezuela &lt;dbl&gt;, `RD-LATINO` &lt;dbl&gt;</span></span>
 <span class="r-in"><span><span class="fu">get_embi</span><span class="op">(</span><span class="st">"trimestral"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 70 × 21</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 74 × 21</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Fecha      Global LATINO `REP DOM` Argentina Bolivia Brasil Chile Colombia</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2007-10-01   2.46   2.72      2.61      3.91     <span style="color: #BB0000;">NaN</span>   2.10  1.41     1.90</span>
@@ -128,33 +128,34 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2009-07-01   3.83   4.18      7.52      9.22     <span style="color: #BB0000;">NaN</span>   2.54  1.47     2.70</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2009-10-01   3.19   3.63      4.66      7.18     <span style="color: #BB0000;">NaN</span>   2.16  1.26     2.14</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2010-01-01   2.97   3.42      4.18      7.33     <span style="color: #BB0000;">NaN</span>   2.03  1.23     2.10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 60 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 64 more rows</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 12 more variables: `Costa Rica` &lt;dbl&gt;, Ecuador &lt;dbl&gt;, `El Salvador` &lt;dbl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   Guatemala &lt;dbl&gt;, Honduras &lt;dbl&gt;, México &lt;dbl&gt;, Paraguay &lt;dbl&gt;, Perú &lt;dbl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   Panamá &lt;dbl&gt;, Uruguay &lt;dbl&gt;, Venezuela &lt;dbl&gt;, `RD-LATINO` &lt;dbl&gt;</span></span>
 <span class="r-in"><span><span class="fu">get_embi</span><span class="op">(</span><span class="st">"anual"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 19 × 21</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 20 × 21</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Fecha      Global LATINO `REP DOM` Argentina Bolivia Brasil Chile Colombia</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2007-01-01   2.46   2.72      2.61      3.91  <span style="color: #BB0000;">NaN</span>      2.10  1.41     1.90</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2008-01-01   4.05   4.37      7.08      8.56  <span style="color: #BB0000;">NaN</span>      3.01  2.12     3.04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2009-01-01   4.70   5.20      8.35     12.0   <span style="color: #BB0000;">NaN</span>      3.05  2.16     3.28</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2010-01-01   3.01   3.44      3.77      6.89  <span style="color: #BB0000;">NaN</span>      2.02  1.29     1.89</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2011-01-01   3.42   3.53      4.42      6.87  <span style="color: #BB0000;">NaN</span>      1.95  1.39     1.68</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2012-01-01   3.42   3.45      4.63      9.89    3.41   1.83  1.51     1.48</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2013-01-01   3.18   3.40      3.77     10.7     3.06   2.09  1.54     1.58</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2014-01-01   3.30   3.44      3.39      7.86    2.55   2.35  1.43     1.67</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2015-01-01   4.15   4.33      3.85      5.89    2.98   3.61  1.85     2.50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2016-01-01   4.09   4.48      4.15      4.75    1.67   3.94  2.00     2.78</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> 2017-01-01   3.25   3.62      3.14      4.12    1.73   2.64  1.30     1.94</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> 2018-01-01   3.59   3.90      3.14      5.47    2.41   2.65  1.33     1.84</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span> 2019-01-01   3.56   3.96      3.31     13.1     2.83   2.35  1.36     1.84</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span> 2020-01-01   4.07   4.65      4.88     22.4     5.40   3.18  1.98     2.62</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span> 2021-01-01   3.21   3.63      3.52     15.8     4.75   2.82  1.41     2.62</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">16</span> 2022-01-01   4.05   4.46      4.25     21.8     5.62   2.97  1.78     3.95</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">17</span> 2023-01-01   3.70   4.11      3.26     22.3    13.1    2.29  1.40     3.58</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">18</span> 2024-01-01   3.18   4.15      2.20     13.7    20.2    2.11  1.25     3.10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">19</span> 2025-01-01   2.92   4.18      2.04      6.56   20.4    2.24  1.24     3.24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2007-01-01   2.46   2.72      2.61      3.91  <span style="color: #BB0000;">NaN</span>      2.10 1.41      1.90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2008-01-01   4.05   4.37      7.08      8.56  <span style="color: #BB0000;">NaN</span>      3.01 2.12      3.04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2009-01-01   4.70   5.20      8.35     12.0   <span style="color: #BB0000;">NaN</span>      3.05 2.16      3.28</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2010-01-01   3.01   3.44      3.77      6.89  <span style="color: #BB0000;">NaN</span>      2.02 1.29      1.89</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2011-01-01   3.42   3.53      4.42      6.87  <span style="color: #BB0000;">NaN</span>      1.95 1.39      1.68</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2012-01-01   3.42   3.45      4.63      9.89    3.41   1.83 1.51      1.48</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2013-01-01   3.18   3.40      3.77     10.7     3.06   2.09 1.54      1.58</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2014-01-01   3.30   3.44      3.39      7.86    2.55   2.35 1.43      1.67</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2015-01-01   4.15   4.33      3.85      5.89    2.98   3.61 1.86      2.50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2016-01-01   4.09   4.48      4.15      4.75    1.67   3.94 2.00      2.78</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> 2017-01-01   3.25   3.62      3.14      4.12    1.73   2.64 1.30      1.94</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> 2018-01-01   3.59   3.90      3.14      5.47    2.41   2.65 1.33      1.84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span> 2019-01-01   3.56   3.96      3.31     13.1     2.83   2.35 1.36      1.84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span> 2020-01-01   4.07   4.65      4.89     22.4     5.41   3.18 1.98      2.63</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span> 2021-01-01   3.21   3.63      3.52     15.8     4.75   2.82 1.41      2.62</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">16</span> 2022-01-01   4.05   4.46      4.25     21.8     5.62   2.97 1.78      3.95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">17</span> 2023-01-01   3.69   4.11      3.26     22.3    13.0    2.29 1.40      3.58</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">18</span> 2024-01-01   3.18   4.13      2.20     13.7    20.2    2.11 1.25      3.10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">19</span> 2025-01-01   2.81   3.88      2.02      7.52   16.0    2.10 1.13      3.11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">20</span> 2026-01-01   2.27   2.95      1.72      5.47    6.37   1.93 0.909     2.68</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 12 more variables: `Costa Rica` &lt;dbl&gt;, Ecuador &lt;dbl&gt;, `El Salvador` &lt;dbl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   Guatemala &lt;dbl&gt;, Honduras &lt;dbl&gt;, México &lt;dbl&gt;, Paraguay &lt;dbl&gt;, Perú &lt;dbl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   Panamá &lt;dbl&gt;, Uruguay &lt;dbl&gt;, Venezuela &lt;dbl&gt;, `RD-LATINO` &lt;dbl&gt;</span></span>
@@ -169,7 +170,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>
