@@ -1,3 +1,5 @@
+# -*- coding: UTF-8 -*-
+
 #' Download the CPI series at item level
 #'
 #' Download the CPI inflacion series for the Dominican Republic by item level with details
@@ -38,7 +40,7 @@ get_ipc_articulos <- function() {
 
 #' Download the CPI series in long format
 #'
-#' Download the CPI inflacion series for the Dominican Republic in any
+#' Download the CPI inflation series for the Dominican Republic in any
 #' disaggregation
 #'
 #' @param desagregacion string with the desired disaggregation. options:
