@@ -12,7 +12,6 @@
 #' @examples
 #' get_expectativas("eem")
 #' get_expectativas("eoe")
-#' get_expectativas("ecc")
 #'
 get_expectativas <- function(modalidad = "eem") {
   checkmate::assert_choice(

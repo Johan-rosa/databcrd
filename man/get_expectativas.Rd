@@ -20,6 +20,5 @@ Dominican Republic.
 \examples{
 get_expectativas("eem")
 get_expectativas("eoe")
-get_expectativas("ecc")
 
 }
