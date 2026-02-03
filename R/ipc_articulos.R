@@ -117,10 +117,15 @@ read_ipc_articulos_sheet <- function(ref_year, file_path) {
         stringr::str_length(code) == 5 ~ "SubClase",
         stringr::str_length(code) == 7 ~ "Articulo",
         TRUE ~ "General"
+      ),
+      nombre = dplyr::recode(
+        nombre,
+         "Suplementos alimenticios (Ensure y similares)" = "Suplementos alimenticios",
+         "Celebración de cumpleaños" = "Celebración de eventos"
       )
     ) |>
     dplyr::relocate(code, agregacion, nombre) |>
-    select(-all_of(c("grupo", "subgrupo", "clase", "subclase", "articulo")))
+    dplyr::select(-all_of(c("grupo", "subgrupo", "clase", "subclase", "articulo")))
 
   raw_data |>
     reshape_ipc_data(as.numeric(ref_year))
