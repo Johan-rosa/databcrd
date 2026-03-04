@@ -2,48 +2,48 @@
 % Please edit documentation in R/operaciones_interbancarias.R
 \name{get_tasa_interbancaria}
 \alias{get_tasa_interbancaria}
-\title{Obtener tasas interbancarias promedio por plazos}
+\title{Get average interbank interest rates by maturity}
 \source{
-Banco Central de la República Dominicana.
+Central Bank of the Dominican Republic.
 }
 \usage{
 get_tasa_interbancaria()
 }
 \value{
-Un \code{tibble} con frecuencia mensual que incluye:
+A monthly-frequency \code{tibble} including:
 \describe{
-\item{date}{Fecha tipo Date (primer día del mes).}
-\item{year}{Año numérico.}
-\item{mes}{Mes numérico (1–12).}
-\item{monto_operaciones_interbancarias}{Monto total de operaciones interbancarias.}
-\item{tasa_promedio_ponderado}{Tasa promedio ponderada de operaciones interbancarias.}
-\item{monto_depositos_vista}{Monto de depósitos a la vista.}
-\item{tasa_depositos_vista}{Tasa de depósitos a la vista.}
-\item{monto_d_\emph{}{Montos por tramo de plazo (días).}
-\item{tasa_d_}}{Tasas por tramo de plazo (días).}
+\item{date}{Date object (first day of the month).}
+\item{year}{Numeric year.}
+\item{mes}{Numeric month (1–12).}
+\item{monto_operaciones_interbancarias}{Total interbank transaction amount.}
+\item{tasa_promedio_ponderado}{Weighted average interbank interest rate.}
+\item{monto_depositos_vista}{Demand deposits amount.}
+\item{tasa_depositos_vista}{Demand deposits interest rate.}
+\item{monto_d_\emph{}{Amounts by maturity bucket (days).}
+\item{tasa_d_}}{Interest rates by maturity bucket (days).}
 }
 }
 \description{
-Descarga y procesa el archivo oficial de Tasas Interbancarias Promedio
-por Plazos publicado por el Banco Central de la República Dominicana.
+Downloads and processes the official Average Interbank Rates by Maturity
+file published by the Central Bank of the Dominican Republic.
 }
 \details{
-La función:
+The function:
 \itemize{
-\item Descarga el archivo .xlsm desde el CDN institucional.
-\item Limpia encabezados y filas agregadas (acumulados).
-\item Convierte montos y tasas a formato numérico.
-\item Construye variables temporales (\code{year}, \code{mes}, \code{date}).
+\item Downloads the .xlsm file from the institutional CDN.
+\item Cleans headers and aggregated rows (cumulative values).
+\item Converts amounts and interest rates to numeric format.
+\item Builds time variables (\code{year}, \code{mes}, \code{date}).
 }
 
-Requiere que la estructura del archivo fuente no cambie (salto de 11 filas
-iniciales y orden de columnas fijo). Si el formato publicado por el Banco
-Central cambia, la función podría fallar.
+Requires the source file structure to remain unchanged (11 initial rows skipped
+and fixed column order). If the format published by the Central Bank changes,
+the function may fail.
 }
 \examples{
 \dontrun{
-tasas <- get_tasa_interbancaria()
-dplyr::glimpse(tasas)
+rates <- get_tasa_interbancaria()
+dplyr::glimpse(rates)
 }
 
 }
