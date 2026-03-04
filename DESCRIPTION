@@ -19,7 +19,8 @@ Imports:
     stringr,
     usethis,
     tidyr,
-    yaml
+    yaml,
+    readr
 Suggests:
     urca,
     tsibble,
