@@ -16,7 +16,7 @@ a tibble
 
 ``` r
 get_encaje()
-#> # A tibble: 289 × 17
+#> # A tibble: 290 × 17
 #>    fecha       year   mes mn_oblicaciones mn_requerido_absoluto
 #>    <date>     <dbl> <dbl>           <dbl>                 <dbl>
 #>  1 2001-12-01  2001    12          97427.                19485.
@@ -29,7 +29,7 @@ get_encaje()
 #>  8 2002-07-01  2002     7         103100.                20620.
 #>  9 2002-08-01  2002     8         102291.                20458.
 #> 10 2002-09-01  2002     9         100814.                20163.
-#> # ℹ 279 more rows
+#> # ℹ 280 more rows
 #> # ℹ 12 more variables: mn_requerido_tasa <dbl>, mn_efectivo_absoluto <dbl>,
 #> #   mn_efectivo_tasa <dbl>, mn_excedente_absoluto <dbl>,
 #> #   mn_excedente_tasa <dbl>, me_oblicaciones <dbl>,

@@ -26,7 +26,7 @@ a tibble
 
 ``` r
 get_ipc_long("general")
-#> # A tibble: 181 × 7
+#> # A tibble: 182 × 7
 #>       id nombre         agregacion date        year   mes indice
 #>    <dbl> <chr>          <chr>      <date>     <dbl> <dbl>  <dbl>
 #>  1     1 Indice General General    2010-12-01  2010    12   73.6
@@ -39,9 +39,9 @@ get_ipc_long("general")
 #>  8     1 Indice General General    2011-07-01  2011     7   78.6
 #>  9     1 Indice General General    2011-08-01  2011     8   79.0
 #> 10     1 Indice General General    2011-09-01  2011     9   79.1
-#> # ℹ 171 more rows
+#> # ℹ 172 more rows
 get_ipc_long("grupo")
-#> # A tibble: 2,172 × 9
+#> # A tibble: 2,184 × 9
 #>       id nombre       agregacion grupo date        year   mes ponderacion indice
 #>    <dbl> <chr>        <chr>      <chr> <date>     <dbl> <dbl>       <dbl>  <dbl>
 #>  1     2 Alimentos y… Grupo      Alim… 2010-12-01  2010    12       23.8    65.2
@@ -54,5 +54,5 @@ get_ipc_long("grupo")
 #>  8   439 Comunicacio… Grupo      Comu… 2010-12-01  2010    12        5.06   89.4
 #>  9   452 Recreación … Grupo      Recr… 2010-12-01  2010    12        3.03   86.9
 #> 10   501 Educación    Grupo      Educ… 2010-12-01  2010    12        3.06   58.2
-#> # ℹ 2,162 more rows
+#> # ℹ 2,174 more rows
 ```

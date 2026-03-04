@@ -38,7 +38,7 @@ rates
 
 ``` r
 get_tc(frecuencia = "diaria", entidad = "spot", average_or_fp = "average")
-#> # A tibble: 8,807 × 3
+#> # A tibble: 8,828 × 3
 #>    fecha      compra venta
 #>    <date>      <dbl> <dbl>
 #>  1 1991-01-02   11.2  11.5
@@ -51,9 +51,9 @@ get_tc(frecuencia = "diaria", entidad = "spot", average_or_fp = "average")
 #>  8 1991-01-11   11.2  11.5
 #>  9 1991-01-14   11.2  11.5
 #> 10 1991-01-15   11.2  11.5
-#> # ℹ 8,797 more rows
+#> # ℹ 8,818 more rows
 get_tc(frecuencia = "mensual", entidad = "eif", average_or_fp = "average")
-#> # A tibble: 409 × 3
+#> # A tibble: 411 × 3
 #>    fecha      compra venta
 #>    <date>      <dbl> <dbl>
 #>  1 1992-01-01   12.5  12.6
@@ -66,7 +66,7 @@ get_tc(frecuencia = "mensual", entidad = "eif", average_or_fp = "average")
 #>  8 1992-08-01   12.6  12.8
 #>  9 1992-09-01   12.5  12.6
 #> 10 1992-10-01   12.5  12.6
-#> # ℹ 399 more rows
+#> # ℹ 401 more rows
 get_tc(frecuencia = "trimestral", entidad = "ac", average_or_fp = "fp")
 #> # A tibble: 109 × 3
 #>    fecha      compra venta

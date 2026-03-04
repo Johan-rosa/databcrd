@@ -23,7 +23,7 @@ a tibble
 
 ``` r
 get_fiscal()
-#> # A tibble: 31,722 × 8
+#> # A tibble: 31,824 × 8
 #>    original_names labels  short_names categoria   nivel direct_parent fecha     
 #>    <chr>          <chr>   <chr>       <chr>       <dbl> <chr>         <date>    
 #>  1 Ingreso        ingreso GC_1        gobierno_c…     1 NA            2000-01-01
@@ -36,6 +36,6 @@ get_fiscal()
 #>  8 Ingreso        ingreso GC_1        gobierno_c…     1 NA            2000-08-01
 #>  9 Ingreso        ingreso GC_1        gobierno_c…     1 NA            2000-09-01
 #> 10 Ingreso        ingreso GC_1        gobierno_c…     1 NA            2000-10-01
-#> # ℹ 31,712 more rows
+#> # ℹ 31,814 more rows
 #> # ℹ 1 more variable: valor <dbl>
 ```

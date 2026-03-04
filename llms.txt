@@ -103,6 +103,8 @@ remotes::install_github("johan-rosa/databcrd")
   : Get remittances by country
 - [`get_remesas_provincias()`](https://johan-rosa.github.io/databcrd/reference/get_remesas_provincias.md)
   : Get remittances by provinces
+- [`get_tasa_interbancaria()`](https://johan-rosa.github.io/databcrd/reference/get_tasa_interbancaria.md)
+  : Get average interbank interest rates by maturity
 - [`get_tasas_activas()`](https://johan-rosa.github.io/databcrd/reference/get_tasas_activas.md)
   : Download interest rates for loans
 - [`get_tasas_pasivas()`](https://johan-rosa.github.io/databcrd/reference/get_tasas_pasivas.md)

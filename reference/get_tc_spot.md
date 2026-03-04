@@ -33,7 +33,7 @@ rates
 
 ``` r
 get_tc_spot("mensual", "average")
-#> # A tibble: 493 × 5
+#> # A tibble: 494 × 5
 #>    fecha       year   mes compra venta
 #>    <date>     <dbl> <dbl>  <dbl> <dbl>
 #>  1 1985-01-01  1985     1   3.26  3.28
@@ -46,9 +46,9 @@ get_tc_spot("mensual", "average")
 #>  8 1985-08-01  1985     8   2.98  2.99
 #>  9 1985-09-01  1985     9   2.98  2.99
 #> 10 1985-10-01  1985    10   2.99  3   
-#> # ℹ 483 more rows
+#> # ℹ 484 more rows
 get_tc_spot("mensual", "fp")
-#> # A tibble: 421 × 5
+#> # A tibble: 422 × 5
 #>    fecha       year   mes compra venta
 #>    <date>     <dbl> <dbl>  <dbl> <dbl>
 #>  1 1991-01-01  1991     1   11.7  12  
@@ -61,7 +61,7 @@ get_tc_spot("mensual", "fp")
 #>  8 1991-08-01  1991     8   12.5  12.5
 #>  9 1991-09-01  1991     9   12.5  12.5
 #> 10 1991-10-01  1991    10   12.5  12.5
-#> # ℹ 411 more rows
+#> # ℹ 412 more rows
 get_tc_spot("trimestral", "average")
 #> # A tibble: 164 × 5
 #>    fecha       year trimestre compra venta

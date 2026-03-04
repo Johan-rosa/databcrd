@@ -24,7 +24,7 @@ a tibble
 
 ``` r
 get_imae(variaciones = FALSE)
-#> # A tibble: 228 × 6
+#> # A tibble: 229 × 6
 #>    fecha       year mes        indice_original indice_desestacionali…¹ indice_tc
 #>    <date>     <dbl> <chr>                <dbl>                   <dbl>     <dbl>
 #>  1 2007-01-01  2007 Enero                 54.0                    55.3      55.7
@@ -37,6 +37,6 @@ get_imae(variaciones = FALSE)
 #>  8 2007-08-01  2007 Agosto                59.5                    61.0      59.9
 #>  9 2007-09-01  2007 Septiembre            57.2                    61.2      60.5
 #> 10 2007-10-01  2007 Octubre               60.4                    60.2      60.8
-#> # ℹ 218 more rows
+#> # ℹ 219 more rows
 #> # ℹ abbreviated name: ¹​indice_desestacionalizado
 ```

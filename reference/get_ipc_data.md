@@ -25,7 +25,7 @@ a tibble
 
 ``` r
 get_ipc_data("general")
-#> # A tibble: 504 × 8
+#> # A tibble: 505 × 8
 #>    fecha      year    mes   ipc ipc_vm ipc_vd ipc_vi ipc_p12
 #>    <date>     <chr> <dbl> <dbl>  <dbl>  <dbl>  <dbl>   <dbl>
 #>  1 1984-01-01 1984      1  1.38  1.74    1.74   7.05    5.57
@@ -38,9 +38,9 @@ get_ipc_data("general")
 #>  8 1984-08-01 1984      8  1.57  0.455  15.5   20.1    12.0 
 #>  9 1984-09-01 1984      9  1.64  4.69   20.9   24.8    13.7 
 #> 10 1984-10-01 1984     10  1.68  2.34   23.8   26.3    15.4 
-#> # ℹ 494 more rows
+#> # ℹ 495 more rows
 get_ipc_data("grupos")
-#> # A tibble: 324 × 26
+#> # A tibble: 325 × 26
 #>    fecha      year    mes ipc_ayb ipc_ayb_vm ipc_alcohol_tabaco
 #>    <date>     <chr> <dbl>   <dbl>      <dbl>              <dbl>
 #>  1 1999-01-01 1999      1    21.0     NA                   11.5
@@ -53,7 +53,7 @@ get_ipc_data("grupos")
 #>  8 1999-08-01 1999      8    20.0     -0.380               12.2
 #>  9 1999-09-01 1999      9    19.9     -0.569               12.2
 #> 10 1999-10-01 1999     10    20.5      2.83                12.4
-#> # ℹ 314 more rows
+#> # ℹ 315 more rows
 #> # ℹ 20 more variables: ipc_alcohol_tabaco_vm <dbl>, ipc_ropa_calzado <dbl>,
 #> #   ipc_ropa_calzado_vm <dbl>, ipc_vivienda <chr>, ipc_vivienda_vm <dbl>,
 #> #   ipc_muebles <dbl>, ipc_muebles_vm <dbl>, ipc_salud <dbl>,
@@ -61,7 +61,7 @@ get_ipc_data("grupos")
 #> #   ipc_comunicaciones <dbl>, ipc_comunicaciones_vm <dbl>, ipc_cultura <dbl>,
 #> #   ipc_cultura_vm <dbl>, ipc_educacion <dbl>, ipc_educacion_vm <dbl>, …
 get_ipc_data("subyacente")
-#> # A tibble: 312 × 7
+#> # A tibble: 313 × 7
 #>    fecha       year   mes ipc_subyacente ipc_subyacente_vm ipc_subyacente_vd
 #>    <date>     <dbl> <dbl>          <dbl>             <dbl>             <dbl>
 #>  1 2000-01-01  2000     1           25.8             0.316             0.316
@@ -74,10 +74,10 @@ get_ipc_data("subyacente")
 #>  8 2000-08-01  2000     8           26.9             0.361             4.22 
 #>  9 2000-09-01  2000     9           27.2             1.22              5.50 
 #> 10 2000-10-01  2000    10           27.3             0.289             5.80 
-#> # ℹ 302 more rows
+#> # ℹ 303 more rows
 #> # ℹ 1 more variable: ipc_subyacente_vi <dbl>
 get_ipc_data("regiones")
-#> # A tibble: 180 × 11
+#> # A tibble: 181 × 11
 #>    fecha      year    mes ipc_ozama ipc_ozama_vm ipc_cibao ipc_cibao_vm ipc_este
 #>    <date>     <chr> <dbl>     <dbl>        <dbl>     <dbl>        <dbl>    <dbl>
 #>  1 2011-01-01 2011      1      76.5       1.01        73.7       1.34       73.5
@@ -90,10 +90,10 @@ get_ipc_data("regiones")
 #>  8 2011-08-01 2011      8      80.7       0.544       78.2       0.423      78.2
 #>  9 2011-09-01 2011      9      80.9       0.161       78.4       0.198      78.4
 #> 10 2011-10-01 2011     10      80.9       0.0485      78.4       0.0351     78.4
-#> # ℹ 170 more rows
+#> # ℹ 171 more rows
 #> # ℹ 3 more variables: ipc_este_vm <dbl>, ipc_sur <dbl>, ipc_sur_vm <dbl>
 get_ipc_data("tnt")
-#> # A tibble: 323 × 12
+#> # A tibble: 324 × 12
 #>    fecha      year    mes   ipc  ipc_vm ipc_vd ipc_t    ipc_t_vm ipc_t_vd ipc_nt
 #>    <date>     <chr> <dbl> <dbl>   <dbl>  <dbl> <chr>    <chr>    <chr>    <chr> 
 #>  1 1999-02-01 1999      2  20.9 NA          NA 21.6612… NA       NA       20.11…
@@ -106,6 +106,6 @@ get_ipc_data("tnt")
 #>  8 1999-09-01 1999      9  21.0  0.400      NA 21.2914… -0.3866… NA       20.69…
 #>  9 1999-10-01 1999     10  21.7  3.51       NA 22.0287… 3.46271… NA       21.42…
 #> 10 1999-11-01 1999     11  22.0  1.43       NA 22.4571… 1.94491… NA       21.63…
-#> # ℹ 313 more rows
+#> # ℹ 314 more rows
 #> # ℹ 2 more variables: ipc_nt_vm <chr>, ipc_nt_vd <chr>
 ```

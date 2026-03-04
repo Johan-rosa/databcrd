@@ -23,7 +23,7 @@ a tibble
 
 ``` r
 get_prestamos_osd("consolidado")
-#> # A tibble: 5,776 × 5
+#> # A tibble: 5,792 × 5
 #>    sectores                          fecha         mn     me consolidado
 #>    <chr>                             <date>     <dbl>  <dbl>       <dbl>
 #>  1 AGRICULTURA, SILVICULTURA Y PESCA 1996-01-01 2920.  0           2920.
@@ -36,9 +36,9 @@ get_prestamos_osd("consolidado")
 #>  8 AGRICULTURA, SILVICULTURA Y PESCA 1996-08-01 2984.  1.40        2986.
 #>  9 AGRICULTURA, SILVICULTURA Y PESCA 1996-09-01 2947.  1.21        2949.
 #> 10 AGRICULTURA, SILVICULTURA Y PESCA 1996-10-01 2848.  6.13        2854.
-#> # ℹ 5,766 more rows
+#> # ℹ 5,782 more rows
 get_prestamos_osd("bancos_multiples")
-#> # A tibble: 5,776 × 5
+#> # A tibble: 5,792 × 5
 #>    sectores                          fecha         mn     me consolidado
 #>    <chr>                             <date>     <dbl>  <dbl>       <dbl>
 #>  1 AGRICULTURA, SILVICULTURA Y PESCA 1996-01-01 2308.  0           2308.
@@ -51,9 +51,9 @@ get_prestamos_osd("bancos_multiples")
 #>  8 AGRICULTURA, SILVICULTURA Y PESCA 1996-08-01 2289.  1.40        2290.
 #>  9 AGRICULTURA, SILVICULTURA Y PESCA 1996-09-01 2222.  1.21        2223.
 #> 10 AGRICULTURA, SILVICULTURA Y PESCA 1996-10-01 2114.  6.13        2121.
-#> # ℹ 5,766 more rows
+#> # ℹ 5,782 more rows
 get_prestamos_osd("resto_osd")
-#> # A tibble: 5,776 × 5
+#> # A tibble: 5,792 × 5
 #>    sectores                          fecha         mn    me consolidado
 #>    <chr>                             <date>     <dbl> <dbl>       <dbl>
 #>  1 AGRICULTURA, SILVICULTURA Y PESCA 1996-01-01  612.     0        612.
@@ -66,5 +66,5 @@ get_prestamos_osd("resto_osd")
 #>  8 AGRICULTURA, SILVICULTURA Y PESCA 1996-08-01  695.     0        695.
 #>  9 AGRICULTURA, SILVICULTURA Y PESCA 1996-09-01  726.     0        726.
 #> 10 AGRICULTURA, SILVICULTURA Y PESCA 1996-10-01  733.     0        733.
-#> # ℹ 5,766 more rows
+#> # ℹ 5,782 more rows
 ```

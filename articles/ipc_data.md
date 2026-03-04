@@ -44,7 +44,7 @@ year-over-year variation (`ipc_vi`), variation since December
 ``` r
 inflacion_general <- get_ipc_data("general")
 inflacion_general
-#> # A tibble: 504 × 8
+#> # A tibble: 505 × 8
 #>    fecha      year    mes   ipc ipc_vm ipc_vd ipc_vi ipc_p12
 #>    <date>     <chr> <dbl> <dbl>  <dbl>  <dbl>  <dbl>   <dbl>
 #>  1 1984-01-01 1984      1  1.38  1.74    1.74   7.05    5.57
@@ -57,7 +57,7 @@ inflacion_general
 #>  8 1984-08-01 1984      8  1.57  0.455  15.5   20.1    12.0 
 #>  9 1984-09-01 1984      9  1.64  4.69   20.9   24.8    13.7 
 #> 10 1984-10-01 1984     10  1.68  2.34   23.8   26.3    15.4 
-#> # ℹ 494 more rows
+#> # ℹ 495 more rows
 ```
 
 Let’s generate graphs for each variable.
@@ -102,9 +102,6 @@ plot_ipc_data(inflacion_general, ipc_vi, "Year-over-Year Variation of CPI") +
 
 ``` r
 library(tsibble)
-#> Registered S3 method overwritten by 'tsibble':
-#>   method               from 
-#>   as_tibble.grouped_df dplyr
 #> 
 #> Attaching package: 'tsibble'
 #> The following objects are masked from 'package:base':
@@ -138,6 +135,13 @@ models |>
   forecast(h = "6 months") %>% 
   autoplot(filter(ts_ipc, year > 2018), level = NULL) +
   theme_minimal()
+#> Warning: `autoplot.fbl_ts()` was deprecated in fabletools 0.6.0.
+#> ℹ Please use `ggtime::autoplot.fbl_ts()` instead.
+#> ℹ Graphics functions have been moved to the {ggtime} package. Please use
+#>   `library(ggtime)` instead.
+#> This warning is displayed once per session.
+#> Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+#> generated.
 ```
 
 ![](ipc_data_files/figure-html/forecast_plots-1.png)

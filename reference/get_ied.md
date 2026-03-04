@@ -29,7 +29,7 @@ A data frame
 
 ``` r
 get_tc_eif("mensual")
-#> # A tibble: 409 × 5
+#> # A tibble: 410 × 5
 #>    fecha       year   mes compra venta
 #>    <date>     <dbl> <dbl>  <dbl> <dbl>
 #>  1 1992-01-01  1992     1   12.5  12.6
@@ -42,7 +42,7 @@ get_tc_eif("mensual")
 #>  8 1992-08-01  1992     8   12.6  12.8
 #>  9 1992-09-01  1992     9   12.5  12.6
 #> 10 1992-10-01  1992    10   12.5  12.6
-#> # ℹ 399 more rows
+#> # ℹ 400 more rows
 get_tc_eif("anual")
 #> # A tibble: 34 × 3
 #>     year compra venta
