@@ -93,8 +93,10 @@ get_tasa_interbancaria <- function() {
     dplyr::distinct(year, year_mes, .keep_all = TRUE) |>
     dplyr::mutate(
       mes = databcrd::crear_mes(year_mes),
-      date = lubridate::make_date(year, mes, 1)
+      date = lubridate::make_date(year, mes, 1),
+      dplyr::across(dplyr::starts_with("tasa"), \(x)  x * 100)
     ) |>
+    dplyr::select(-year_mes) |>
     dplyr::relocate(date, year, mes) |>
     suppressMessages() |>
     suppressWarnings()
