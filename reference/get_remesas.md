@@ -25,7 +25,7 @@ a data frame
 
 ``` r
 get_remesas("mensual")
-#> # A tibble: 193 × 4
+#> # A tibble: 197 × 4
 #>    fecha        mes  year      monto
 #>    <date>     <dbl> <dbl>      <dbl>
 #>  1 2010-01-01     1  2010 280155041.
@@ -38,12 +38,9 @@ get_remesas("mensual")
 #>  8 2010-08-01     8  2010 314046413.
 #>  9 2010-09-01     9  2010 294098116.
 #> 10 2010-10-01    10  2010 306398494.
-#> # ℹ 183 more rows
+#> # ℹ 187 more rows
 get_remesas("por_pais_emisor")
-#> New names:
-#> • `2023` -> `2023...15`
-#> • `2023` -> `2023...16`
-#> # A tibble: 165 × 3
+#> # A tibble: 187 × 3
 #>    partida         year proporcion
 #>    <chr>          <dbl>      <dbl>
 #>  1 Estados Unidos  2010      0.664
@@ -56,9 +53,9 @@ get_remesas("por_pais_emisor")
 #>  8 Estados Unidos  2017      0.739
 #>  9 Estados Unidos  2018      0.774
 #> 10 Estados Unidos  2019      0.766
-#> # ℹ 155 more rows
+#> # ℹ 177 more rows
 get_remesas("por_provincia_receptora")
-#> # A tibble: 225 × 3
+#> # A tibble: 255 × 3
 #>    partida            year proporcion
 #>    <chr>             <dbl>      <dbl>
 #>  1 Distrito Nacional  2010     0.0903
@@ -71,9 +68,9 @@ get_remesas("por_provincia_receptora")
 #>  8 Distrito Nacional  2017     0.317 
 #>  9 Distrito Nacional  2018     0.318 
 #> 10 Distrito Nacional  2019     0.316 
-#> # ℹ 215 more rows
+#> # ℹ 245 more rows
 get_remesas("cantidad_de_transacciones")
-#> # A tibble: 165 × 3
+#> # A tibble: 187 × 3
 #>    partida         year cantidad
 #>    <chr>          <dbl>    <dbl>
 #>  1 Estados Unidos  2010  9790684
@@ -86,9 +83,9 @@ get_remesas("cantidad_de_transacciones")
 #>  8 Estados Unidos  2017 18203876
 #>  9 Estados Unidos  2018 20468645
 #> 10 Estados Unidos  2019 21899462
-#> # ℹ 155 more rows
+#> # ℹ 177 more rows
 get_remesas("promedio_transacciones")
-#> # A tibble: 150 × 3
+#> # A tibble: 170 × 3
 #>    partida         year monto
 #>    <chr>          <dbl> <dbl>
 #>  1 Estados Unidos  2010  200.
@@ -101,9 +98,9 @@ get_remesas("promedio_transacciones")
 #>  8 Estados Unidos  2017  206.
 #>  9 Estados Unidos  2018  211.
 #> 10 Estados Unidos  2019  209.
-#> # ℹ 140 more rows
+#> # ℹ 160 more rows
 get_remesas("segun_moneda")
-#> # A tibble: 30 × 3
+#> # A tibble: 34 × 3
 #>    partida               year proporcion
 #>    <chr>                <dbl>      <dbl>
 #>  1 Dólar Estadounidense  2010      0.347
@@ -116,9 +113,9 @@ get_remesas("segun_moneda")
 #>  8 Dólar Estadounidense  2017      0.643
 #>  9 Dólar Estadounidense  2018      0.660
 #> 10 Dólar Estadounidense  2019      0.670
-#> # ℹ 20 more rows
+#> # ℹ 24 more rows
 get_remesas("entidad_pagadora")
-#> # A tibble: 30 × 3
+#> # A tibble: 34 × 3
 #>    partida               year proporcion
 #>    <chr>                <dbl>      <dbl>
 #>  1 Empresas Remesadoras  2010      0.961
@@ -131,12 +128,9 @@ get_remesas("entidad_pagadora")
 #>  8 Empresas Remesadoras  2017      0.751
 #>  9 Empresas Remesadoras  2018      0.763
 #> 10 Empresas Remesadoras  2019      0.790
-#> # ℹ 20 more rows
+#> # ℹ 24 more rows
 get_remesas("genero_receptor")
-#> New names:
-#> • `2023` -> `2023...10`
-#> • `2023` -> `2023...11`
-#> # A tibble: 30 × 3
+#> # A tibble: 36 × 3
 #>    partida    year proporcion
 #>    <chr>     <dbl>      <dbl>
 #>  1 Masculino  2015      0.395
@@ -148,6 +142,6 @@ get_remesas("genero_receptor")
 #>  7 Masculino  2021      0.532
 #>  8 Masculino  2022      0.532
 #>  9 Masculino  2023      0.526
-#> 10 Masculino  2023      0.528
-#> # ℹ 20 more rows
+#> 10 Masculino  2024      0.476
+#> # ℹ 26 more rows
 ```

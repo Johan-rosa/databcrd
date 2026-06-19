@@ -24,7 +24,7 @@ A data frame
 
 ``` r
 get_exportaciones("mensual")
-#> # A tibble: 12,096 × 8
+#> # A tibble: 12,288 × 8
 #>    original_names labels   short_names categoria nivel direct_parent valor_expor
 #>    <chr>          <chr>    <chr>       <chr>     <dbl> <chr>               <dbl>
 #>  1 1. Minerales   Mineral… minerales   minerales     1 NA                    8.8
@@ -37,12 +37,12 @@ get_exportaciones("mensual")
 #>  8 1. Minerales   Mineral… minerales   minerales     1 NA                   15.3
 #>  9 1. Minerales   Mineral… minerales   minerales     1 NA                    7.8
 #> 10 1. Minerales   Mineral… minerales   minerales     1 NA                    5  
-#> # ℹ 12,086 more rows
+#> # ℹ 12,278 more rows
 #> # ℹ 1 more variable: fecha <date>
 get_exportaciones("trimestral")
-#> # A tibble: 4,032 × 8
+#> # A tibble: 4,096 × 8
 #> # Groups:   trimestre, original_names, labels, short_names, categoria, nivel
-#> #   [4,032]
+#> #   [4,096]
 #>    trimestre original_names    labels  short_names categoria nivel direct_parent
 #>        <dbl> <chr>             <chr>   <chr>       <chr>     <dbl> <chr>        
 #>  1     2010. 1. Minerales      Minera… minerales   minerales     1 NA           
@@ -55,7 +55,7 @@ get_exportaciones("trimestral")
 #>  8     2010. Aceite de soya    Aceite… aceite_de_… industri…     3 Industriales…
 #>  9     2010. Aguacates         Aguaca… aguacates   agropecu…     3 Agropecuario…
 #> 10     2010. Ajíes y pimientos Ajíes … ajíes_y_pi… agropecu…     3 Agropecuario…
-#> # ℹ 4,022 more rows
+#> # ℹ 4,086 more rows
 #> # ℹ 1 more variable: valor_expor <dbl>
 get_exportaciones("anual")
 #> # A tibble: 1,024 × 8

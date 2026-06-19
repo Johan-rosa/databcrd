@@ -1,6 +1,7 @@
 # Dominican Inflation Data
 
 ``` r
+
 library(databcrd)
 library(ggplot2)
 library(dplyr)
@@ -42,9 +43,10 @@ year-over-year variation (`ipc_vi`), variation since December
 (`ipc_vd`), and the 12-month average variation (`ipc_p12`).
 
 ``` r
+
 inflacion_general <- get_ipc_data("general")
 inflacion_general
-#> # A tibble: 505 × 8
+#> # A tibble: 509 × 8
 #>    fecha      year    mes   ipc ipc_vm ipc_vd ipc_vi ipc_p12
 #>    <date>     <chr> <dbl> <dbl>  <dbl>  <dbl>  <dbl>   <dbl>
 #>  1 1984-01-01 1984      1  1.38  1.74    1.74   7.05    5.57
@@ -57,12 +59,13 @@ inflacion_general
 #>  8 1984-08-01 1984      8  1.57  0.455  15.5   20.1    12.0 
 #>  9 1984-09-01 1984      9  1.64  4.69   20.9   24.8    13.7 
 #> 10 1984-10-01 1984     10  1.68  2.34   23.8   26.3    15.4 
-#> # ℹ 495 more rows
+#> # ℹ 499 more rows
 ```
 
 Let’s generate graphs for each variable.
 
 ``` r
+
 # Function to plot inflation data
 plot_ipc_data <- function(data, variable, title, start_year = 2018) {
   data |>
@@ -79,12 +82,14 @@ plot_ipc_data <- function(data, variable, title, start_year = 2018) {
 ```
 
 ``` r
+
 plot_ipc_data(inflacion_general, ipc, "Consumer Price Index")
 ```
 
 ![](ipc_data_files/figure-html/plot_ipc-1.png)
 
 ``` r
+
 plot_ipc_data(inflacion_general, ipc_vm, "Monthly Variation of CPI") +
   scale_y_continuous(labels = \(x) scales::comma(x, accuracy = 0.1, suffix = "%"))
 ```
@@ -92,6 +97,7 @@ plot_ipc_data(inflacion_general, ipc_vm, "Monthly Variation of CPI") +
 ![](ipc_data_files/figure-html/plot_ipc_vm-1.png)
 
 ``` r
+
 plot_ipc_data(inflacion_general, ipc_vi, "Year-over-Year Variation of CPI") +
   scale_y_continuous(labels = \(x) scales::comma(x, accuracy = 0.1, suffix = "%"))
 ```
@@ -101,6 +107,7 @@ plot_ipc_data(inflacion_general, ipc_vi, "Year-over-Year Variation of CPI") +
 ## Now a *naive* forecast of inflation
 
 ``` r
+
 library(tsibble)
 #> 
 #> Attaching package: 'tsibble'
@@ -131,6 +138,7 @@ models
 ```
 
 ``` r
+
 models |>
   forecast(h = "6 months") %>% 
   autoplot(filter(ts_ipc, year > 2018), level = NULL) +

@@ -17,7 +17,7 @@ A data frame
 
 ``` r
 get_exportaciones_zf()
-#> # A tibble: 1,701 × 3
+#> # A tibble: 1,728 × 3
 #>    fecha      partida                                     valor_expor
 #>    <date>     <chr>                                             <dbl>
 #>  1 2010-01-01 confecciones_textiles                              38.3
@@ -30,5 +30,5 @@ get_exportaciones_zf()
 #>  8 2010-01-01 otros                                              23.4
 #>  9 2010-01-01 total                                             214. 
 #> 10 2010-02-01 confecciones_textiles                              60.2
-#> # ℹ 1,691 more rows
+#> # ℹ 1,718 more rows
 ```

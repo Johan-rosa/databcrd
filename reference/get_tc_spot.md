@@ -33,7 +33,7 @@ rates
 
 ``` r
 get_tc_spot("mensual", "average")
-#> # A tibble: 494 × 5
+#> # A tibble: 497 × 5
 #>    fecha       year   mes compra venta
 #>    <date>     <dbl> <dbl>  <dbl> <dbl>
 #>  1 1985-01-01  1985     1   3.26  3.28
@@ -46,9 +46,9 @@ get_tc_spot("mensual", "average")
 #>  8 1985-08-01  1985     8   2.98  2.99
 #>  9 1985-09-01  1985     9   2.98  2.99
 #> 10 1985-10-01  1985    10   2.99  3   
-#> # ℹ 484 more rows
+#> # ℹ 487 more rows
 get_tc_spot("mensual", "fp")
-#> # A tibble: 422 × 5
+#> # A tibble: 425 × 5
 #>    fecha       year   mes compra venta
 #>    <date>     <dbl> <dbl>  <dbl> <dbl>
 #>  1 1991-01-01  1991     1   11.7  12  
@@ -61,9 +61,9 @@ get_tc_spot("mensual", "fp")
 #>  8 1991-08-01  1991     8   12.5  12.5
 #>  9 1991-09-01  1991     9   12.5  12.5
 #> 10 1991-10-01  1991    10   12.5  12.5
-#> # ℹ 412 more rows
+#> # ℹ 415 more rows
 get_tc_spot("trimestral", "average")
-#> # A tibble: 164 × 5
+#> # A tibble: 165 × 5
 #>    fecha       year trimestre compra venta
 #>    <date>     <dbl>     <int>  <dbl> <dbl>
 #>  1 1992-01-01  1985         1   3.19  3.21
@@ -76,9 +76,9 @@ get_tc_spot("trimestral", "average")
 #>  8 1993-10-01  1986         4   3.02  3.03
 #>  9 1994-01-01  1987         1   3.12  3.13
 #> 10 1994-04-01  1987         2   3.42  3.44
-#> # ℹ 154 more rows
+#> # ℹ 155 more rows
 get_tc_spot("trimestral", "fp")
-#> # A tibble: 140 × 5
+#> # A tibble: 141 × 5
 #>    fecha       year trimestre compra venta
 #>    <date>     <dbl>     <int>  <dbl> <dbl>
 #>  1 1992-01-01  1991         1   12.7  13  
@@ -91,5 +91,5 @@ get_tc_spot("trimestral", "fp")
 #>  8 1993-10-01  1992         4   12.5  12.5
 #>  9 1994-01-01  1993         1   12.5  12.5
 #> 10 1994-04-01  1993         2   12.5  12.5
-#> # ℹ 130 more rows
+#> # ℹ 131 more rows
 ```
