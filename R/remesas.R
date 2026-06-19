@@ -56,6 +56,7 @@ get_remesas_mensuales <- function() {
     dplyr::rename(mes = "PERIODOS") |>
     tidyr::pivot_longer(cols = -mes, names_to = "year", values_to = "monto") |>
     dplyr::mutate(
+      year = stringr::str_extract(year, "\\d+"),
       mes = crear_mes(mes, type = "text_to_number"),
       year = as.numeric(year),
       fecha = lubridate::make_date(year, mes, "1")
