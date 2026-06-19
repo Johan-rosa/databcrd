@@ -104,11 +104,11 @@ test_that("PIB for december 2018 is Ok", {
 })
 
 test_that("PIB for december 2016 is Ok", {
-  pib_2016 <- pib_gasto_nominal_2007_acumulado |>
-    dplyr::filter(sector == "Producto Interno Bruto", fecha == "2016-10-01")
+  pib_2020 <- pib_sectores_nominal_2018_acumulado |>
+    dplyr::filter(sector == "Producto Interno Bruto", fecha == "2020-10-01")
 
-  expect_equal(pib_2016$pib_nominal, 3487292.51270275)
-  expect_equal(pib_2016$ponderacion, 1)
+  expect_equal(pib_2020$pib_nominal, 4439813.97652647)
+  expect_equal(pib_2020$ponderacion * 100, 100)
 })
 
 # PIB real series 2007 --------------------------------------------------
