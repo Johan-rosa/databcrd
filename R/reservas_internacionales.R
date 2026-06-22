@@ -77,5 +77,6 @@ get_reservas_internacionales <- function() {
     ) |>
     dplyr::select(-column) |>
     dplyr::relocate(fecha = date, year, mes, variable, modalidad) |>
-    dplyr::arrange(fecha)
+    dplyr::arrange(fecha) |>
+    dplyr::filter(!is.na(value))
 }
