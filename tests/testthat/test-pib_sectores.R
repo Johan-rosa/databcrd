@@ -112,18 +112,18 @@ test_that("PIB for december 2016 is Ok", {
 })
 
 # PIB real series 2007 --------------------------------------------------
-pib_gasto_real_2007 <- get_pib_sectores(modalidad = "real")
+pib_sectores_real_2018 <- get_pib_sectores(modalidad = "real")
 
-test_that("Series starts at january 1991", {
-  expect_equal(min(pib_gasto_real_2007$fecha), as.Date("2007-01-01"))
+test_that("Series starts at january 2018", {
+  expect_equal(min(pib_sectores_real_2018$fecha), as.Date("2018-01-01"))
 })
 
 test_that("Series doesn't ends in the future", {
-  expect_true(max(pib_gasto_real_2007$fecha) <= lubridate::today())
+  expect_true(max(pib_sectores_real_2018$fecha) <= lubridate::today())
 })
 
 test_that("All series have the same length", {
-  n_by_partida <- pib_gasto_real_2007 |>
+  n_by_partida <- pib_sectores_real_2018 |>
     dplyr::count(sector)
 
   expect_true(max(n_by_partida$n) == min(max(n_by_partida$n)))
@@ -131,25 +131,25 @@ test_that("All series have the same length", {
 
 test_that("Correct column names", {
   expect_equal(
-    names(pib_gasto_real_2007),
+    names(pib_sectores_real_2018),
     c("sector", "fecha", "year", "trimestre", "indice",
       "crecimiento_interanual", "incidencia")
   )
 })
 
-test_that("PIB for december 2007 is Ok", {
-  pib_2007 <- pib_gasto_real_2007 |>
-    dplyr::filter(sector == "Producto Interno Bruto", fecha == "2007-10-01") |>
+test_that("PIB for december 2018 is Ok", {
+  pib_2018 <- pib_sectores_real_2018 |>
+    dplyr::filter(sector == "Producto Interno Bruto", fecha == "2018-10-01") |>
     dplyr::pull(indice)
 
-  expect_equal(pib_2007, 103.525353112715)
+  expect_equal(pib_2018, 103.973724)
 })
 
-test_that("PIB for december 2016 is Ok", {
-  pib_2016 <- pib_gasto_real_2007 |>
-    dplyr::filter(sector == "Producto Interno Bruto", fecha == "2016-10-01")
+test_that("PIB for december 2020 is Ok", {
+  pib_2020 <- pib_sectores_real_2018 |>
+    dplyr::filter(sector == "Producto Interno Bruto", fecha == "2020-10-01")
 
-  expect_equal(pib_2016$indice, 157.009259740035)
-  expect_equal(pib_2016$crecimiento_interanual, 5.39533315364895)
-  expect_equal(pib_2016$incidencia, 5.39533315364895)
+  expect_equal(pib_2020$indice, 102.819042)
+  expect_equal(pib_2020$crecimiento_interanual, -5.4203175)
+  expect_equal(pib_2020$incidencia, -5.4203175)
 })
