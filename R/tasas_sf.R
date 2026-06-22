@@ -229,3 +229,108 @@ get_tasas_activas <- function() {
   usethis::ui_done("Data ready")
   tasas
 }
+
+
+#' Download daily interest rate
+#'
+#' Get the series of daily interest rate of the Dominican Republic.
+#'
+#' @return a data frame with monthly series
+#' @export
+#'
+#' @examples
+#' get_fbkf()
+get_tasas_diarias <- function(year = 2025) {
+  file_url <- paste0(
+    "https://cdn.bancentral.gov.do/documents/",
+    "estadisticas/sector-monetario-y-financiero/",
+    glue::glue("documents/tasas_diariasBM-{year}.xlsx")
+  )
+
+  file_path <- tempfile(pattern = as.character(year), fileext = ".xlsx")
+  utils::download.file(file_url, file_path, mode = "wb", quiet = TRUE)
+
+  sheets <- readxl::excel_sheets(file_path)
+
+  names <- list(
+    `ACTRD$` =  c(
+      "day_mes", "ta_90d", "ta_180d", "ta_360d", "ta_2a", "ta_5a",
+      "ta_m5a", "ta_pp", "ta_ps", "ta_comercio", "ta_consumo",
+      "ta_hipotecario", "ta_preferencial", "ta_preferencial_comercio",
+      "ta_preferencial_consumo", "ta_preferencial_hipotecario"
+    ),
+    `PASRD$` = c(
+      "day_mes", "tp_30d", "tp_60d", "tp_90d", "tp_180d", "tp_360d",
+      "tp_2a", "tp_5a", "tp_m5a", "tp_pp", "tp_ps",  "tp_dep_ahorros", "tp_general",
+      "tp_preferencial", "tp_interbancarios"
+    ),
+    `ACTUS$` = c(
+      "day_mes", "ta_90d", "ta_180d", "ta_360d", "ta_2a", "ta_5a",
+      "ta_m5a", "ta_pp", "ta_ps", "ta_comercio", "ta_consumo",
+      "ta_hipotecario", "ta_preferencial", "ta_preferencial_comercio",
+      "ta_preferencial_consumo", "ta_preferencial_hipotecario"
+    ),
+    `PASUS$` = c(
+      "day_mes", "tp_30d", "tp_60d", "tp_90d", "tp_180d", "tp_360d",
+      "tp_2a", "tp_5a", "tp_m5a", "tp_pp", "tp_ps",  "tp_dep_ahorros", "tp_general"
+    )
+  )
+
+  month_pattern <- crear_mes(1:12, "number_to_text") |>
+    paste(collapse = "|")
+
+  data <- purrr::map(
+    purrr::set_names(sheets),
+    \(sheet) {
+      suppressMessages(
+        tasas <- readxl::read_excel(
+          path = file_path,
+          skip = 11,
+          trim_ws = TRUE,
+          col_names = FALSE,
+          sheet = sheet
+        )
+      )
+
+      type <- ifelse(stringr::str_detect(sheet, "^ACT"), "Activa", "Pasiva")
+      moneda <- ifelse(stringr::str_detect(sheet, "RD\\$$"), "DOP", "USD")
+
+      tasas |>
+        purrr::set_names(names[[sheet]]) |>
+        janitor::remove_empty(which = "cols") |>
+        janitor::remove_empty(which = "rows") |>
+        dplyr::mutate(
+          mes = stringr::str_extract(day_mes, month_pattern),
+          mes = crear_mes(mes)
+        ) |>
+        dplyr::relocate(mes) |>
+        tidyr::fill(mes) |>
+        dplyr::filter(dplyr::if_any(dplyr::ends_with("90d"), \(x) !is.na(x))) |>
+        dplyr::filter(stringr::str_detect(day_mes, "^\\d{1,2}$")) |>
+        dplyr::mutate(
+          year = year,
+          day_mes = as.numeric(day_mes),
+          fecha = lubridate::make_date(year, mes, day_mes),
+          type = type,
+          moneda = moneda
+        ) |>
+        dplyr::relocate(fecha, year, mes, day = day_mes, type, moneda)
+    }
+  )
+
+  data[[3]] |>
+    tidyr::pivot_longer(cols = matches("^ta|^tp")) |>
+    dplyr::mutate(
+      grupo = dplyr::case_when(
+        stringr::str_detect(name, "\\d[da]$") ~ "Plazo",
+        stringr::str_detect(name, "pp$|ps")   ~ "Promedio",
+        stringr::str_detect(name, "preferencial")   ~ "Preferencial",
+        stringr::str_detect(name, "comercio|consumo|hipotecario")   ~ "Sector"
+      ),
+      detalle = dplyr::case_when(
+        stringr::str_remove(name, "^ta_|^tp_"),
+        "30d" = "0 a 90 días",
+        "60d" = "0 a 90 días",
+      )
+    )
+}
