@@ -117,7 +117,7 @@ get_embi("anual")
 #> 17 2023-01-01   3.69   4.11      3.26     22.3    13.0    2.29 1.40      3.58
 #> 18 2024-01-01   3.18   4.13      2.20     13.7    20.2    2.11 1.25      3.10
 #> 19 2025-01-01   2.81   3.88      2.02      7.52   16.0    2.10 1.13      3.11
-#> 20 2026-01-01   2.28   2.80      1.81      5.39    5.30   1.87 0.899     2.52
+#> 20 2026-01-01   2.28   2.79      1.81      5.38    5.29   1.87 0.899     2.52
 #> # ℹ 12 more variables: `Costa Rica` <dbl>, Ecuador <dbl>, `El Salvador` <dbl>,
 #> #   Guatemala <dbl>, Honduras <dbl>, México <dbl>, Paraguay <dbl>, Perú <dbl>,
 #> #   Panamá <dbl>, Uruguay <dbl>, Venezuela <dbl>, `RD-LATINO` <dbl>
