@@ -60,7 +60,7 @@ test_that("PIB for december 2007 is Ok", {
 })
 
 test_that("PIB for december 2016 is Ok", {
-  pib_2020 <- pib_gasto_nominal_2018 |>
+  pib_2020 <- pib_sectores_nominal_2018 |>
     dplyr::filter(sector == "Producto Interno Bruto", fecha == "2020-10-01") |>
     dplyr::pull(pib_nominal)
 
