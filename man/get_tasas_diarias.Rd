@@ -2,7 +2,7 @@
 % Please edit documentation in R/tasas_sf.R
 \name{get_tasas_diarias}
 \alias{get_tasas_diarias}
-\title{Tasas de interés diarias del Banco Central}
+\title{Daily Interest Rates from the Central Bank}
 \usage{
 get_tasas_diarias(
   year = 2025,
@@ -14,50 +14,52 @@ get_tasas_diarias(
 )
 }
 \arguments{
-\item{year}{\verb{<integer>} Año a descargar. Por defecto \code{2025}.}
+\item{year}{\verb{<integer>} Year to download. Defaults to \code{2025}.}
 
-\item{filtro_tipo_tasa}{\verb{<character>} Filtra por tipo de tasa: \code{"Activa"}
-o \code{"Pasiva"}.}
+\item{filtro_tipo_tasa}{\verb{<character>} Filter by rate type: \code{"Activa"}
+or \code{"Pasiva"}.}
 
-\item{filtro_moneda}{\verb{<character>} Filtra por moneda: \code{"DOP"} o \code{"USD"}.}
+\item{filtro_moneda}{\verb{<character>} Filter by currency: \code{"DOP"} or \code{"USD"}.}
 
-\item{filtro_condicion}{\verb{<character>} Filtra por condición de la tasa:
-\code{"General"} o \code{"Preferencial"}.}
+\item{filtro_condicion}{\verb{<character>} Filter by rate condition:
+\code{"General"} or \code{"Preferencial"}.}
 
-\item{filtro_grupo}{\verb{<character>} Filtra por agrupación: \code{"Plazo"},
-\code{"Promedio"} o \code{"Sector"}.}
+\item{filtro_grupo}{\verb{<character>} Filter by grouping: \code{"Plazo"},
+\code{"Promedio"}, or \code{"Sector"}.}
 
-\item{filtro_detalle}{\verb{<character>} Filtra por categoría de detalle (ver
-columna \code{detalle} del resultado, e.g. \code{"Comercio"}, \code{"0 a 30 días"}).}
+\item{filtro_detalle}{\verb{<character>} Filter by detail category (see the
+\code{detalle} column in the output, e.g. \code{"Comercio"}, \code{"0 a 30 días"}).}
 }
 \value{
-Un \code{tibble} con una fila por tasa y fecha, y las columnas:
+A \code{tibble} with one row per rate and date, containing the
+following columns:
 \describe{
-\item{fecha}{Fecha de la observación (\code{Date}).}
-\item{year}{Año (\code{integer}).}
-\item{mes}{Mes (\code{integer}).}
-\item{day}{Día del mes (\code{integer}).}
-\item{tipo_tasa}{\code{"Activa"} o \code{"Pasiva"}.}
-\item{moneda}{\code{"DOP"} o \code{"USD"}.}
-\item{grupo}{\code{"Plazo"}, \code{"Promedio"} o \code{"Sector"}.}
-\item{condicion}{\code{"General"} o \code{"Preferencial"}.}
-\item{detalle}{Descripción del instrumento o plazo.}
-\item{tasa}{Valor de la tasa de interés (\code{double}).}
+\item{fecha}{Observation date (\code{Date}).}
+\item{year}{Year (\code{integer}).}
+\item{mes}{Month (\code{integer}).}
+\item{day}{Day of the month (\code{integer}).}
+\item{tipo_tasa}{\code{"Activa"} or \code{"Pasiva"}.}
+\item{moneda}{\code{"DOP"} or \code{"USD"}.}
+\item{grupo}{\code{"Plazo"}, \code{"Promedio"}, or \code{"Sector"}.}
+\item{condicion}{\code{"General"} or \code{"Preferencial"}.}
+\item{detalle}{Instrument, maturity, or sector description.}
+\item{tasa}{Interest rate value (\code{double}).}
 }
 }
 \description{
-Descarga y procesa las tasas de interés diarias publicadas por el Banco
-Central de la República Dominicana (BCRD) para un año dado.
+Downloads and processes the daily interest rates published by the
+Central Bank of the Dominican Republic (BCRD) for a given year.
 }
 \examples{
-# Todas las tasas de 2024
+# All rates for 2024
 get_tasas_diarias(2024)
 
-# Solo tasas activas en pesos por plazo
+# Only active rates in DOP grouped by term
 get_tasas_diarias(
   year             = 2024,
   filtro_tipo_tasa = "Activa",
   filtro_moneda    = "DOP",
   filtro_grupo     = "Plazo"
 )
+
 }

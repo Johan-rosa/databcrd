@@ -274,48 +274,51 @@ get_tasas_activas <- function() {
   "interbancarios" = "Interbancaria"
 )
 
-#' Tasas de interés diarias del Banco Central
+#' Daily Interest Rates from the Central Bank
 #'
-#' Descarga y procesa las tasas de interés diarias publicadas por el Banco
-#' Central de la República Dominicana (BCRD) para un año dado.
+#' Downloads and processes the daily interest rates published by the
+#' Central Bank of the Dominican Republic (BCRD) for a given year.
 #'
-#' @param year `<integer>` Año a descargar. Por defecto `2025`.
-#' @param filtro_tipo_tasa `<character>` Filtra por tipo de tasa: `"Activa"`
-#'   o `"Pasiva"`.
-#' @param filtro_moneda `<character>` Filtra por moneda: `"DOP"` o `"USD"`.
-#' @param filtro_condicion `<character>` Filtra por condición de la tasa:
-#'   `"General"` o `"Preferencial"`.
-#' @param filtro_grupo `<character>` Filtra por agrupación: `"Plazo"`,
-#'   `"Promedio"` o `"Sector"`.
-#' @param filtro_detalle `<character>` Filtra por categoría de detalle (ver
-#'   columna `detalle` del resultado, e.g. `"Comercio"`, `"0 a 30 días"`).
+#' @param year `<integer>` Year to download. Defaults to `2025`.
+#' @param filtro_tipo_tasa `<character>` Filter by rate type: `"Activa"`
+#'   or `"Pasiva"`.
+#' @param filtro_moneda `<character>` Filter by currency: `"DOP"` or `"USD"`.
+#' @param filtro_condicion `<character>` Filter by rate condition:
+#'   `"General"` or `"Preferencial"`.
+#' @param filtro_grupo `<character>` Filter by grouping: `"Plazo"`,
+#'   `"Promedio"`, or `"Sector"`.
+#' @param filtro_detalle `<character>` Filter by detail category (see the
+#'   `detalle` column in the output, e.g. `"Comercio"`, `"0 a 30 días"`).
 #'
-#' @return Un `tibble` con una fila por tasa y fecha, y las columnas:
+#' @return A `tibble` with one row per rate and date, containing the
+#'   following columns:
 #'   \describe{
-#'     \item{fecha}{Fecha de la observación (`Date`).}
-#'     \item{year}{Año (`integer`).}
-#'     \item{mes}{Mes (`integer`).}
-#'     \item{day}{Día del mes (`integer`).}
-#'     \item{tipo_tasa}{`"Activa"` o `"Pasiva"`.}
-#'     \item{moneda}{`"DOP"` o `"USD"`.}
-#'     \item{grupo}{`"Plazo"`, `"Promedio"` o `"Sector"`.}
-#'     \item{condicion}{`"General"` o `"Preferencial"`.}
-#'     \item{detalle}{Descripción del instrumento o plazo.}
-#'     \item{tasa}{Valor de la tasa de interés (`double`).}
+#'     \item{fecha}{Observation date (`Date`).}
+#'     \item{year}{Year (`integer`).}
+#'     \item{mes}{Month (`integer`).}
+#'     \item{day}{Day of the month (`integer`).}
+#'     \item{tipo_tasa}{`"Activa"` or `"Pasiva"`.}
+#'     \item{moneda}{`"DOP"` or `"USD"`.}
+#'     \item{grupo}{`"Plazo"`, `"Promedio"`, or `"Sector"`.}
+#'     \item{condicion}{`"General"` or `"Preferencial"`.}
+#'     \item{detalle}{Instrument, maturity, or sector description.}
+#'     \item{tasa}{Interest rate value (`double`).}
 #'   }
-#' @export
 #'
 #' @examples
-#' # Todas las tasas de 2024
+#' # All rates for 2024
 #' get_tasas_diarias(2024)
 #'
-#' # Solo tasas activas en pesos por plazo
+#' # Only active rates in DOP grouped by term
 #' get_tasas_diarias(
 #'   year             = 2024,
 #'   filtro_tipo_tasa = "Activa",
 #'   filtro_moneda    = "DOP",
 #'   filtro_grupo     = "Plazo"
 #' )
+#'
+#' @export
+#'
 get_tasas_diarias <- function(
     year = 2025,
     filtro_tipo_tasa = NULL,
