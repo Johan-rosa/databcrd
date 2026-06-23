@@ -38,7 +38,9 @@
 <url><loc>https://johan-rosa.github.io/databcrd/reference/get_ipc_subyacente.html</loc></url>
 <url><loc>https://johan-rosa.github.io/databcrd/reference/get_ipc_tnt.html</loc></url>
 <url><loc>https://johan-rosa.github.io/databcrd/reference/get_pib_gasto.html</loc></url>
+<url><loc>https://johan-rosa.github.io/databcrd/reference/get_pib_gasto_2007.html</loc></url>
 <url><loc>https://johan-rosa.github.io/databcrd/reference/get_pib_sectores.html</loc></url>
+<url><loc>https://johan-rosa.github.io/databcrd/reference/get_pib_sectores_2007.html</loc></url>
 <url><loc>https://johan-rosa.github.io/databcrd/reference/get_prestamos_osd.html</loc></url>
 <url><loc>https://johan-rosa.github.io/databcrd/reference/get_remesas.html</loc></url>
 <url><loc>https://johan-rosa.github.io/databcrd/reference/get_remesas_avg.html</loc></url>
@@ -49,8 +51,10 @@
 <url><loc>https://johan-rosa.github.io/databcrd/reference/get_remesas_mensuales.html</loc></url>
 <url><loc>https://johan-rosa.github.io/databcrd/reference/get_remesas_pais.html</loc></url>
 <url><loc>https://johan-rosa.github.io/databcrd/reference/get_remesas_provincias.html</loc></url>
+<url><loc>https://johan-rosa.github.io/databcrd/reference/get_reservas_internacionales.html</loc></url>
 <url><loc>https://johan-rosa.github.io/databcrd/reference/get_tasa_interbancaria.html</loc></url>
 <url><loc>https://johan-rosa.github.io/databcrd/reference/get_tasas_activas.html</loc></url>
+<url><loc>https://johan-rosa.github.io/databcrd/reference/get_tasas_diarias.html</loc></url>
 <url><loc>https://johan-rosa.github.io/databcrd/reference/get_tasas_pasivas.html</loc></url>
 <url><loc>https://johan-rosa.github.io/databcrd/reference/get_tc.html</loc></url>
 <url><loc>https://johan-rosa.github.io/databcrd/reference/get_tc_eif.html</loc></url>

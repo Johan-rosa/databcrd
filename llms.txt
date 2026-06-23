@@ -82,7 +82,11 @@ remotes::install_github("johan-rosa/databcrd")
   : To get the CPI data by transferable or not
 - [`get_pib_gasto()`](https://johan-rosa.github.io/databcrd/reference/get_pib_gasto.md)
   : GDP by the expenditure approach, both real and nominal
+- [`get_pib_gasto_2007()`](https://johan-rosa.github.io/databcrd/reference/get_pib_gasto_2007.md)
+  : GDP by the expenditure approach, both real and nominal
 - [`get_pib_sectores()`](https://johan-rosa.github.io/databcrd/reference/get_pib_sectores.md)
+  : GDP by the sector of origin, both real and nominal
+- [`get_pib_sectores_2007()`](https://johan-rosa.github.io/databcrd/reference/get_pib_sectores_2007.md)
   : GDP by the sector of origin, both real and nominal
 - [`get_prestamos_osd()`](https://johan-rosa.github.io/databcrd/reference/get_prestamos_osd.md)
   : Download the loans by sector series
@@ -104,10 +108,14 @@ remotes::install_github("johan-rosa/databcrd")
   : Get remittances by country
 - [`get_remesas_provincias()`](https://johan-rosa.github.io/databcrd/reference/get_remesas_provincias.md)
   : Get remittances by provinces
+- [`get_reservas_internacionales()`](https://johan-rosa.github.io/databcrd/reference/get_reservas_internacionales.md)
+  : Parse Bank Reserve and Asset Data from Excel
 - [`get_tasa_interbancaria()`](https://johan-rosa.github.io/databcrd/reference/get_tasa_interbancaria.md)
   : Get average interbank interest rates by maturity
 - [`get_tasas_activas()`](https://johan-rosa.github.io/databcrd/reference/get_tasas_activas.md)
   : Download interest rates for loans
+- [`get_tasas_diarias()`](https://johan-rosa.github.io/databcrd/reference/get_tasas_diarias.md)
+  : Daily Interest Rates from the Central Bank
 - [`get_tasas_pasivas()`](https://johan-rosa.github.io/databcrd/reference/get_tasas_pasivas.md)
   : Download interest rates for savings
 - [`get_tc()`](https://johan-rosa.github.io/databcrd/reference/get_tc.md)
