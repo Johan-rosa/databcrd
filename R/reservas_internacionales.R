@@ -68,11 +68,11 @@ get_reservas_internacionales <- function() {
       mes = crear_mes(mes),
       date = lubridate::make_date(year, mes, 1),
       modalidad = stringr::str_extract(modalidad, "\\w+"),
-      modalidad = dplyr::case_match(
+      modalidad = dplyr::recode(
         modalidad,
-        "Brutas" ~ "Brutos",
-        "Netas"  ~ "Netos",
-        .default = modalidad
+        "Brutos" = "Bruto",
+        "Brutas" = "Bruto",
+        "Netas"  = "Neto"
       ),
     ) |>
     dplyr::select(-column) |>
