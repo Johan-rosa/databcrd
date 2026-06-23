@@ -21,8 +21,8 @@ test_that("variable values are exactly 'Reservas' and 'Activos'", {
   expect_setequal(unique(reservas$variable), c("Reservas", "Activos"))
 })
 
-test_that("modalidad values are exactly 'Brutos' and 'Netos'", {
-  expect_setequal(unique(reservas$modalidad), c("Brutos", "Netos"))
+test_that("modalidad values are exactly 'Bruto' and 'Neto'", {
+  expect_setequal(unique(reservas$modalidad), c("Bruto", "Neto"))
 })
 
 test_that("no missing dates or years", {
