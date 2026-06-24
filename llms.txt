@@ -113,11 +113,11 @@ remotes::install_github("johan-rosa/databcrd")
 - [`get_tasa_interbancaria()`](https://johan-rosa.github.io/databcrd/reference/get_tasa_interbancaria.md)
   : Get average interbank interest rates by maturity
 - [`get_tasas_activas()`](https://johan-rosa.github.io/databcrd/reference/get_tasas_activas.md)
-  : Download interest rates for loans
+  : Download interest rates for loans (Activas)
 - [`get_tasas_diarias()`](https://johan-rosa.github.io/databcrd/reference/get_tasas_diarias.md)
   : Daily Interest Rates from the Central Bank
 - [`get_tasas_pasivas()`](https://johan-rosa.github.io/databcrd/reference/get_tasas_pasivas.md)
-  : Download interest rates for savings
+  : Download interest rates for savings (Pasivas)
 - [`get_tc()`](https://johan-rosa.github.io/databcrd/reference/get_tc.md)
   : Average exchange rate of the operations in financial institutions
 - [`get_tc_eif()`](https://johan-rosa.github.io/databcrd/reference/get_tc_eif.md)
@@ -136,6 +136,8 @@ remotes::install_github("johan-rosa/databcrd")
   : Function to read files metadata
 - [`rescale()`](https://johan-rosa.github.io/databcrd/reference/rescale.md)
   : change the scale of a vector
+- [`tasas_to_long()`](https://johan-rosa.github.io/databcrd/reference/tasas_to_long.md)
+  : Pivot wide formats of interest rates data frames to long format
 
 # Articles
 

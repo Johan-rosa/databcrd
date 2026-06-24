@@ -100,10 +100,10 @@ get_tasas_diarias(2024)
 #>    <date>     <dbl> <dbl> <dbl> <chr>     <chr>  <chr>   <chr>     <chr>   <dbl>
 #>  1 2024-01-02  2024     1     2 Activa    DOP    Plazo   General   0 a 90… 18.2 
 #>  2 2024-01-02  2024     1     2 Activa    DOP    Plazo   General   91 a 1…  9.96
-#>  3 2024-01-02  2024     1     2 Activa    DOP    Plazo   General   181 a … 15.6 
+#>  3 2024-01-02  2024     1     2 Activa    DOP    Plazo   General   331 a … 15.6 
 #>  4 2024-01-02  2024     1     2 Activa    DOP    Plazo   General   361 dí… 14.6 
 #>  5 2024-01-02  2024     1     2 Activa    DOP    Plazo   General   2 a 5 … 18.8 
-#>  6 2024-01-02  2024     1     2 Activa    DOP    Plazo   General   Más de… 14.3 
+#>  6 2024-01-02  2024     1     2 Activa    DOP    Plazo   General   m2 a 5… 14.3 
 #>  7 2024-01-02  2024     1     2 Activa    DOP    Promed… General   Promed… 15.4 
 #>  8 2024-01-02  2024     1     2 Activa    DOP    Promed… General   Promed… 15.3 
 #>  9 2024-01-02  2024     1     2 Activa    DOP    Sector  General   Comerc… 12.7 
@@ -122,13 +122,13 @@ get_tasas_diarias(
 #>    <date>     <dbl> <dbl> <dbl> <chr>     <chr>  <chr> <chr>     <chr>     <dbl>
 #>  1 2024-01-02  2024     1     2 Activa    DOP    Plazo General   0 a 90 d… 18.2 
 #>  2 2024-01-02  2024     1     2 Activa    DOP    Plazo General   91 a 180…  9.96
-#>  3 2024-01-02  2024     1     2 Activa    DOP    Plazo General   181 a 36… 15.6 
+#>  3 2024-01-02  2024     1     2 Activa    DOP    Plazo General   331 a 60… 15.6 
 #>  4 2024-01-02  2024     1     2 Activa    DOP    Plazo General   361 días… 14.6 
 #>  5 2024-01-02  2024     1     2 Activa    DOP    Plazo General   2 a 5 añ… 18.8 
-#>  6 2024-01-02  2024     1     2 Activa    DOP    Plazo General   Más de 5… 14.3 
+#>  6 2024-01-02  2024     1     2 Activa    DOP    Plazo General   m2 a 5 a… 14.3 
 #>  7 2024-01-03  2024     1     3 Activa    DOP    Plazo General   0 a 90 d… 11.4 
 #>  8 2024-01-03  2024     1     3 Activa    DOP    Plazo General   91 a 180… 11.5 
-#>  9 2024-01-03  2024     1     3 Activa    DOP    Plazo General   181 a 36… 15.2 
+#>  9 2024-01-03  2024     1     3 Activa    DOP    Plazo General   331 a 60… 15.2 
 #> 10 2024-01-03  2024     1     3 Activa    DOP    Plazo General   361 días… 15.3 
 #> # ℹ 1,502 more rows
 ```
