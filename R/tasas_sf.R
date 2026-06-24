@@ -117,7 +117,6 @@
 # 2. FUNCIONES AUXILIARES INTERNAS
 # ==============================================================================
 
-#' Descargador Centralizado de Archivos BCRD (Punto 1 y 4)
 .download_bcrd_file <- function(url, dest_path) {
   tryCatch({
     utils::download.file(url, dest_path, mode = "wb", quiet = TRUE)
@@ -126,7 +125,6 @@
   })
 }
 
-#' Motor de extracción unificado para series mensuales históricas (Punto 1 y 6)
 .get_historical_rates <- function(type = c("pasiva", "activa")) {
   type <- match.arg(type)
   meta <- .bcrd_historical_metadata[[type]]
