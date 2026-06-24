@@ -2,14 +2,28 @@
 % Please edit documentation in R/tasas_sf.R
 \name{get_tasas_pasivas}
 \alias{get_tasas_pasivas}
-\title{Download interest rates for savings}
+\title{Download interest rates for savings (Pasivas)}
 \usage{
-get_tasas_pasivas()
+get_tasas_pasivas(
+  long = FALSE,
+  filtro_condicion = NULL,
+  filtro_grupo = NULL,
+  filtro_detalle = NULL
+)
+}
+\arguments{
+\item{long}{\verb{<logical>} If \code{TRUE}, converts data frame into long format. Defaults to \code{FALSE}.}
+
+\item{filtro_condicion}{\verb{<character>} Filter by rate condition: \code{"General"} or \code{"Preferencial"}. Only used if \code{long = TRUE}.}
+
+\item{filtro_grupo}{\verb{<character>} Filter by grouping: \code{"Plazo"}, \code{"Promedio"}, or \code{"Sector"}. Only used if \code{long = TRUE}.}
+
+\item{filtro_detalle}{\verb{<character>} Filter by specific descriptive category. Only used if \code{long = TRUE}.}
 }
 \value{
-a data frame with monthly series
+A \code{tibble} containing monthly series data.
 }
 \description{
-Get the series of the interest rates for savings in the Dominican Republic
-separated by time and type of saving
+Downloads and aggregates historic monthly interest rates for savings (tasas pasivas)
+published by the Central Bank of the Dominican Republic (BCRD).
 }

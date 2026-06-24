@@ -2,14 +2,28 @@
 % Please edit documentation in R/tasas_sf.R
 \name{get_tasas_activas}
 \alias{get_tasas_activas}
-\title{Download interest rates for loans}
+\title{Download interest rates for loans (Activas)}
 \usage{
-get_tasas_activas()
+get_tasas_activas(
+  long = FALSE,
+  filtro_condicion = NULL,
+  filtro_grupo = NULL,
+  filtro_detalle = NULL
+)
+}
+\arguments{
+\item{long}{\verb{<logical>} If \code{TRUE}, converts data frame into long format. Defaults to \code{FALSE}.}
+
+\item{filtro_condicion}{\verb{<character>} Filter by rate condition: \code{"General"} or \code{"Preferencial"}. Only used if \code{long = TRUE}.}
+
+\item{filtro_grupo}{\verb{<character>} Filter by grouping: \code{"Plazo"}, \code{"Promedio"}, or \code{"Sector"}. Only used if \code{long = TRUE}.}
+
+\item{filtro_detalle}{\verb{<character>} Filter by specific descriptive category. Only used if \code{long = TRUE}.}
 }
 \value{
-a data frame with monthly series
+A \code{tibble} containing monthly series data.
 }
 \description{
-Get the series of the interest rates for loans in the dominican republic
-separated by time and type of loan
+Downloads and aggregates historic monthly interest rates for loans (tasas activas)
+published by the Central Bank of the Dominican Republic (BCRD).
 }
