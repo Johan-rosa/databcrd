@@ -1,6 +1,66 @@
+.download_bcrd_file <- function(url, dest_path) {
+  tryCatch({
+    utils::download.file(url, dest_path, mode = "wb", quiet = TRUE)
+  }, error = function(e) {
+    stop(glue::glue("Error al descargar desde {url}. Verifique su conexión de red o si el Banco Central cambió el enlace. Detalle: {e$message}"), call. = FALSE)
+  })
+}
+
+list(
+  bm_pasiva_2007 = list(
+    end_point = "tbm_pasiva-1991-2007.xls",
+    file_ext  = ".xls",
+    col_names =  c(
+      "mes", "tp_30d", "tp_60d", "tp_90d", "tp_180d", "tp_360", "tp_m360d",
+      "tp_ps", "tp_pp", "tp_dep_ahorros", "tp_preferencial", "tp_general",
+      "tp_interbancarios"
+    )
+  )
+)
+
+
+cdn_url <- "https://cdn.bancentral.gov.do/documents/estadisticas/sector-monetario-y-financiero/documents/"
+endpoint <- "tbm_pasiva-1991-2007.xls"
+file_ext <- ".xls"
+
+file_url <- paste0(cdn_url, endpoint)
+temp_file <- tempfile(fileext = file_ext)
+.download_bcrd_file(file_url, temp_file)
+
+month_pattern <- purrr::map_chr(1:12, ~ crear_mes(.x, "number_to_text")) |>
+  paste(collapse = "|")
+
+temp_file |>
+  readxl::read_excel(col_names = FALSE) |>
+  janitor::clean_names() |>
+  dplyr::filter(stringr::str_detect(x1, paste0("^\\d{4}|", month_pattern))) |>
+  janitor::remove_empty("cols") |>
+  purrr::set_names(col_names) |>
+  dplyr::mutate(year = stringr::str_extract(mes, "\\d{4}")) |>
+  tidyr::fill(year) |>
+  dplyr::filter(stringr::str_detect(mes, "\\d{4}", negate = TRUE)) |>
+  dplyr::mutate(
+    dplyr::across(-c(mes, year), as.numeric),
+    mes = databcrd::crear_mes(mes),
+    fecha = lubridate::make_date(year, mes, 1)
+  ) |>
+  dplyr::relocate(fecha, year, mes)
+
 # ==============================================================================
 # 1. METADATOS Y CONFIGURACIONES GLOBALES
 # ==============================================================================
+
+endpoints <- list(
+  bm_pasiva  = c("tbm_pasiva-1991-2007.xls", "tbm_pasivad-2008-2012.xls", "tbm_pasivad-2013-2016.xlsx", "tbm_pasivad.xlsx"),
+  aap_pasiva = c("taap_pasiva.xls", "taap_pasivad-2008-2012.xls", "taap_pasivad-2013-2016.xlsx", "taap_pasivad.xlsx"),
+  bac_pasiva = c("tbd_pasiva.xls", "tbd_pasivad-2008-2012.xls", "tbac_pasivad_2013_2016.xls", "tbac_pasivad.xlsx"),
+  cc_pasiva  = c("tf_pasiva.xls", "tf_pasivad-2008-2011.xls", "tf_pasivad_2013_2016.xlsx", "tf_pasivad.xlsx"),
+
+  bm_activa  = c("tbm_activa-1991-2007.xls","tbm_activad-2008-2012.xls", "tbm_activad-2013-2016.xlsx", "tbm_activad.xlsx"),
+  aap_activa = c("taap_activa.xls", "taap_activad-2008-2012.xls", "taap_activad-2013-2016.xlsx", "taap_activad.xlsx"),
+  bac_activa = c("tbd_activa.xls","tbd_activad-2008-2012.xls", "tbac_activad_2013_2016.xls", "tbac_activad.xlsx"),
+  cc_activa  = c("tf_activa.xls", "tf_activad-2008-2011.xls", "tf_activad_2013-2016.xlsx", "tf_activad.xls")
+)
 
 
 
@@ -12,20 +72,13 @@
   entidad <- match.arg(entidad)
   tipo    <- match.arg(tipo)
   query <- paste(entidad, tipo, sep = "_")
-
-  switch(
-    query,
-    bm_pasiva  = c("tbm_pasiva-1991-2007.xls", "tbm_pasivad-2008-2012.xls", "tbm_pasivad-2013-2016.xlsx", "tbm_pasivad.xlsx"),
-    aap_pasiva = c("taap_pasiva.xls", "taap_pasivad-2008-2012.xls", "taap_pasivad-2013-2016.xlsx", "taap_pasivad.xlsx"),
-    bac_pasiva = c("tbd_pasiva.xls", "tbd_pasivad-2008-2012.xls", "tbac_pasivad_2013_2016.xls", "tbac_pasivad.xlsx"),
-    cc_pasiva  = c("tf_pasiva.xls", "tf_pasivad-2008-2011.xls", "tf_pasivad_2013_2016.xlsx", "tf_pasivad.xlsx"),
-
-    bm_activa  = c("tbm_activa-1991-2007.xls","tbm_activad-2008-2012.xls", "tbm_activad-2013-2016.xlsx", "tbm_activad.xlsx"),
-    aap_activa = c("taap_activa.xls", "taap_activad-2008-2012.xls", "taap_activad-2013-2016.xlsx", "taap_activad.xlsx"),
-    bac_activa = c("tbd_activa.xls","tbd_activad-2008-2012.xls", "tbac_activad_2013_2016.xls", "tbac_activad.xlsx"),
-    cc_activa  = c("tf_activa.xls", "tf_activad-2008-2011.xls", "tf_activad_2013-2016.xlsx", "tf_activad.xls")
-  )
+  endpoints[[query]]
 }
+
+
+
+
+
 
 .bcrd_historical_metadata <- function(entidad = "bm") {
   list(
@@ -146,13 +199,7 @@
 # 2. FUNCIONES AUXILIARES INTERNAS
 # ==============================================================================
 
-.download_bcrd_file <- function(url, dest_path) {
-  tryCatch({
-    utils::download.file(url, dest_path, mode = "wb", quiet = TRUE)
-  }, error = function(e) {
-    stop(glue::glue("Error al descargar desde {url}. Verifique su conexión de red o si el Banco Central cambió el enlace. Detalle: {e$message}"), call. = FALSE)
-  })
-}
+
 
 .get_historical_rates <- function(
     entidad = c("bm", "aap", "bd", "cc"),
@@ -176,6 +223,24 @@
   })
 
   browser()
+
+  month_pattern <- purrr::map_chr(1:12, ~ crear_mes(.x, "number_to_text")) |>
+    paste(collapse = "|")
+
+  params[[1]]$path |>
+    readxl::read_excel(col_names = FALSE) |>
+    janitor::clean_names() |>
+    dplyr::filter(stringr::str_detect(x1, paste0("^\\d{4}|", month_pattern))) |>
+    dplyr::mutate(year = stringr::str_extract(x1, "\\d{4}")) |>
+    tidyr::fill(year) |>
+    dplyr::filter(stringr::str_detect(x1, "\\d{4}", negate = TRUE)) |>
+    dplyr::mutate(
+      dplyr::across(-c(x1, year), as.numeric),
+      x1 = crear_mes(x1),
+      fecha = lubridate::make_date(year, x1, 1)
+    ) |>
+    dplyr::relocate(fecha, year, mes = x1) |>
+    janitor::remove_empty("cols")
 
   tasas_list <- purrr::map(seq_along(meta$file_names), \(index) {
     do.call(readxl::read_excel, params[[index]])
