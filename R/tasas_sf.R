@@ -18,7 +18,6 @@ list(
   )
 )
 
-
 cdn_url <- "https://cdn.bancentral.gov.do/documents/estadisticas/sector-monetario-y-financiero/documents/"
 endpoint <- "tbm_pasiva-1991-2007.xls"
 file_ext <- ".xls"
@@ -46,6 +45,11 @@ temp_file |>
   ) |>
   dplyr::relocate(fecha, year, mes)
 
+get_tasa_file <- function(url, colnames) {
+
+}
+
+
 # ==============================================================================
 # 1. METADATOS Y CONFIGURACIONES GLOBALES
 # ==============================================================================
@@ -61,8 +65,6 @@ endpoints <- list(
   bac_activa = c("tbd_activa.xls","tbd_activad-2008-2012.xls", "tbac_activad_2013_2016.xls", "tbac_activad.xlsx"),
   cc_activa  = c("tf_activa.xls", "tf_activad-2008-2011.xls", "tf_activad_2013-2016.xlsx", "tf_activad.xls")
 )
-
-
 
 
 .tasas_endpoints_by_entidad <- function(
@@ -222,25 +224,8 @@ endpoints <- list(
     append(x, list(path = y, col_names = FALSE, col_types = "text"))
   })
 
-  browser()
-
   month_pattern <- purrr::map_chr(1:12, ~ crear_mes(.x, "number_to_text")) |>
     paste(collapse = "|")
-
-  params[[1]]$path |>
-    readxl::read_excel(col_names = FALSE) |>
-    janitor::clean_names() |>
-    dplyr::filter(stringr::str_detect(x1, paste0("^\\d{4}|", month_pattern))) |>
-    dplyr::mutate(year = stringr::str_extract(x1, "\\d{4}")) |>
-    tidyr::fill(year) |>
-    dplyr::filter(stringr::str_detect(x1, "\\d{4}", negate = TRUE)) |>
-    dplyr::mutate(
-      dplyr::across(-c(x1, year), as.numeric),
-      x1 = crear_mes(x1),
-      fecha = lubridate::make_date(year, x1, 1)
-    ) |>
-    dplyr::relocate(fecha, year, mes = x1) |>
-    janitor::remove_empty("cols")
 
   tasas_list <- purrr::map(seq_along(meta$file_names), \(index) {
     do.call(readxl::read_excel, params[[index]])
