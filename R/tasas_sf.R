@@ -54,6 +54,32 @@ params <- list(
       "tp_5a", "tp_m5a", "tp_pp", "tp_ps", "tp_dep_ahorros", "tp_general",
       "tp_preferencial", "tp_interbancarios"
     )
+  ),
+  bm_activa_2007 = list(
+    endpoint = "tbm_activa-1991-2007.xls",
+    fileext  = ".xls",
+    col_names = c(
+      "mes", "ta_90d", "ta_180d", "ta_360d", "ta_m360d", "ta_2a", "ta_5a", "ta_m5a",
+      "ta_ps", "ta_pp", "ta_preferencial", "ta_comercio", "ta_consumo", "ta_hipotecario"
+    )
+  ),
+  bm_activa_2012 = list(
+    endpoint = "tbm_activad-2008-2012.xls",
+    fileext  = ".xls",
+    col_names = c(
+      "mes", "ta_90d", "ta_180d", "ta_360d", "ta_2a", "ta_5a", "ta_m5a",
+      "ta_pp", "ta_ps", "ta_preferencial", "ta_comercio", "ta_consumo",
+      "ta_hipotecario"
+    )
+  ),
+  bm_activa_2016 = list(
+    endpoint = "tbm_activad-2013-2016.xlsx",
+    fileext  = ".xlsx",
+    col_names = c(
+      "mes", "ta_90d", "ta_180d", "ta_360d", "ta_2a", "ta_5a", "ta_m5a",
+      "ta_pp", "ta_ps", "ta_preferencial", "ta_comercio", "ta_consumo",
+      "ta_hipotecario"
+    )
   )
 )
 
@@ -260,12 +286,21 @@ get_tasas_pasivas <- function(
 #' @return A `tibble` containing monthly series data.
 #' @export
 get_tasas_activas <- function(
+    entidad = c("bm", "app", "bac", "cc"),
     long             = FALSE,
     filtro_condicion = NULL,
     filtro_grupo     = NULL,
     filtro_detalle   = NULL
 ) {
-  tasas <- .get_historical_rates(type = "activa")
+  entidad <- rlang::arg_match(entidad)
+  toread <- stringr::str_subset(names(params), paste0(entidad, "_activa"))
+  files_to_read <- params[toread]
+
+  tasas <- purrr::map(
+    files_to_read,
+    \(x) do.call(.get_historical_rates, x)
+  ) |>
+    dplyr::bind_rows()
 
   if (long) {
     tasas <- tasas |>
@@ -276,6 +311,7 @@ get_tasas_activas <- function(
         filtro_detalle   = filtro_detalle
       )
   }
+
   tasas
 }
 
