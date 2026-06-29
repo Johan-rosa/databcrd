@@ -18,12 +18,12 @@
 #   cc_activa  = c("tf_activa.xls", "tf_activad-2008-2011.xls", "tf_activad_2013-2016.xlsx", "tf_activad.xls")
 # )
 
-params <- list(
-  bm_pasiva_2007 = list(
+params <- dplyr::lst(
+  bm_pasiva_2007 = dplyr::lst(
     endpoint = "tbm_pasiva-1991-2007.xls",
     fileext  = ".xls",
     col_names =  c(
-      "mes", "tp_30d", "tp_60d", "tp_90d", "tp_180d", "tp_360", "tp_m360d",
+      "mes", "tp_30d", "tp_60d", "tp_90d", "tp_180d", "tp_360d", "tp_m360d",
       "tp_ps", "tp_pp", "tp_dep_ahorros", "tp_preferencial", "tp_general",
       "tp_interbancarios"
     )
@@ -80,6 +80,37 @@ params <- list(
       "ta_pp", "ta_ps", "ta_preferencial", "ta_comercio", "ta_consumo",
       "ta_hipotecario"
     )
+  ),
+  bm_activa_today = list(
+    endpoint = "tbm_activad.xlsx",
+    fileext = ".xlsx",
+    col_names = c(
+      "mes", "ta_90d", "ta_180d", "ta_360d", "ta_2a", "ta_5a", "ta_m5a",
+      "ta_pp", "ta_ps", "ta_comercio", "ta_consumo", "ta_hipotecario",
+      "ta_preferencial", "ta_preferencial_comercio", "ta_preferencial_consumo",
+      "ta_preferencial_hipotecario"
+    )
+  ),
+  aap_pasivas_2007 = list(
+    endpoint = "taap_pasiva.xls",
+    fileext = ".xls",
+    col_names = c("mes", "tp_30d", "tp_60d", "tp_90d", "tp_180d", "tp_360d", "tp_m360d", "tp_pp")
+  ),
+  # Reusing some names after this point
+  aap_pasivas_2012 = list(
+    endpoint = "taap_pasivad-2008-2012.xls",
+    fileext = ".xls",
+    col_names = bm_pasiva_2012$col_names
+  ),
+  aap_pasivas_2016 = list(
+    endpoint = "taap_pasivad-2013-2016.xlsx",
+    fileext = ".xlsx",
+    col_names = bm_pasiva_2016$col_names
+  ),
+  aap_pasivas_today = list(
+    endpoint = "taap_pasivad.xlsx",
+    fileext = ".xlsx",
+    col_names = bm_pasiva_today$col_names
   )
 )
 
@@ -99,12 +130,12 @@ params <- list(
     readxl::read_excel(col_names = FALSE) |>
     suppressMessages() |>
     janitor::clean_names() |>
-    dplyr::filter(stringr::str_detect(x1, paste0("^\\d{4}|", month_pattern))) |>
+    dplyr::filter(stringr::str_detect(x1, paste0("^[\\*]?\\d{4}|", month_pattern))) |>
     janitor::remove_empty("cols") |>
     purrr::set_names(col_names) |>
     dplyr::mutate(
       year = stringr::str_extract(mes, "\\d{4}"),
-      mes  = stringr::str_extract(mes, "\\w+")
+      mes  = stringr::str_extract(mes, "[a-zA-Z]+")
     ) |>
     tidyr::fill(year) |>
     dplyr::filter(stringr::str_detect(mes, "\\d{4}", negate = TRUE)) |>
@@ -113,6 +144,7 @@ params <- list(
       mes = crear_mes(mes),
       fecha = lubridate::make_date(year, mes, 1)
     ) |>
+    dplyr::filter(dplyr::if_any(dplyr::matches("^(ta|tp)"), ~ !is.na(.))) |>
     dplyr::relocate(fecha, year, mes)
 }
 
@@ -243,7 +275,7 @@ tasas_to_long <- function(
 #' @return A `tibble` containing monthly series data.
 #' @export
 get_tasas_pasivas <- function(
-    entidad = c("bm", "app", "bac", "cc"),
+    entidad = c("bm", "aap", "bac", "cc"),
     long = FALSE,
     filtro_condicion = NULL,
     filtro_grupo     = NULL,
@@ -286,7 +318,7 @@ get_tasas_pasivas <- function(
 #' @return A `tibble` containing monthly series data.
 #' @export
 get_tasas_activas <- function(
-    entidad = c("bm", "app", "bac", "cc"),
+    entidad = c("bm", "aap", "bac", "cc"),
     long             = FALSE,
     filtro_condicion = NULL,
     filtro_grupo     = NULL,
