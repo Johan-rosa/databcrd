@@ -91,26 +91,51 @@ params <- dplyr::lst(
       "ta_preferencial_hipotecario"
     )
   ),
-  aap_pasivas_2007 = list(
+
+  aap_pasiva_2007 = list(
     endpoint = "taap_pasiva.xls",
     fileext = ".xls",
     col_names = c("mes", "tp_30d", "tp_60d", "tp_90d", "tp_180d", "tp_360d", "tp_m360d", "tp_pp")
   ),
   # Reusing some names after this point
-  aap_pasivas_2012 = list(
+  aap_pasiva_2012 = list(
     endpoint = "taap_pasivad-2008-2012.xls",
     fileext = ".xls",
     col_names = bm_pasiva_2012$col_names
   ),
-  aap_pasivas_2016 = list(
+  aap_pasiva_2016 = list(
     endpoint = "taap_pasivad-2013-2016.xlsx",
     fileext = ".xlsx",
     col_names = bm_pasiva_2016$col_names
   ),
-  aap_pasivas_today = list(
+  aap_pasiva_today = list(
     endpoint = "taap_pasivad.xlsx",
     fileext = ".xlsx",
     col_names = bm_pasiva_today$col_names
+  ),
+
+  aap_activa_2007 = list(
+    endpoint = "taap_activa.xls",
+    fileext  = ".xls",
+    col_names =  c("mes", "ta_90d", "ta_180d", "ta_360d", "ta_2a", "ta_5a", "ta_m5a", "ta_pp")
+  ),
+  aap_activa_2012 = list(
+    endpoint = "taap_activad-2008-2012.xls",
+    fileext  = ".xls",
+    col_names = c(
+      "mes", "ta_90d", "ta_180d", "ta_360d", "ta_2a", "ta_5a", "ta_m5a",
+      "ta_ps", "ta_pp", "ta_preferencial", "ta_comercio", "ta_consumo", "ta_hipotecario"
+    )
+  ),
+  aap_activa_2016 = list(
+    endpoint = "taap_activad-2013-2016.xlsx",
+    fileext  = ".xlsx",
+    col_names = aap_activa_2012$col_names
+  ),
+  aap_activa_today = list(
+    endpoint = "taap_activad.xlsx",
+    fileext = ".xlsx",
+    col_names = bm_activa_today$col_name
   )
 )
 
