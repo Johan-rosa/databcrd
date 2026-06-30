@@ -136,6 +136,31 @@ params <- dplyr::lst(
     endpoint = "taap_activad.xlsx",
     fileext = ".xlsx",
     col_names = bm_activa_today$col_name
+  ),
+
+  bac_activa_2007 = list(
+    endpoint = "tbd_activa.xls",
+    fileext  = ".xls",
+    col_names = aap_activa_2007$col_names
+  ),
+  bac_activa_2012 = list(
+    endpoint = "tbd_activad-2008-2012.xls",
+    fileext  = ".xls",
+    col_names = aap_activa_2012$col_names
+  ),
+  bac_activa_2016 = list(
+    endpoint = "tbac_activad_2013_2016.xls",
+    fileext  = ".xls",
+    col_names = aap_activa_2016$col_names
+  ),
+  bac_activa_today = list(
+    endpoint = "tbac_activad.xlsx",
+    fileext  = ".xlsx",
+    # Este archivo tiene una columna para las tarjetas de crédito. Es el único que lo tiene.
+    col_names = c("mes", "ta_90d", "ta_180d", "ta_360d", "ta_2a", "ta_5a", "ta_m5a",
+                  "ta_pp", "ta_ps", "ta_tc", "ta_comercio", "ta_consumo", "ta_hipotecario",
+                  "ta_preferencial", "ta_preferencial_comercio", "ta_preferencial_consumo",
+                  "ta_preferencial_hipotecario")
   )
 )
 
@@ -219,7 +244,8 @@ params <- dplyr::lst(
   "dep_ahorros"    = "Depositos",
   "general"        = "General",
   "preferencial"   = "Preferencial PP",
-  "interbancarios" = "Interbancaria"
+  "interbancarios" = "Interbancaria",
+  "tc" = "Tarjeta de crédito"
 )
 
 # ==============================================================================
@@ -263,7 +289,7 @@ tasas_to_long <- function(
       grupo = dplyr::case_when(
         stringr::str_detect(name, "\\d[da]$") ~ "Plazo",
         stringr::str_detect(name, "pp$|ps|preferencial$") ~ "Promedio",
-        stringr::str_detect(name, "comercio|consumo|hipotecario") ~ "Sector"
+        stringr::str_detect(name, "comercio|consumo|hipotecario|tc") ~ "Sector"
       ),
       condicion = dplyr::if_else(stringr::str_detect(name, "preferencial"), "Preferencial", "General"),
       # Reemplazado dplyr::recode por un mapeo directo moderno de strings (Punto 5)
