@@ -163,6 +163,38 @@ params <- dplyr::lst(
       "ta_preferencial", "ta_preferencial_comercio", "ta_preferencial_consumo",
       "ta_preferencial_hipotecario"
     )
+  ),
+
+  bac_pasiva_2007 = list(
+    endpoint = "tbd_pasiva.xls",
+    fileext  = ".xls",
+    col_names = aap_pasiva_2007$col_names
+  ),
+  bac_pasiva_2012 = list(
+    endpoint = "tbd_pasivad-2008-2012.xls",
+    fileext = ".xls",
+    # la tasas simple y la ponderada están invertidas.
+    col_names = c(
+      "mes", "tp_30d", "tp_60d", "tp_90d", "tp_180d", "tp_360d", "tp_2a",
+      "tp_ps", "tp_pp", "tp_dep_ahorros", "tp_general",
+      "tp_preferencial", "tp_interbancarios"
+    )
+  ),
+  bac_pasiva_2016 = list(
+    endpoint = "tbac_pasivad_2013_2016.xls",
+    fileext = "xls",
+    # la tasas simple y la ponderada están invertidas.
+    col_names = c(
+      "mes", "tp_30d", "tp_60d", "tp_90d", "tp_180d", "tp_360d", "tp_2a",
+      "tp_5a", "tp_m5a",
+      "tp_ps", "tp_pp", "tp_dep_ahorros", "tp_general",
+      "tp_preferencial", "tp_interbancarios"
+    )
+  ),
+  bac_pasiva_today = list(
+    endpoint = "tbac_pasivad.xlsx",
+    fileext = "xlsx",
+    col_names = bac_pasiva_2016$col_names
   )
 )
 
