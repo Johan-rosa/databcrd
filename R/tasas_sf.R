@@ -157,10 +157,12 @@ params <- dplyr::lst(
     endpoint = "tbac_activad.xlsx",
     fileext  = ".xlsx",
     # Este archivo tiene una columna para las tarjetas de crédito. Es el único que lo tiene.
-    col_names = c("mes", "ta_90d", "ta_180d", "ta_360d", "ta_2a", "ta_5a", "ta_m5a",
-                  "ta_pp", "ta_ps", "ta_tc", "ta_comercio", "ta_consumo", "ta_hipotecario",
-                  "ta_preferencial", "ta_preferencial_comercio", "ta_preferencial_consumo",
-                  "ta_preferencial_hipotecario")
+    col_names = c(
+      "mes", "ta_90d", "ta_180d", "ta_360d", "ta_2a", "ta_5a", "ta_m5a",
+      "ta_pp", "ta_ps", "ta_tc", "ta_comercio", "ta_consumo", "ta_hipotecario",
+      "ta_preferencial", "ta_preferencial_comercio", "ta_preferencial_consumo",
+      "ta_preferencial_hipotecario"
+    )
   )
 )
 
