@@ -6,18 +6,6 @@
   })
 }
 
-# endpoints <- list(
-#   bm_pasiva  = c("tbm_pasiva-1991-2007.xls", "tbm_pasivad-2008-2012.xls", "tbm_pasivad-2013-2016.xlsx", "tbm_pasivad.xlsx"),
-#   aap_pasiva = c("taap_pasiva.xls", "taap_pasivad-2008-2012.xls", "taap_pasivad-2013-2016.xlsx", "taap_pasivad.xlsx"),
-#   bac_pasiva = c("tbd_pasiva.xls", "tbd_pasivad-2008-2012.xls", "tbac_pasivad_2013_2016.xls", "tbac_pasivad.xlsx"),
-#   cc_pasiva  = c("tf_pasiva.xls", "tf_pasivad-2008-2011.xls", "tf_pasivad_2013_2016.xlsx", "tf_pasivad.xlsx"),
-#
-#   bm_activa  = c("tbm_activa-1991-2007.xls","tbm_activad-2008-2012.xls", "tbm_activad-2013-2016.xlsx", "tbm_activad.xlsx"),
-#   aap_activa = c("taap_activa.xls", "taap_activad-2008-2012.xls", "taap_activad-2013-2016.xlsx", "taap_activad.xlsx"),
-#   bac_activa = c("tbd_activa.xls","tbd_activad-2008-2012.xls", "tbac_activad_2013_2016.xls", "tbac_activad.xlsx"),
-#   cc_activa  = c("tf_activa.xls", "tf_activad-2008-2011.xls", "tf_activad_2013-2016.xlsx", "tf_activad.xls")
-# )
-
 params <- dplyr::lst(
   bm_pasiva_2007 = dplyr::lst(
     endpoint = "tbm_pasiva-1991-2007.xls",
@@ -195,10 +183,47 @@ params <- dplyr::lst(
     endpoint = "tbac_pasivad.xlsx",
     fileext = "xlsx",
     col_names = bac_pasiva_2016$col_names
+  ),
+
+  cc_activa_2012 = list(
+    endpoint = "tf_activad-2008-2011.xls",
+    fileext = ".xls",
+    col_names = c("mes", "ta_90d", "ta_180d", "ta_360d", "ta_2a", "ta_5a", "ta_m5a", "ta_pp")
+  ),
+  cc_activa_2016 = list(
+    endpoint = "tf_activad_2013-2016.xlsx",
+    fileext = ".xlsx",
+    col_names = c("mes", "ta_90d", "ta_180d", "ta_360d", "ta_2a", "ta_5a", "ta_m5a", "ta_pp")
+  ),
+  cc_activa_today = list(
+    endpoint = "tf_activad.xls",
+    fileext  = ".xls",
+    col_name = c(
+      "mes", "ta_90d", "ta_180d", "ta_360d", "ta_2a", "ta_5a", "ta_m5a",
+      "ta_pp", "ta_ps", "ta_comercio", "ta_consumo", "ta_hipotecario",
+      "ta_preferencial", "ta_preferencial_comercio", "ta_preferencial_consumo",
+      "ta_preferencial_hipotecario"
+    )
+  ),
+
+  cc_pasiva_today = list(
+    endpoint = "tf_pasivad.xlsx",
+    fileext  = ".xlsx",
+    col_names = c(
+      "mes", "tp_30d", "tp_60d", "tp_90d", "tp_180d", "tp_360d", "tp_2a",
+      "tp_5a", "tp_m5a", "tp_pp", "tp_ps", "tp_dep_ahorros", "tp_general",
+      "tp_preferencial", "tp_interbancarios"
+    )
+  ),
+  cc_pasiva_2016 = list(
+    endpoint = "tf_pasivad_2013_2016.xlsx",
+    fileext = ".xlsx",
+    col_names = c(
+      "mes", "tp_30d", "tp_60d", "tp_90d", "tp_180d", "tp_360d", "tp_2a", "tp_5a", "tp_m5a",
+      "tp_pp"
+    )
   )
 )
-
-
 
 .get_historical_rates <- function(endpoint, fileext, col_names) {
   cdn_url <- "https://cdn.bancentral.gov.do/documents/estadisticas/sector-monetario-y-financiero/documents/"
@@ -215,8 +240,8 @@ params <- dplyr::lst(
     suppressMessages() |>
     janitor::clean_names() |>
     dplyr::filter(stringr::str_detect(x1, paste0("^[\\*]?\\d{4}|", month_pattern))) |>
-    janitor::remove_empty("cols") |>
     purrr::set_names(col_names) |>
+    janitor::remove_empty("cols") |>
     dplyr::mutate(
       year = stringr::str_extract(mes, "\\d{4}"),
       mes  = stringr::str_extract(mes, "[a-zA-Z]+")
@@ -374,7 +399,8 @@ get_tasas_pasivas <- function(
     files_to_read,
     \(x) do.call(.get_historical_rates, x)
   ) |>
-    dplyr::bind_rows()
+    dplyr::bind_rows() |>
+    dplyr::arrange(fecha)
 
   if (long) {
     tasas <- tasas |>
