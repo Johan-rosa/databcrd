@@ -1,73 +1,266 @@
-# ==============================================================================
-# 1. METADATOS Y CONFIGURACIONES GLOBALES
-# ==============================================================================
-.bcrd_historical_metadata <- list(
-  pasiva = list(
-    file_names = c("Tasas 1991-2007", "Tasas 2008-2012", "Tasas 2013-2016", "Tasas 2017-today"),
-    exts       = c(".xls", ".xls", ".xlsx", ".xlsx"),
-    start_dates = c("2000/01/01", "2008/01/01", "2013/01/01", "2017/01/01"),
-    endpoints  = c("tbm_pasiva-1991-2007.xls", "tbm_pasivad-2008-2012.xls", "tbm_pasivad-2013-2016.xlsx", "tbm_pasivad.xlsx"),
-    read_params = list(
-      list(range = "A157:M266"),
-      list(range = "A14:O88"),
-      list(range = "A11:O67"),
-      list(skip = 10)
-    ),
-    col_names = list(
-      c(
-        "mes", "tp_30d", "tp_60d", "tp_90d", "tp_180d", "tp_360d", "tp_m360",
-        "tp_ps", "tp_pp", "tp_dep_ahorros", "tp_preferencial", "tp_general", "tp_interbancarios"
-      ),
-      c(
-        "mes", "tp_30d", "tp_60d", "tp_90d", "tp_180d", "tp_360d", "tp_2a",
-        "tp_5a", "tp_m5a", "tp_pp", "tp_ps", "tp_dep_ahorros", "tp_general",
-        "tp_preferencial", "tp_interbancarios"
-      ),
-      c(
-        "mes", "tp_30d", "tp_60d", "tp_90d", "tp_180d", "tp_360d", "tp_2a",
-        "tp_5a", "tp_m5a", "tp_pp", "tp_ps", "tp_dep_ahorros", "tp_general",
-        "tp_preferencial", "tp_interbancarios"
-      ),
-      c(
-        "mes", "tp_30d", "tp_60d", "tp_90d", "tp_180d", "tp_360d", "tp_2a",
-        "tp_5a", "tp_m5a", "tp_pp", "tp_ps", "tp_dep_ahorros", "tp_general",
-        "tp_preferencial", "tp_interbancarios"
-      )
+.download_bcrd_file <- function(url, dest_path) {
+  tryCatch({
+    utils::download.file(url, dest_path, mode = "wb", quiet = TRUE)
+  }, error = function(e) {
+    stop(glue::glue("Error al descargar desde {url}. Verifique su conexión de red o si el Banco Central cambió el enlace. Detalle: {e$message}"), call. = FALSE)
+  })
+}
+
+params <- dplyr::lst(
+  bm_pasiva_2007 = dplyr::lst(
+    endpoint = "tbm_pasiva-1991-2007.xls",
+    fileext  = ".xls",
+    col_names =  c(
+      "mes", "tp_30d", "tp_60d", "tp_90d", "tp_180d", "tp_360d", "tp_m360d",
+      "tp_ps", "tp_pp", "tp_dep_ahorros", "tp_preferencial", "tp_general",
+      "tp_interbancarios"
     )
   ),
-  activa = list(
-    file_names = c("Tasas 1991-2007", "Tasas 2008-2012", "Tasas 2013-2016", "Tasas 2017-today"),
-    exts       = c(".xls", ".xls", ".xlsx", ".xlsx"),
-    start_dates = c("2000/01/01", "2008/01/01", "2013/01/01", "2017/01/01"),
-    endpoints  = c("tbm_activa-1991-2007.xls", "tbm_activad-2008-2012.xls", "tbm_activad-2013-2016.xlsx", "tbm_activad.xlsx"),
-    read_params = list(
-      list(range = "A157:O266"),
-      list(range = "A14:M85"),
-      list(range = "A10:M66"),
-      list(skip = 9)
-    ),
-    col_names = list(
-      c(
-        "mes", "ta_90d", "ta_180d", "ta_360d", "ta_2a", "ta_5a", "ta_m5a",
-        "ta_ps", "ta_pp", "ta_preferencial", "ta_comercio", "ta_consumo", "ta_hipotecario"
-      ),
-      c(
-        "mes", "ta_90d", "ta_180d", "ta_360d", "ta_2a", "ta_5a", "ta_m5a", "ta_ps",
-        "ta_pp", "ta_preferencial", "ta_comercio", "ta_consumo", "ta_hipotecario"
-      ),
-      c(
-        "mes", "ta_90d", "ta_180d", "ta_360d", "ta_2a", "ta_5a", "ta_m5a",
-        "ta_ps", "ta_pp", "ta_preferencial", "ta_comercio", "ta_consumo", "ta_hipotecario"
-      ),
-      c(
-        "mes", "ta_90d", "ta_180d", "ta_360d", "ta_2a", "ta_5a", "ta_m5a",
-        "ta_pp", "ta_ps", "ta_comercio", "ta_consumo", "ta_hipotecario",
-        "ta_preferencial", "ta_preferencial_comercio", "ta_preferencial_consumo",
-        "ta_preferencial_hipotecario"
-      )
+  bm_pasiva_2012 = list(
+    endpoint = "tbm_pasivad-2008-2012.xls",
+    fileext  = ".xls",
+    col_names = c(
+      "mes", "tp_30d", "tp_60d", "tp_90d", "tp_180d", "tp_360d", "tp_2a",
+      "tp_pp", "tp_ps", "tp_dep_ahorros", "tp_general",
+      "tp_preferencial", "tp_interbancarios"
+    )
+  ),
+  bm_pasiva_2016 = list(
+    endpoint = "tbm_pasivad-2013-2016.xlsx",
+    fileext = ".xlsx",
+    col_names = c(
+      "mes", "tp_30d", "tp_60d", "tp_90d", "tp_180d", "tp_360d", "tp_2a",
+      "tp_5a", "tp_m5a", "tp_pp", "tp_ps", "tp_dep_ahorros", "tp_general",
+      "tp_preferencial", "tp_interbancarios"
+    )
+  ),
+  bm_pasiva_today = list(
+    endpoint = "tbm_pasivad.xlsx",
+    fileext  = ".xlsx",
+    col_names = c(
+      "mes", "tp_30d", "tp_60d", "tp_90d", "tp_180d", "tp_360d", "tp_2a",
+      "tp_5a", "tp_m5a", "tp_pp", "tp_ps", "tp_dep_ahorros", "tp_general",
+      "tp_preferencial", "tp_interbancarios"
+    )
+  ),
+  bm_activa_2007 = list(
+    endpoint = "tbm_activa-1991-2007.xls",
+    fileext  = ".xls",
+    col_names = c(
+      "mes", "ta_90d", "ta_180d", "ta_360d", "ta_m360d", "ta_2a", "ta_5a", "ta_m5a",
+      "ta_ps", "ta_pp", "ta_preferencial", "ta_comercio", "ta_consumo", "ta_hipotecario"
+    )
+  ),
+  bm_activa_2012 = list(
+    endpoint = "tbm_activad-2008-2012.xls",
+    fileext  = ".xls",
+    col_names = c(
+      "mes", "ta_90d", "ta_180d", "ta_360d", "ta_2a", "ta_5a", "ta_m5a",
+      "ta_pp", "ta_ps", "ta_preferencial", "ta_comercio", "ta_consumo",
+      "ta_hipotecario"
+    )
+  ),
+  bm_activa_2016 = list(
+    endpoint = "tbm_activad-2013-2016.xlsx",
+    fileext  = ".xlsx",
+    col_names = c(
+      "mes", "ta_90d", "ta_180d", "ta_360d", "ta_2a", "ta_5a", "ta_m5a",
+      "ta_pp", "ta_ps", "ta_preferencial", "ta_comercio", "ta_consumo",
+      "ta_hipotecario"
+    )
+  ),
+  bm_activa_today = list(
+    endpoint = "tbm_activad.xlsx",
+    fileext = ".xlsx",
+    col_names = c(
+      "mes", "ta_90d", "ta_180d", "ta_360d", "ta_2a", "ta_5a", "ta_m5a",
+      "ta_pp", "ta_ps", "ta_comercio", "ta_consumo", "ta_hipotecario",
+      "ta_preferencial", "ta_preferencial_comercio", "ta_preferencial_consumo",
+      "ta_preferencial_hipotecario"
+    )
+  ),
+
+  aap_pasiva_2007 = list(
+    endpoint = "taap_pasiva.xls",
+    fileext = ".xls",
+    col_names = c("mes", "tp_30d", "tp_60d", "tp_90d", "tp_180d", "tp_360d", "tp_m360d", "tp_pp")
+  ),
+  # Reusing some names after this point
+  aap_pasiva_2012 = list(
+    endpoint = "taap_pasivad-2008-2012.xls",
+    fileext = ".xls",
+    col_names = bm_pasiva_2012$col_names
+  ),
+  aap_pasiva_2016 = list(
+    endpoint = "taap_pasivad-2013-2016.xlsx",
+    fileext = ".xlsx",
+    col_names = bm_pasiva_2016$col_names
+  ),
+  aap_pasiva_today = list(
+    endpoint = "taap_pasivad.xlsx",
+    fileext = ".xlsx",
+    col_names = bm_pasiva_today$col_names
+  ),
+
+  aap_activa_2007 = list(
+    endpoint = "taap_activa.xls",
+    fileext  = ".xls",
+    col_names =  c("mes", "ta_90d", "ta_180d", "ta_360d", "ta_2a", "ta_5a", "ta_m5a", "ta_pp")
+  ),
+  aap_activa_2012 = list(
+    endpoint = "taap_activad-2008-2012.xls",
+    fileext  = ".xls",
+    col_names = c(
+      "mes", "ta_90d", "ta_180d", "ta_360d", "ta_2a", "ta_5a", "ta_m5a",
+      "ta_ps", "ta_pp", "ta_preferencial", "ta_comercio", "ta_consumo", "ta_hipotecario"
+    )
+  ),
+  aap_activa_2016 = list(
+    endpoint = "taap_activad-2013-2016.xlsx",
+    fileext  = ".xlsx",
+    col_names = aap_activa_2012$col_names
+  ),
+  aap_activa_today = list(
+    endpoint = "taap_activad.xlsx",
+    fileext = ".xlsx",
+    col_names = bm_activa_today$col_name
+  ),
+
+  bac_activa_2007 = list(
+    endpoint = "tbd_activa.xls",
+    fileext  = ".xls",
+    col_names = aap_activa_2007$col_names
+  ),
+  bac_activa_2012 = list(
+    endpoint = "tbd_activad-2008-2012.xls",
+    fileext  = ".xls",
+    col_names = aap_activa_2012$col_names
+  ),
+  bac_activa_2016 = list(
+    endpoint = "tbac_activad_2013_2016.xls",
+    fileext  = ".xls",
+    col_names = aap_activa_2016$col_names
+  ),
+  bac_activa_today = list(
+    endpoint = "tbac_activad.xlsx",
+    fileext  = ".xlsx",
+    # Este archivo tiene una columna para las tarjetas de crédito. Es el único que lo tiene.
+    col_names = c(
+      "mes", "ta_90d", "ta_180d", "ta_360d", "ta_2a", "ta_5a", "ta_m5a",
+      "ta_pp", "ta_ps", "ta_tc", "ta_comercio", "ta_consumo", "ta_hipotecario",
+      "ta_preferencial", "ta_preferencial_comercio", "ta_preferencial_consumo",
+      "ta_preferencial_hipotecario"
+    )
+  ),
+
+  bac_pasiva_2007 = list(
+    endpoint = "tbd_pasiva.xls",
+    fileext  = ".xls",
+    col_names = aap_pasiva_2007$col_names
+  ),
+  bac_pasiva_2012 = list(
+    endpoint = "tbd_pasivad-2008-2012.xls",
+    fileext = ".xls",
+    # la tasas simple y la ponderada están invertidas.
+    col_names = c(
+      "mes", "tp_30d", "tp_60d", "tp_90d", "tp_180d", "tp_360d", "tp_2a",
+      "tp_ps", "tp_pp", "tp_dep_ahorros", "tp_general",
+      "tp_preferencial", "tp_interbancarios"
+    )
+  ),
+  bac_pasiva_2016 = list(
+    endpoint = "tbac_pasivad_2013_2016.xls",
+    fileext = "xls",
+    # la tasas simple y la ponderada están invertidas.
+    col_names = c(
+      "mes", "tp_30d", "tp_60d", "tp_90d", "tp_180d", "tp_360d", "tp_2a",
+      "tp_5a", "tp_m5a",
+      "tp_ps", "tp_pp", "tp_dep_ahorros", "tp_general",
+      "tp_preferencial", "tp_interbancarios"
+    )
+  ),
+  bac_pasiva_today = list(
+    endpoint = "tbac_pasivad.xlsx",
+    fileext = "xlsx",
+    col_names = bac_pasiva_2016$col_names
+  ),
+
+  cc_activa_2012 = list(
+    endpoint = "tf_activad-2008-2011.xls",
+    fileext = ".xls",
+    col_names = c("mes", "ta_90d", "ta_180d", "ta_360d", "ta_2a", "ta_5a", "ta_m5a", "ta_pp")
+  ),
+  cc_activa_2016 = list(
+    endpoint = "tf_activad_2013-2016.xlsx",
+    fileext = ".xlsx",
+    col_names = c("mes", "ta_90d", "ta_180d", "ta_360d", "ta_2a", "ta_5a", "ta_m5a", "ta_pp")
+  ),
+  cc_activa_today = list(
+    endpoint = "tf_activad.xls",
+    fileext  = ".xls",
+    col_name = c(
+      "mes", "ta_90d", "ta_180d", "ta_360d", "ta_2a", "ta_5a", "ta_m5a",
+      "ta_pp", "ta_ps", "ta_comercio", "ta_consumo", "ta_hipotecario",
+      "ta_preferencial", "ta_preferencial_comercio", "ta_preferencial_consumo",
+      "ta_preferencial_hipotecario"
+    )
+  ),
+
+  cc_pasiva_today = list(
+    endpoint = "tf_pasivad.xlsx",
+    fileext  = ".xlsx",
+    col_names = c(
+      "mes", "tp_30d", "tp_60d", "tp_90d", "tp_180d", "tp_360d", "tp_2a",
+      "tp_5a", "tp_m5a", "tp_pp", "tp_ps", "tp_general", "tp_preferencial",
+      "tp_interbancarios"
+    )
+  ),
+  cc_pasiva_2016 = list(
+    endpoint = "tf_pasivad_2013_2016.xlsx",
+    fileext = ".xlsx",
+    col_names = c(
+      "mes", "tp_30d", "tp_60d", "tp_90d", "tp_180d", "tp_360d", "tp_2a", "tp_5a", "tp_m5a",
+      "tp_pp"
     )
   )
 )
+
+.get_historical_rates <- function(endpoint, fileext, col_names) {
+  cdn_url <- "https://cdn.bancentral.gov.do/documents/estadisticas/sector-monetario-y-financiero/documents/"
+  file_url <- paste0(cdn_url, endpoint)
+
+  temp_file <- tempfile(fileext = fileext)
+  .download_bcrd_file(file_url, temp_file)
+
+  month_pattern <- purrr::map_chr(1:12, ~ crear_mes(.x, "number_to_text")) |>
+    paste(collapse = "|")
+
+  temp_file |>
+    readxl::read_excel(col_names = FALSE) |>
+    suppressMessages() |>
+    janitor::clean_names() |>
+    dplyr::filter(stringr::str_detect(x1, paste0("^[\\*]?\\d{4}|", month_pattern))) |>
+    janitor::remove_empty("cols") |>
+    purrr::set_names(col_names) |>
+    dplyr::mutate(
+      year = stringr::str_extract(mes, "\\d{4}"),
+      mes  = stringr::str_extract(mes, "[a-zA-Z]+")
+    ) |>
+    tidyr::fill(year) |>
+    dplyr::filter(stringr::str_detect(mes, "\\d{4}", negate = TRUE)) |>
+    dplyr::mutate(
+      dplyr::across(-c(mes, year), as.numeric),
+      mes = crear_mes(mes),
+      fecha = lubridate::make_date(year, mes, 1)
+    ) |>
+    dplyr::filter(dplyr::if_any(dplyr::matches("^(ta|tp)"), ~ !is.na(.))) |>
+    dplyr::relocate(fecha, year, mes)
+}
+
+
+# ==============================================================================
+# 1. METADATOS Y CONFIGURACIONES GLOBALES
+# ==============================================================================
 
 .tasas_col_names_diarias <- list(
   `ACTRD$` =  c(
@@ -110,69 +303,13 @@
   "dep_ahorros"    = "Depositos",
   "general"        = "General",
   "preferencial"   = "Preferencial PP",
-  "interbancarios" = "Interbancaria"
+  "interbancarios" = "Interbancaria",
+  "tc" = "Tarjeta de crédito"
 )
 
 # ==============================================================================
 # 2. FUNCIONES AUXILIARES INTERNAS
 # ==============================================================================
-
-.download_bcrd_file <- function(url, dest_path) {
-  tryCatch({
-    utils::download.file(url, dest_path, mode = "wb", quiet = TRUE)
-  }, error = function(e) {
-    stop(glue::glue("Error al descargar desde {url}. Verifique su conexión de red o si el Banco Central cambió el enlace. Detalle: {e$message}"), call. = FALSE)
-  })
-}
-
-.get_historical_rates <- function(type = c("pasiva", "activa")) {
-  type <- match.arg(type)
-  meta <- .bcrd_historical_metadata[[type]]
-  base_url <- "https://cdn.bancentral.gov.do/documents/estadisticas/sector-monetario-y-financiero/documents/"
-
-  urls <- paste0(base_url, meta$endpoints) |> stats::setNames(meta$file_names)
-
-  temp_files <- base::sapply(meta$exts, \(x) tempfile(fileext = x)) |>
-    stats::setNames(meta$file_names)
-
-  purrr::walk2(urls, temp_files, .download_bcrd_file)
-
-  params <- purrr::map2(meta$read_params, temp_files, \(x, y) {
-    append(x, list(path = y, col_names = FALSE, col_types = "text"))
-  })
-
-  tasas_list <- purrr::map(seq_along(meta$file_names), \(index) {
-    do.call(readxl::read_excel, params[[index]])
-  }) |>
-    stats::setNames(meta$file_names) |>
-    suppressMessages()
-
-  prepare_data <- function(df, names, start_date) {
-    df |>
-      janitor::remove_empty(which = c("cols", "rows")) |>
-      stats::setNames(names) |>
-      dplyr::filter(stringr::str_detect(mes, "^[\\*]?[A-Z]")) |>
-      dplyr::filter(!dplyr::if_all(-c(mes), is.na)) |>
-      dplyr::mutate(
-        dplyr::across(dplyr::everything(), \(x) stringr::str_remove_all(x, ",")),
-        dplyr::across(-mes, as.numeric),
-        fecha = seq(as.Date(start_date), by = "month", length.out = dplyr::n()),
-        year  = lubridate::year(fecha),
-        mes_num = lubridate::month(fecha),
-        mes     = crear_mes(mes_num, "number_to_text")
-      ) |>
-      dplyr::select(fecha, year, mes, dplyr::everything(), -mes_num)
-  }
-
-  df_cleaning_params <- dplyr::lst(
-    df         = tasas_list,
-    names      = meta$col_names,
-    start_date = meta$start_dates
-  )
-
-  purrr::pmap(df_cleaning_params, prepare_data) |>
-    purrr::list_rbind()
-}
 
 
 #' Pivot wide formats of interest rates data frames to long format
@@ -211,7 +348,7 @@ tasas_to_long <- function(
       grupo = dplyr::case_when(
         stringr::str_detect(name, "\\d[da]$") ~ "Plazo",
         stringr::str_detect(name, "pp$|ps|preferencial$") ~ "Promedio",
-        stringr::str_detect(name, "comercio|consumo|hipotecario") ~ "Sector"
+        stringr::str_detect(name, "comercio|consumo|hipotecario|tc") ~ "Sector"
       ),
       condicion = dplyr::if_else(stringr::str_detect(name, "preferencial"), "Preferencial", "General"),
       # Reemplazado dplyr::recode por un mapeo directo moderno de strings (Punto 5)
@@ -240,6 +377,11 @@ tasas_to_long <- function(
 #' Downloads and aggregates historic monthly interest rates for savings (tasas pasivas)
 #' published by the Central Bank of the Dominican Republic (BCRD).
 #'
+#' @param entidad `<character>` Entity type to fetch. One of:
+#''   * `"bm"`: Multiple Banks.
+#''   * `"aap"`: Savings and Loan Associations.
+#''   * `"bac"`: Savings and Credit Banks.
+#''   * `"cc"`: Credit Corporations
 #' @param long `<logical>` If `TRUE`, converts data frame into long format. Defaults to `FALSE`.
 #' @param filtro_condicion `<character>` Filter by rate condition: `"General"` or `"Preferencial"`. Only used if `long = TRUE`.
 #' @param filtro_grupo `<character>` Filter by grouping: `"Plazo"`, `"Promedio"`, or `"Sector"`. Only used if `long = TRUE`.
@@ -248,12 +390,29 @@ tasas_to_long <- function(
 #' @return A `tibble` containing monthly series data.
 #' @export
 get_tasas_pasivas <- function(
-    long             = FALSE,
+    entidad = c("bm", "aap", "bac", "cc"),
+    long = FALSE,
     filtro_condicion = NULL,
     filtro_grupo     = NULL,
     filtro_detalle   = NULL
 ) {
-  tasas <- .get_historical_rates(type = "pasiva")
+  entidad <- rlang::arg_match(entidad)
+  toread <- stringr::str_subset(names(params), paste0(entidad, "_pasiva"))
+  files_to_read <- params[toread]
+
+  tasas <- purrr::map(
+    files_to_read,
+    \(x) do.call(.get_historical_rates, x)
+  ) |>
+    dplyr::bind_rows() |>
+    dplyr::arrange(fecha)
+
+  if (entidad == "bac") {
+    # Este archivo tiene un problema, los años 2012 y 2017 están repetidos
+    # en dos archivos
+    tasas <- tasas |>
+      dplyr::slice(1, .by = c(year, mes))
+  }
 
   if (long) {
     tasas <- tasas |>
@@ -264,6 +423,7 @@ get_tasas_pasivas <- function(
         filtro_detalle   = filtro_detalle
       )
   }
+
   tasas
 }
 
@@ -273,6 +433,11 @@ get_tasas_pasivas <- function(
 #' Downloads and aggregates historic monthly interest rates for loans (tasas activas)
 #' published by the Central Bank of the Dominican Republic (BCRD).
 #'
+#' @param entidad `<character>` Entity type to fetch. One of:
+#''   * `"bm"`: Multiple Banks.
+#''   * `"aap"`: Savings and Loan Associations.
+#''   * `"bac"`: Savings and Credit Banks.
+#''   * `"cc"`: Credit Corporations
 #' @param long `<logical>` If `TRUE`, converts data frame into long format. Defaults to `FALSE`.
 #' @param filtro_condicion `<character>` Filter by rate condition: `"General"` or `"Preferencial"`. Only used if `long = TRUE`.
 #' @param filtro_grupo `<character>` Filter by grouping: `"Plazo"`, `"Promedio"`, or `"Sector"`. Only used if `long = TRUE`.
@@ -281,12 +446,29 @@ get_tasas_pasivas <- function(
 #' @return A `tibble` containing monthly series data.
 #' @export
 get_tasas_activas <- function(
+    entidad = c("bm", "aap", "bac", "cc"),
     long             = FALSE,
     filtro_condicion = NULL,
     filtro_grupo     = NULL,
     filtro_detalle   = NULL
 ) {
-  tasas <- .get_historical_rates(type = "activa")
+  entidad <- rlang::arg_match(entidad)
+  toread <- stringr::str_subset(names(params), paste0(entidad, "_activa"))
+  files_to_read <- params[toread]
+
+  tasas <- purrr::map(
+    files_to_read,
+    \(x) do.call(.get_historical_rates, x)
+  ) |>
+    dplyr::bind_rows() |>
+    dplyr::arrange(fecha)
+
+  if (entidad == "bac") {
+    # Este archivo tiene un problema, los años 2012 y 2017 están repetidos
+    # en dos archivos
+    tasas <- tasas |>
+      dplyr::slice(1, .by = c(year, mes))
+  }
 
   if (long) {
     tasas <- tasas |>
@@ -297,6 +479,7 @@ get_tasas_activas <- function(
         filtro_detalle   = filtro_detalle
       )
   }
+
   tasas
 }
 
