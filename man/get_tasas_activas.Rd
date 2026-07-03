@@ -5,6 +5,7 @@
 \title{Download interest rates for loans (Activas)}
 \usage{
 get_tasas_activas(
+  entidad = c("bm", "aap", "bac", "cc"),
   long = FALSE,
   filtro_condicion = NULL,
   filtro_grupo = NULL,
@@ -12,6 +13,12 @@ get_tasas_activas(
 )
 }
 \arguments{
+\item{entidad}{\verb{<character>} Entity type to fetch. One of:
+'   * \code{"bm"}: Multiple Banks.
+'   * \code{"aap"}: Savings and Loan Associations.
+'   * \code{"bac"}: Savings and Credit Banks.
+'   * \code{"cc"}: Credit Corporations}
+
 \item{long}{\verb{<logical>} If \code{TRUE}, converts data frame into long format. Defaults to \code{FALSE}.}
 
 \item{filtro_condicion}{\verb{<character>} Filter by rate condition: \code{"General"} or \code{"Preferencial"}. Only used if \code{long = TRUE}.}

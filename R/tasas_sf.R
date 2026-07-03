@@ -377,6 +377,11 @@ tasas_to_long <- function(
 #' Downloads and aggregates historic monthly interest rates for savings (tasas pasivas)
 #' published by the Central Bank of the Dominican Republic (BCRD).
 #'
+#' @param entidad `<character>` Entity type to fetch. One of:
+#''   * `"bm"`: Multiple Banks.
+#''   * `"aap"`: Savings and Loan Associations.
+#''   * `"bac"`: Savings and Credit Banks.
+#''   * `"cc"`: Credit Corporations
 #' @param long `<logical>` If `TRUE`, converts data frame into long format. Defaults to `FALSE`.
 #' @param filtro_condicion `<character>` Filter by rate condition: `"General"` or `"Preferencial"`. Only used if `long = TRUE`.
 #' @param filtro_grupo `<character>` Filter by grouping: `"Plazo"`, `"Promedio"`, or `"Sector"`. Only used if `long = TRUE`.
@@ -428,6 +433,11 @@ get_tasas_pasivas <- function(
 #' Downloads and aggregates historic monthly interest rates for loans (tasas activas)
 #' published by the Central Bank of the Dominican Republic (BCRD).
 #'
+#' @param entidad `<character>` Entity type to fetch. One of:
+#''   * `"bm"`: Multiple Banks.
+#''   * `"aap"`: Savings and Loan Associations.
+#''   * `"bac"`: Savings and Credit Banks.
+#''   * `"cc"`: Credit Corporations
 #' @param long `<logical>` If `TRUE`, converts data frame into long format. Defaults to `FALSE`.
 #' @param filtro_condicion `<character>` Filter by rate condition: `"General"` or `"Preferencial"`. Only used if `long = TRUE`.
 #' @param filtro_grupo `<character>` Filter by grouping: `"Plazo"`, `"Promedio"`, or `"Sector"`. Only used if `long = TRUE`.
