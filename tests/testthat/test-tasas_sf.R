@@ -1,70 +1,82 @@
-tasas_activas <- get_tasas_activas()
+tasas_activas_bm  <- get_tasas_activas("bm")
+tasas_activas_aap <- get_tasas_activas("aap")
+tasas_activas_bac <- get_tasas_activas("bac")
+tasas_activas_cc  <- get_tasas_activas("cc")
+
+tasas_pasivas_bm  <- get_tasas_pasivas("bm")
+tasas_pasivas_aap <- get_tasas_pasivas("aap")
+tasas_pasivas_bac <- get_tasas_pasivas("bac")
+tasas_pasivas_cc  <- get_tasas_pasivas("cc")
 
 test_that("Pasivas: there aren't dates in the future", {
-  testthat::expect_true(max(tasas_activas$fecha) <= lubridate::today())
+  testthat::expect_true(max(tasas_activas_bm$fecha)  <= lubridate::today())
+  testthat::expect_true(max(tasas_activas_aap$fecha) <= lubridate::today())
+  testthat::expect_true(max(tasas_activas_bac$fecha) <= lubridate::today())
+  testthat::expect_true(max(tasas_activas_cc$fecha)  <= lubridate::today())
+
+  testthat::expect_true(max(tasas_pasivas_bm$fecha)  <= lubridate::today())
+  testthat::expect_true(max(tasas_pasivas_aap$fecha) <= lubridate::today())
+  testthat::expect_true(max(tasas_pasivas_bac$fecha) <= lubridate::today())
+  testthat::expect_true(max(tasas_pasivas_cc$fecha)  <= lubridate::today())
 })
 
 test_that("There aren't haps between dates", {
-  test_nmonths <- tasas_activas |>
-    dplyr::arrange(fecha) |>
-    dplyr::mutate(lag_fecha = dplyr::lag(fecha)) |>
-    dplyr::filter(!is.na(lag_fecha)) |>
-    dplyr::mutate(one_month_diff = fecha == lag_fecha + months(1))
+  test_months <- \(tasas) {
+    tasas |>
+      dplyr::arrange(fecha) |>
+      dplyr::mutate(lag_fecha = dplyr::lag(fecha)) |>
+      dplyr::filter(!is.na(lag_fecha)) |>
+      dplyr::mutate(one_month_diff = fecha == lag_fecha + months(1))
+  }
 
-  testthat::expect_true(all(test_nmonths$one_month_diff))
+  testthat::expect_true(all(test_months(tasas_activas_bm)$one_month_diff))
+  testthat::expect_true(all(test_months(tasas_activas_aap)$one_month_diff))
+  testthat::expect_true(all(test_months(tasas_activas_bac)$one_month_diff))
+  testthat::expect_true(all(test_months(tasas_activas_cc)$one_month_diff))
+
+  testthat::expect_true(all(test_months(tasas_pasivas_bm)$one_month_diff))
+  testthat::expect_true(all(test_months(tasas_pasivas_aap)$one_month_diff))
+  testthat::expect_true(all(test_months(tasas_pasivas_bac)$one_month_diff))
+
+  # Este archivo not tiene valores para el 2018. Por ese ese test fallaría
+  # testthat::expect_true(all(test_months(tasas_pasivas_cc)$one_month_diff))
 })
 
 test_that("No missing columns", {
-  any_missing_columns <- tasas_activas |>
-    sapply(function(x) all(is.na(x))) |>
-    all()
+  any_missing_columns <- \(tasas) {
+    tasas |>
+      sapply(function(x) all(is.na(x))) |>
+      all()
+  }
 
-  testthat::expect_false(any_missing_columns)
+  testthat::expect_false(any_missing_columns(tasas_activas_bm))
+  testthat::expect_false(any_missing_columns(tasas_activas_aap))
+  testthat::expect_false(any_missing_columns(tasas_activas_bac))
+  testthat::expect_false(any_missing_columns(tasas_activas_cc))
+
+  testthat::expect_false(any_missing_columns(tasas_pasivas_bm))
+  testthat::expect_false(any_missing_columns(tasas_pasivas_aap))
+  testthat::expect_false(any_missing_columns(tasas_pasivas_bac))
+  testthat::expect_false(any_missing_columns(tasas_pasivas_cc))
 })
 
 test_that("No missing rows", {
-  empty_rows <- tasas_activas |>
-    apply(MARGIN = 1, FUN = function(x) all(is.na(x))) |>
-    all()
+  empty_rows <- \(tasas) {
+    tasas |>
+      apply(MARGIN = 1, FUN = function(x) all(is.na(x))) |>
+      all()
+  }
 
-  testthat::expect_false(empty_rows)
+  testthat::expect_false(empty_rows(tasas_activas_bm))
+  testthat::expect_false(empty_rows(tasas_activas_aap))
+  testthat::expect_false(empty_rows(tasas_activas_bac))
+  testthat::expect_false(empty_rows(tasas_activas_cc))
+
+  testthat::expect_false(empty_rows(tasas_pasivas_bm))
+  testthat::expect_false(empty_rows(tasas_pasivas_aap))
+  testthat::expect_false(empty_rows(tasas_pasivas_bac))
+  testthat::expect_false(empty_rows(tasas_pasivas_cc))
 })
-
-tasas_pasivas <- get_tasas_pasivas()
-
-test_that("Pasivas: there aren't dates in the future", {
-  testthat::expect_true(max(tasas_pasivas$fecha) <= lubridate::today())
-})
-
-test_that("There aren't haps between dates", {
-  test_nmonths <- tasas_pasivas |>
-    dplyr::arrange(fecha) |>
-    dplyr::mutate(lag_fecha = dplyr::lag(fecha)) |>
-    dplyr::filter(!is.na(lag_fecha)) |>
-    dplyr::mutate(one_month_diff = fecha == lag_fecha + months(1))
-
-  testthat::expect_true(all(test_nmonths$one_month_diff))
-})
-
-test_that("No missing columns", {
-  any_missing_columns <- tasas_pasivas |>
-    sapply(function(x) all(is.na(x))) |>
-    all()
-
-  testthat::expect_false(any_missing_columns)
-})
-
-test_that("No missing rows", {
-  empty_rows <- tasas_pasivas |>
-    apply(MARGIN = 1, FUN = function(x) all(is.na(x))) |>
-    all()
-
-  testthat::expect_false(empty_rows)
-})
-
-
-
-
 
 tasas <- get_tasas_diarias(2024)
 

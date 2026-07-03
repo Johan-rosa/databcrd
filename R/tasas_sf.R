@@ -211,8 +211,8 @@ params <- dplyr::lst(
     fileext  = ".xlsx",
     col_names = c(
       "mes", "tp_30d", "tp_60d", "tp_90d", "tp_180d", "tp_360d", "tp_2a",
-      "tp_5a", "tp_m5a", "tp_pp", "tp_ps", "tp_dep_ahorros", "tp_general",
-      "tp_preferencial", "tp_interbancarios"
+      "tp_5a", "tp_m5a", "tp_pp", "tp_ps", "tp_general", "tp_preferencial",
+      "tp_interbancarios"
     )
   ),
   cc_pasiva_2016 = list(
@@ -240,8 +240,8 @@ params <- dplyr::lst(
     suppressMessages() |>
     janitor::clean_names() |>
     dplyr::filter(stringr::str_detect(x1, paste0("^[\\*]?\\d{4}|", month_pattern))) |>
-    purrr::set_names(col_names) |>
     janitor::remove_empty("cols") |>
+    purrr::set_names(col_names) |>
     dplyr::mutate(
       year = stringr::str_extract(mes, "\\d{4}"),
       mes  = stringr::str_extract(mes, "[a-zA-Z]+")
@@ -402,6 +402,13 @@ get_tasas_pasivas <- function(
     dplyr::bind_rows() |>
     dplyr::arrange(fecha)
 
+  if (entidad == "bac") {
+    # Este archivo tiene un problema, los años 2012 y 2017 están repetidos
+    # en dos archivos
+    tasas <- tasas |>
+      dplyr::slice(1, .by = c(year, mes))
+  }
+
   if (long) {
     tasas <- tasas |>
       dplyr::mutate(type = "Pasiva", moneda = "DOP") |>
@@ -443,7 +450,15 @@ get_tasas_activas <- function(
     files_to_read,
     \(x) do.call(.get_historical_rates, x)
   ) |>
-    dplyr::bind_rows()
+    dplyr::bind_rows() |>
+    dplyr::arrange(fecha)
+
+  if (entidad == "bac") {
+    # Este archivo tiene un problema, los años 2012 y 2017 están repetidos
+    # en dos archivos
+    tasas <- tasas |>
+      dplyr::slice(1, .by = c(year, mes))
+  }
 
   if (long) {
     tasas <- tasas |>
