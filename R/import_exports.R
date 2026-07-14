@@ -14,11 +14,11 @@
 #' get_exportaciones("mensual")
 #' get_exportaciones("trimestral")
 #' get_exportaciones("anual")
-
 get_exportaciones <- function(frecuencia = "mensual") {
   checkmate::assert_choice(
     frecuencia,
-    choices = c("mensual", "trimestral", "anual"))
+    choices = c("mensual", "trimestral", "anual")
+  )
 
   years <- 2010:lubridate::year(Sys.Date())
 
@@ -58,18 +58,26 @@ get_exportaciones <- function(frecuencia = "mensual") {
         dplyr::slice(-1) |>
         tidyr::drop_na(x2) |>
         dplyr::select(-x1, -x2, -dplyr::last_col()) |>
+        # Algunas veces dejan los meses futuros y solo los ocultan
+        # hay que removerlos.
+        dplyr::select(where(~ any(.x > 0, na.rm = TRUE))) |>
         dplyr::bind_cols(exports_details) |>
-        tidyr::pivot_longer(names_to = "mes",
-                            values_to = "valor_expor",
-                            cols = -c(original_names, labels, short_names,
-                                      categoria, nivel, direct_parent)
-                            )
+        tidyr::pivot_longer(
+          names_to = "mes",
+          values_to = "valor_expor",
+          cols = -c(
+            original_names, labels, short_names,
+            categoria, nivel, direct_parent
+          )
+        )
       ) |>
         dplyr::bind_rows(.id = "year") |>
-        dplyr::mutate(mes = crear_mes(mes,
-                                      type = "text_to_number"),
-                      fecha = lubridate::make_date(year, mes, "1"),
-                      trimestre = lubridate::quarter(fecha, with_year = TRUE))
+        dplyr::mutate(
+          mes = crear_mes(mes,
+          type = "text_to_number"),
+          fecha = lubridate::make_date(year, mes, "1"),
+          trimestre = lubridate::quarter(fecha, with_year = TRUE)
+        )
 
   if (frecuencia == "mensual") {
     data <- exportaciones1 |>
@@ -77,15 +85,19 @@ get_exportaciones <- function(frecuencia = "mensual") {
   } else if (frecuencia == "trimestral") {
     data <- exportaciones1 |>
       dplyr::select(-c(year, mes, fecha)) |>
-      dplyr::group_by(trimestre, original_names, labels, short_names,
-                      categoria, nivel, direct_parent) |>
+      dplyr::group_by(
+        trimestre, original_names, labels, short_names,
+        categoria, nivel, direct_parent
+      ) |>
       dplyr::summarize(valor_expor = sum(valor_expor)) |>
       suppressMessages()
   } else if (frecuencia == "anual") {
     data <- exportaciones1 |>
       dplyr::select(-c(trimestre, mes, fecha)) |>
-      dplyr::group_by(year, original_names, labels, short_names,
-                      categoria, nivel, direct_parent) |>
+      dplyr::group_by(
+        year, original_names, labels, short_names,
+        categoria, nivel, direct_parent
+      ) |>
       dplyr::summarize(valor_expor = sum(valor_expor)) |>
       suppressMessages()
   }
@@ -104,31 +116,28 @@ get_exportaciones <- function(frecuencia = "mensual") {
 #' @examples
 #' get_exportaciones_zf()
 get_exportaciones_zf <- function() {
-  file_url <- base::paste0("https://cdn.bancentral.gov.do/documents/",
-                     "estadisticas/sector-externo/",
-                     "documents/Exportaciones_Zonas_Francas_6.xls")
+  file_url <- base::paste0(
+    "https://cdn.bancentral.gov.do/documents/",
+    "estadisticas/sector-externo/",
+    "documents/Exportaciones_Zonas_Francas_6.xls"
+  )
   file_path <- base::tempfile(pattern = "", fileext = ".xls")
 
-  utils::download.file(file_url,
-                       file_path,
-                       mode = "wb",
-                       quiet = TRUE)
-
+  utils::download.file(file_url, file_path, mode = "wb", quiet = TRUE)
 
   data <- suppressMessages(
-    readxl::read_excel(path = file_path,
-                       skip = 8) |>
+    readxl::read_excel(path = file_path, skip = 8) |>
       janitor::clean_names() |>
-      dplyr::filter(!is.na(confecciones_textiles),
-                    !grepl("^2", x3)) |>
-      dplyr::mutate(fecha = seq(
-        as.Date("2010-01-01"),
-        length.out = dplyr::n(),
-        by = "month")) |>
+      dplyr::filter(!is.na(confecciones_textiles), !grepl("^2", x3)) |>
+      dplyr::select(where(~ any(.x > 0, na.rm = TRUE))) |>
+      dplyr::mutate(
+        fecha = seq(
+          as.Date("2010-01-01"),
+          length.out = dplyr::n(),
+          by = "month")
+      ) |>
       dplyr::select(-c(x1, x2, x3)) |>
-      tidyr::pivot_longer(!fecha,
-                          names_to = "partida",
-                          values_to = "valor_expor")
+      tidyr::pivot_longer(!fecha, names_to = "partida", values_to = "valor_expor")
   )
 
   return(data)
@@ -151,7 +160,6 @@ get_exportaciones_zf <- function() {
 #' get_importaciones("mensual")
 #' get_importaciones("trimestral")
 #' get_importaciones("anual")
-
 get_importaciones <- function(frecuencia = "mensual") {
   checkmate::assert_choice(
     frecuencia,
@@ -194,19 +202,21 @@ get_importaciones <- function(frecuencia = "mensual") {
         dplyr::slice(-1) |>
         tidyr::drop_na(ene) |>
         dplyr::select(-x1, -x2, -dplyr::last_col()) |>
+        dplyr::select(where(~ any(.x > 0, na.rm = TRUE))) |>
         dplyr::bind_cols(imports_details) |>
-        tidyr::pivot_longer(names_to = "mes",
-                            values_to = "valor_impor",
-                            cols = -c(original_names, labels, short_names,
-                                      categoria, nivel, direct_parent)
+        tidyr::pivot_longer(
+          names_to = "mes",
+          values_to = "valor_impor",
+          cols = -c(original_names, labels, short_names, categoria, nivel, direct_parent)
         )
     ) |>
     dplyr::bind_rows(.id = "year") |>
     dplyr::filter(!grepl("^x|^total", mes)) |>
-    dplyr::mutate(mes = crear_mes(mes,
-                                  type = "text_to_number"),
-                  fecha = lubridate::make_date(year, mes, "1"),
-                  trimestre = lubridate::quarter(fecha, with_year = TRUE))
+    dplyr::mutate(
+      mes = crear_mes(mes, type = "text_to_number"),
+      fecha = lubridate::make_date(year, mes, "1"),
+      trimestre = lubridate::quarter(fecha, with_year = TRUE)
+    )
 
   if (frecuencia == "mensual") {
     data <- importaciones1 |>
@@ -221,8 +231,10 @@ get_importaciones <- function(frecuencia = "mensual") {
   } else if (frecuencia == "anual") {
     data <- importaciones1 |>
       dplyr::select(-c(trimestre, mes, fecha)) |>
-      dplyr::group_by(year, original_names, labels, short_names,
-                      categoria, nivel, direct_parent) |>
+      dplyr::group_by(
+        year, original_names, labels, short_names,
+        categoria, nivel, direct_parent
+      ) |>
       dplyr::summarize(valor_impor = sum(valor_impor)) |>
       suppressMessages()
   }
@@ -241,15 +253,15 @@ get_importaciones <- function(frecuencia = "mensual") {
 #' @examples
 #' get_exportaciones_zf()
 get_importaciones_petroleo <- function() {
-  file_url <- base::paste0("https://cdn.bancentral.gov.do/documents/",
-                           "estadisticas/sector-externo/",
-                           "documents/Importaciones_Crudo_6.xls")
+  file_url <- base::paste0(
+    "https://cdn.bancentral.gov.do/documents/",
+    "estadisticas/sector-externo/",
+    "documents/Importaciones_Crudo_6.xls"
+  )
+
   file_path <- base::tempfile(pattern = "", fileext = ".xls")
 
-  utils::download.file(file_url,
-                       file_path,
-                       mode = "wb",
-                       quiet = TRUE)
+  utils::download.file(file_url, file_path, mode = "wb", quiet = TRUE)
 
   headers <- c("Fecha",
                "PetroleoCrudoXVolumen", "PetroleoCrudoXPrecio",
@@ -265,22 +277,24 @@ get_importaciones_petroleo <- function() {
                "OtrosXVolumen", "OtrosXPrecio", "OtrosXValor",
                "TotalXVolumen", "TotalXPrecio", "TotalXValor")
 
-  data <- readxl::read_excel(path = file_path,
-                             skip = 8,
-                             col_names = headers) |>
-    dplyr::filter(!is.na(PetroleoCrudoXPrecio),
-                  !grepl("^2", Fecha)) |>
-    dplyr::mutate(fecha = seq(as.Date("2010-01-01"),
-                              length.out = dplyr::n(),
-                              by = "month"),
-                  PetroleoCrudoXVolumen = as.numeric(PetroleoCrudoXVolumen)) |>
+  data <- readxl::read_excel(
+    path = file_path,
+    skip = 8,
+    col_names = headers
+  ) |>
+    dplyr::filter(!is.na(PetroleoCrudoXPrecio), !grepl("^2", Fecha)) |>
+    dplyr::mutate(
+      fecha = seq(as.Date("2010-01-01"), length.out = dplyr::n(), by = "month"),
+      PetroleoCrudoXVolumen = as.numeric(PetroleoCrudoXVolumen)
+    ) |>
+    dplyr::filter(dplyr::if_any(where(is.numeric), ~ .x > 0)) |>
     dplyr::select(-Fecha) |>
-    tidyr::pivot_longer(!fecha,
-                        names_to = "partida",
-                        values_to = "valor_impor") |>
-    tidyr::separate_wider_delim(cols = partida,
-                                delim = "X",
-                                names = c("categoria", "partida"))
+    tidyr::pivot_longer(!fecha, names_to = "partida", values_to = "valor_impor") |>
+    tidyr::separate_wider_delim(
+      cols = partida,
+      delim = "X",
+      names = c("categoria", "partida")
+    )
 
   return(data)
 
