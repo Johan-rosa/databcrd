@@ -96,7 +96,6 @@ ze_gdpg <- function() {
 #' <https://data.ecb.europa.eu/>.
 #'
 #' @examples
-#' unemployment <- euro_area_unemployment()
 #'
 #' @export
 ze_unemployment  <- function() {
