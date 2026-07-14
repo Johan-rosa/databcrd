@@ -20,7 +20,8 @@ Imports:
     usethis,
     tidyr,
     yaml,
-    readr
+    readr,
+    httr2
 Suggests:
     urca,
     tsibble,
