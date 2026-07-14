@@ -22,10 +22,6 @@ The data correspond to the ECB series
 \code{"LFSI.M.I10.S.UNEHRT.TOTAL0.15_74.T"}, which reports the harmonized monthly
 unemployment rate for persons aged 15 to 74 in the euro area.
 }
-\examples{
-unemployment <- euro_area_unemployment()
-
-}
 \seealso{
 Additional information is available from the ECB Data Portal:
 \url{https://data.ecb.europa.eu/}.

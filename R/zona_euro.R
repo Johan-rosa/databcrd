@@ -95,8 +95,6 @@ ze_gdpg <- function() {
 #' Additional information is available from the ECB Data Portal:
 #' <https://data.ecb.europa.eu/>.
 #'
-#' @examples
-#'
 #' @export
 ze_unemployment  <- function() {
   endpoint <- "https://data.ecb.europa.eu/data-detail-api/LFSI.M.I10.S.UNEHRT.TOTAL0.15_74.T"
