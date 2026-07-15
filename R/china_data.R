@@ -123,3 +123,74 @@ china_inflation <- function() {
     ) |>
       purrr::list_rbind()
 }
+
+
+# Another approach
+#TODO: Add httr2 :: namespace
+
+china_series_cpi_metadata <- function() {
+  resp <- request("https://data.stats.gov.cn/dg/website/publicrelease/en/web/external/new/queryIndicatorsByCid") |>
+    req_url_query(
+      cid = "5353d942c68f42c789c7d8c546510ff4",
+      dt = "",
+      name = ""
+    ) |>
+    req_headers(
+      accept = "application/json, text/plain, */*",
+      `accept-language` = "en-US,en;q=0.9,es-DO;q=0.8,es;q=0.7",
+      client = "pc",
+      Referer = "https://data.stats.gov.cn/dg/website/page.html"
+    ) |>
+    req_perform()
+
+  data <- resp_body_json(resp)
+
+  data$data$list |>
+    purrr::map(
+      \(x) dplyr::as_tibble(x[c("_id", "i_showname")])
+    ) |>
+    purrr::list_rbind() |>
+    dplyr::rename("id" = "_id", "name" = "i_showname")
+}
+
+china_cpi <- function() {
+  metadata <- china_series_cpi_metadata()
+
+  body <- list(
+    cid          = "5353d942c68f42c789c7d8c546510ff4",
+    indicatorIds = metadata$id,
+    daCatalogId = "",
+    das = list(
+      list(text = "全国", value = "000000000000")
+    ),
+    showType = "1",
+    dts = as.list("201607MM-202606MM"),
+    rootId = "0cff94832c7f4cbe9ca57b7c0ef09704"
+  )
+
+
+  resp <- request("https://data.stats.gov.cn/dg/website/publicrelease/en/web/external/stream/esData") |>
+    req_method("POST") |>
+    req_headers(
+      accept          = "*/*",
+      `accept-language` = "en-US,en;q=0.9,es-DO;q=0.8,es;q=0.7",
+      `content-type`  = "application/json",
+      referer         = "https://data.stats.gov.cn/dg/website/page.html"
+    ) |>
+    req_body_json(body, auto_unbox = TRUE) |>
+    req_perform()
+
+  data <- resp |> resp_body_json()
+
+  data$data |>
+    purrr::map(
+      \(x) {
+        purrr::map(x$values, \(x) dplyr::as_tibble(x[c("_id", "value")])) |>
+          purrr::list_rbind() |>
+          dplyr::mutate(date = lubridate::my(x$name)) |>
+          dplyr::rename("id" = "_id")
+      }
+    ) |>
+    purrr::list_rbind() |>
+    dplyr::left_join(metadata, by = "id")
+}
