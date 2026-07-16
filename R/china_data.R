@@ -1,9 +1,40 @@
 
-#' Esta función es para obtener el id global del catalogo de indicadores.
-#' Es necesario para request subsiguientes. Al momento del desarrollo el id es
-#' "fc982599aa684be7969d7b90b1bd0e84", pero creo que podría cambiar.
-#'
-#' Selectionar el elemento `_id`. Ese es el ID.
+# Navigate the folder tree of the web application.
+# Code refere to the page panel: use 1 for "Browse topics" and "advance search", 19 for the Visualized
+# With multiple fetch you can navigate an check if the ids changed.
+china_tree_node <- function(parent_id = NULL, code = 19) {
+  url <- "https://data.stats.gov.cn/dg/website/publicrelease/en/web/external/new/queryIndexTreeAsync"
+  page_tree <- httr2::request(url) |>
+    httr2::req_url_query(pid = parent_id, code = code) |>
+    httr2::req_headers(
+      "accept" = "application/json, text/plain, */*",
+      "client" = "pc",
+      Referer = "https://data.stats.gov.cn/dg/website/page.html"
+    ) |>
+    httr2::req_method("GET") |>
+    httr2::req_perform()
+
+  data <- page_tree |> httr2::resp_body_json()
+  data$data |>
+    purrr::map(\(x) dplyr::as_tibble(x[!sapply(x, is.null)])) |>
+    purrr::list_rbind() |>
+    dplyr::select(
+      dplyr::any_of(
+        c("level" = "treeinfo_level", "parent_id" = "treeinfo_pid", "id" = "_id", "name", "dt")))
+}
+
+# This function serach for the ID of the CPI indicators. During development it was
+# 5353d942c68f42c789c7d8c546510ff4 but is not certain that it is an static value.
+# This is a way to get it using the API.
+china_price_index_node_id <- function() {
+  root     <- china_tree_node()
+  sections <- china_tree_node(root$id)
+  cpi_section   <- sections[sections$name == "Price Index", ]
+  cpi_indicators <- china_tree_node(cpi_section$id)
+  index <- which(stringr::str_detect(cpi_indicators$name, "^Consumer Price Indices by Category"))
+  cpi_indicators$id[index]
+}
+
 # Another approach
 #TODO: Add httr2 :: namespace
 
