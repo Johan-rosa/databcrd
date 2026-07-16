@@ -21,7 +21,10 @@ Imports:
     tidyr,
     yaml,
     readr,
-    httr2
+    httr2,
+    rlang,
+    glue,
+    imf.data
 Suggests:
     urca,
     tsibble,
