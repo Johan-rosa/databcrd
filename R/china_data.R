@@ -129,21 +129,21 @@ china_inflation <- function() {
 #TODO: Add httr2 :: namespace
 
 china_series_cpi_metadata <- function() {
-  resp <- request("https://data.stats.gov.cn/dg/website/publicrelease/en/web/external/new/queryIndicatorsByCid") |>
-    req_url_query(
+  resp <- httr2::request("https://data.stats.gov.cn/dg/website/publicrelease/en/web/external/new/queryIndicatorsByCid") |>
+    httr2::req_url_query(
       cid = "5353d942c68f42c789c7d8c546510ff4",
       dt = "",
       name = ""
     ) |>
-    req_headers(
+    httr2::req_headers(
       accept = "application/json, text/plain, */*",
       `accept-language` = "en-US,en;q=0.9,es-DO;q=0.8,es;q=0.7",
       client = "pc",
       Referer = "https://data.stats.gov.cn/dg/website/page.html"
     ) |>
-    req_perform()
+    httr2::req_perform()
 
-  data <- resp_body_json(resp)
+  data <- httr2::resp_body_json(resp)
 
   data$data$list |>
     purrr::map(
@@ -153,7 +153,15 @@ china_series_cpi_metadata <- function() {
     dplyr::rename("id" = "_id", "name" = "i_showname")
 }
 
-china_cpi <- function() {
+china_cpi <- function(
+    start_period = 201601,
+    end_period   = NULL
+) {
+
+  if (is.null(end_period)) {
+    end_period <- format(Sys.Date(), "%Y%m")
+  }
+
   metadata <- china_series_cpi_metadata()
 
   body <- list(
@@ -164,23 +172,24 @@ china_cpi <- function() {
       list(text = "全国", value = "000000000000")
     ),
     showType = "1",
-    dts = as.list("201607MM-202606MM"),
+    dts = as.list(paste0(start_period, "MM-", end_period, "MM")),
     rootId = "0cff94832c7f4cbe9ca57b7c0ef09704"
   )
 
 
-  resp <- request("https://data.stats.gov.cn/dg/website/publicrelease/en/web/external/stream/esData") |>
-    req_method("POST") |>
-    req_headers(
+  resp <- httr2::request("https://data.stats.gov.cn/dg/website/publicrelease/en/web/external/stream/esData") |>
+    httr2::req_method("POST") |>
+    httr2::req_headers(
       accept          = "*/*",
       `accept-language` = "en-US,en;q=0.9,es-DO;q=0.8,es;q=0.7",
       `content-type`  = "application/json",
       referer         = "https://data.stats.gov.cn/dg/website/page.html"
     ) |>
-    req_body_json(body, auto_unbox = TRUE) |>
-    req_perform()
+    httr2::req_body_json(body, auto_unbox = TRUE) |>
+    httr2::req_perform()
 
-  data <- resp |> resp_body_json()
+  data <- resp |>
+    httr2::resp_body_json()
 
   data$data |>
     purrr::map(
@@ -192,5 +201,10 @@ china_cpi <- function() {
       }
     ) |>
     purrr::list_rbind() |>
-    dplyr::left_join(metadata, by = "id")
+    dplyr::left_join(metadata, by = "id") |>
+    dplyr::mutate(
+      value = as.numeric(value),
+      name  = stringr::str_squish(name)
+    ) |>
+    dplyr::filter(!is.na(value))
 }
