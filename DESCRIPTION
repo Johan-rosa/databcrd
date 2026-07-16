@@ -21,7 +21,8 @@ Imports:
     tidyr,
     yaml,
     readr,
-    httr2
+    httr2,
+    rlang
 Suggests:
     urca,
     tsibble,
