@@ -22,7 +22,9 @@ Imports:
     yaml,
     readr,
     httr2,
-    rlang
+    rlang,
+    glue,
+    imf.data
 Suggests:
     urca,
     tsibble,
