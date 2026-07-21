@@ -95,9 +95,9 @@
 #' }
 "ipc_articulos_details"
 
-#' CPI by item data, from October 2020 to December 2024
+#' CPI by item data, from October 2020 to December 2025
 #'
-#' @format ## `data_ipc_articulos_2020_2024`
+#' @format ## `data_ipc_articulos_2020_2025`
 #' A data frame with 612 rows and 26 columns:
 #'
 #' \describe{
@@ -116,7 +116,7 @@
 #'   \item{ponderacion_ipc}{Weight of the element as proportion of the general basket}
 #'   \item{indice}{item index}
 #' }
-"data_ipc_articulos_2020_2024"
+"data_ipc_articulos_2020_2025"
 
 #' CPI by item data, from 2010 to December 2024
 #'
