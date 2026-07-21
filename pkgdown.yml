@@ -1,0 +1,9 @@
+pandoc: 3.8.3
+pkgdown: 2.2.1
+pkgdown_sha: ~
+articles:
+  ipc_data: ipc_data.html
+last_built: 2026-07-21T19:57Z
+urls:
+  reference: https://johan-rosa.github.io/databcrd/reference
+  article: https://johan-rosa.github.io/databcrd/articles
