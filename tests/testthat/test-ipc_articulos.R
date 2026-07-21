@@ -19,7 +19,7 @@ test_that("No empty rows", {
 test_that("Weigth add up to 100 at all levels", {
   total_weight <- data |>
     dplyr::summarise(
-      sum_ponderacion = round(sum(ponderacion, na.rm = TRUE)),
+      sum_ponderacion = round(sum(ponderacion)),
       .by = c(date, agregacion)
     )
 
