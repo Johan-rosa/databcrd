@@ -6,18 +6,6 @@ ipc_articulos_details <- readRDS("inst/ipc_articulos_details.rds") |>
 ipc_articulos_key <- ipc_articulos_details |>
   dplyr::select(id, nombre, agregacion, grupo, subgrupo, clase, subclase, articulo)
 
-reshape_ipc_data <- function(raw_data, ref_year) {
-  dplyr::bind_cols(ipc_articulos_key, raw_data) |>
-    dplyr::select(-name) |>
-    tidyr::pivot_longer(-c(id:ponderacion), values_to = "indice", names_to = "mes") |>
-    dplyr::mutate(
-      year = ref_year,
-      mes = crear_mes(mes),
-      date = lubridate::make_date(year, mes, 1)
-    ) |>
-    dplyr::relocate(date,year, mes, .before = ponderacion)
-}
-
 # Download IPC file ---------------------------------------------------------------------------
 
 url_descarga <- paste0(
@@ -44,7 +32,7 @@ dates <- seq(
 fixed_columns <- c("grupo", "subgrupo", "clase", "subclase", "articulo", "ponderacion")
 headers <- c(fixed_columns, dates)
 
-# Data 2020 y 2021 -----------------------------------------------------------------------------
+# Data 2020-2026 -----------------------------------------------------------------------------
 data_raw <- readxl::read_excel(
   file_path, sheet = 1, skip = 3) |>
   janitor::clean_names() |>
@@ -119,7 +107,7 @@ ipc_articulos_wide_2010_2024 <- readxl::read_excel(
   dplyr::mutate(x1 = as.Date(x1))
 
 
-ipc_articulos_long_2010_2024 <- ipc_articulos_wide_2010_2024 |>
+data_ipc_articulos_long_2010_2024 <- ipc_articulos_wide_2010_2024 |>
   tidyr::pivot_longer(-x1, names_to = "id", values_to = "indice") |>
   setNames(c("date", "posicion", "indice")) |>
   dplyr::mutate(posicion = readr::parse_number(posicion) -1) |>
