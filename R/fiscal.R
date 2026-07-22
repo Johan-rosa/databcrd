@@ -218,10 +218,24 @@ fiscal_operations_gdp <- function() {
     categoria = dplyr::if_else(
       stringr::str_detect(x2, "GOBIERNO CENTRAL|RESTO DEL SECTOR PÚBLICO|SECTOR PÚBLICO NO FINANCIERO"),
       x2, NA
-    )
+    ),
   ) |>
     tidyr::fill(categoria) |>
-    dplyr::relocate(categoria)
+    dplyr::mutate(
+      # x1 es la columnna del codigo de cuenta
+      # se le agrega un prefijo dependiendo de la categoria
+      # para que sea único. Ya que varias categorias pueden tener
+      # las mismas cuentas. El prefijo se remueve al final
+      preffix = dplyr::case_when(
+        stringr::str_detect(categoria, "GOBIERNO CENTRAL") ~ "GC",
+        stringr::str_detect(categoria, "RESTO DEL SECTOR") ~ "RSPNF",
+        stringr::str_detect(categoria, "SECTOR P") ~ "RSPF"
+      ),
+      x1 = paste(preffix, x1, sep = "_")
+    ) |>
+    dplyr::relocate(categoria, preffix) |>
+    # Se remueve la última columna porque contienen el acumulado del último año
+    dplyr::select(-dplyr::last_col(), -preffix)
 
   # Considering annual data starting since 2000
   headers <- c(
