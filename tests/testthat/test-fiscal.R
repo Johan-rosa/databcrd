@@ -1,5 +1,5 @@
 # Mensual
-data <- get_fiscal()
+data <- fiscal_operations()
 
 test_that("All indicators have the same number of rows", {
   count <- data |>
