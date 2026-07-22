@@ -112,3 +112,44 @@ imf_policy_rate <- function(
     dplyr::select(date, COUNTRY, policy_rate = OBS_VALUE) |>
     janitor::clean_names()
 }
+
+
+
+#' Catalog: Primary Commodity Price System (PCPC)
+imf_pcps_catalogo <- function() {
+  url <- "https://data.imf.org/platform/rest/v1/registry/sdmx-plus/structure/glossary/IMF.RES/CL_PCPS_INDICATOR/3.0.0?references=hierarchy&detail=referencepartial"
+
+  resp <- request(url) |>
+    req_perform() |>
+    resp_body_json()
+
+  resp$data$glossaries[[1]]$terms |>
+    purrr::map(
+      \(x) {
+        dplyr::tibble(
+          id = x$id,
+          name = x$names$en,
+          description = x$description
+        )
+      }
+    ) |>
+    purrr::list_rbind()
+}
+
+imf_pcps <- function(
+    indicadores = c("PBEVE"),
+    data_transformation = "INDEX"
+) {
+  catalogo <- imf_pcps_catalogo()
+
+  imf.data::get_data(
+    dataflow = "PCPS",
+    agency_id = "IMF.RES",
+    filters = list(
+      FREQUENCY = "M",
+      INDICATOR = indicadores,
+      DATA_TRANSFORMATION = data_transformation
+    )
+  )
+}
+
