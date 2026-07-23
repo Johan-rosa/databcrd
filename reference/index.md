@@ -22,8 +22,10 @@
   : Utility complement to handle the macroeconomic expectations
 - [`exports_details`](https://johan-rosa.github.io/databcrd/reference/exports_details.md)
   : Utility complement to handle the total exports data
-- [`fiscal_details`](https://johan-rosa.github.io/databcrd/reference/fiscal_details.md)
-  : Utility complement to handle the total imports data
+- [`fiscal_operations()`](https://johan-rosa.github.io/databcrd/reference/fiscal_operations.md)
+  : Fiscal operations
+- [`fiscal_operations_gdp()`](https://johan-rosa.github.io/databcrd/reference/fiscal_operations_gdp.md)
+  : Fiscal operations as a percentage of GDP
 - [`get_ecc()`](https://johan-rosa.github.io/databcrd/reference/get_ecc.md)
   : Get ECC
 - [`get_eem()`](https://johan-rosa.github.io/databcrd/reference/get_eem.md)
@@ -42,8 +44,6 @@
   : Free Trade Exports
 - [`get_fbkf()`](https://johan-rosa.github.io/databcrd/reference/get_fbkf.md)
   : Download GROSS FIXED CAPITAL FORMATION BY SECTOR AND TYPE OF GOOD
-- [`get_fiscal()`](https://johan-rosa.github.io/databcrd/reference/get_fiscal.md)
-  : Download Statement of Operations of the non-financial public sector
 - [`get_ied()`](https://johan-rosa.github.io/databcrd/reference/get_ied.md)
   : Foreign direct investment to the Dominican Republic
 - [`get_imae()`](https://johan-rosa.github.io/databcrd/reference/get_imae.md)
