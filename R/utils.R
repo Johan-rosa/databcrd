@@ -155,3 +155,13 @@ crear_mes <- function(mes, type = "text_to_number") {
 
   return(new_mes)
 }
+
+#' Helper to download file
+download_file <- function(url, file_path) {
+  tryCatch(
+    utils::download.file(url, file_path, mode = "wb", quiet = TRUE),
+    error = function(e) {
+      rlang::abort("Unable to download the data file")
+    }
+  )
+}
