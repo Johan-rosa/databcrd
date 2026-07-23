@@ -153,3 +153,31 @@ imf_pcps <- function(
   )
 }
 
+# TODO: Make it possible to get the GDP as well as the CPI
+imf_weo_forecast <- function(
+    last_n_obs = 6,
+    countries = c("DOM", "CHN", "USA"),
+    format = c("long", "wide")
+) {
+  format <- rlang::arg_match(format)
+
+  data <- imf.data::get_data(
+    dataflow = "WEO",
+    agency_id = "IMF.RES",
+    filters = list(
+      INDICATOR = "PCPIEPCH",
+      COUNTRY   = countries
+    ),
+    last_n_obs = last_n_obs
+  ) |>
+    janitor::clean_names() |>
+    dplyr::rename(value = obs_value, year = time_period)
+
+  if (format == "wide") {
+    data <- data |>
+      dplyr::select(year, country, value) |>
+      tidyr::pivot_wider(names_from = country, values_from = value)
+  }
+
+  data
+}
