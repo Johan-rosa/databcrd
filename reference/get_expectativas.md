@@ -39,7 +39,7 @@ get_expectativas("eem")
 #> # ℹ 9,215 more rows
 #> # ℹ 1 more variable: expectativa <dbl>
 get_expectativas("eoe")
-#> # A tibble: 2,629 × 5
+#> # A tibble: 2,640 × 5
 #>     year mes   descripcion                      valor fecha     
 #>    <dbl> <chr> <chr>                            <dbl> <date>    
 #>  1  2006 Julio situacion_economica              36.5  2006-07-01
@@ -52,5 +52,5 @@ get_expectativas("eoe")
 #>  8  2006 Julio expectativa_situacion_economica  44.2  2006-07-01
 #>  9  2006 Julio expectativa_empleo               NA    2006-07-01
 #> 10  2006 Julio indice_de_confianza_industrial   54.5  2006-07-01
-#> # ℹ 2,619 more rows
+#> # ℹ 2,630 more rows
 ```
