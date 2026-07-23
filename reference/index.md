@@ -10,6 +10,8 @@
   : Fetch metadata for China's CPI series
 - [`china_tree_node()`](https://johan-rosa.github.io/databcrd/reference/china_tree_node.md)
   : Navigate the NBS data-portal folder tree
+- [`costo_canasta_familiar()`](https://johan-rosa.github.io/databcrd/reference/costo_canasta_familiar.md)
+  : Family Basket Cost
 - [`crear_mes()`](https://johan-rosa.github.io/databcrd/reference/crear_mes.md)
   : Change month encoding
 - [`data_ipc_articulos_2020_2025`](https://johan-rosa.github.io/databcrd/reference/data_ipc_articulos_2020_2025.md)
@@ -18,6 +20,8 @@
   : CPI by item data, from 2010 to December 2024
 - [`date_label()`](https://johan-rosa.github.io/databcrd/reference/date_label.md)
   : Create date label
+- [`download_file()`](https://johan-rosa.github.io/databcrd/reference/download_file.md)
+  : Helper to download file
 - [`expectativas_details`](https://johan-rosa.github.io/databcrd/reference/expectativas_details.md)
   : Utility complement to handle the macroeconomic expectations
 - [`exports_details`](https://johan-rosa.github.io/databcrd/reference/exports_details.md)
