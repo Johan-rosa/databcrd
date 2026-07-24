@@ -22,3 +22,40 @@ test_that("There aren't missing dates", {
 
   testthat::expect_true(all(months_diff$one_month_diff))
 })
+
+
+om <- operaciones_monetarias()
+
+test_that("operaciones_monetarias() returns a valid tibble", {
+  expect_s3_class(om, "tbl_df")
+  expect_named(
+    om,
+    c(
+      "date",
+      "year",
+      "mes",
+      "day",
+      "ventanilla_depositos",
+      "subasta_letras",
+      "operaciones_contraccion",
+      "ventanilla_repos",
+      "subasta_repos",
+      "operaciones_expansion"
+    )
+  )
+
+  expect_gt(nrow(om), 0)
+})
+
+test_that("operaciones_monetarias() contains no empty rows", {
+  expect_false(any(apply(is.na(om), 1, all)))
+})
+
+test_that("operaciones_monetarias() has no duplicated periods", {
+  expect_false(as.logical(anyDuplicated(om$date)))
+})
+
+test_that("operaciones_monetarias() has no empty periods", {
+  expect_false(all(is.na(om$date)))
+})
+

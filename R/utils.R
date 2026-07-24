@@ -165,3 +165,10 @@ download_file <- function(url, file_path) {
     }
   )
 }
+
+open_file <- function(url) {
+  ext <- stringr::str_extract(url, "\\.xls[x]?$")
+  file <- tempfile(fileext = ext)
+  download_file(url, file)
+  xopen::xopen(file)
+}
