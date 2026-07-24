@@ -58,3 +58,4 @@ test_that("operaciones_monetarias() has no duplicated periods", {
 test_that("operaciones_monetarias() has no empty periods", {
   expect_false(all(is.na(om$date)))
 })
+
