@@ -103,6 +103,7 @@
 #'   \item{ponderacion_ipc}{Weight of the element as proportion of the general basket}
 #'   \item{indice}{item index}
 #' }
+#' @keywords internal
 "data_ipc_articulos_2020_2025"
 
 #' CPI by item data, from 2010 to December 2024
@@ -126,4 +127,38 @@
 #'   \item{ponderacion_ipc}{Weight of the element as proportion of the general basket}
 #'   \item{indice}{item index}
 #' }
+#' @keywords internal
 "data_ipc_articulos_long_2010_2024"
+
+#' Metadatos para las series de indicadores de las OSD
+#'
+#' Tabla interna que contiene la clasificación de las series publicadas en el
+#' panorama monetario de las Otras Sociedades de Depósito (OSD). Su propósito es
+#' estandarizar las etiquetas originales de las publicaciones del Banco Central
+#' de la República Dominicana y facilitar la construcción de consultas,
+#' transformaciones y visualizaciones.
+#'
+#' Cada fila representa una serie o un elemento de la jerarquía de encabezados,
+#' asociando la etiqueta original con un conjunto de variables descriptivas.
+#'
+#' @format Un tibble con las siguientes variables:
+#' \describe{
+#'   \item{original_label}{Etiqueta original tal como aparece en la publicación
+#'   del Banco Central.}
+#'   \item{variable}{Agregado económico al que pertenece la serie, por ejemplo
+#'   `"Préstamos"`, `"Depósitos"` o `"Activos externos"`.}
+#'   \item{sector}{Sector institucional o componente del agregado al que hace
+#'   referencia la serie, por ejemplo `"Sector público"`, `"Sector privado"`,
+#'   `"Sociedades financieras"` o `"Depósitos transferibles"`. Cuando no aplica,
+#'   toma el valor `NA`.}
+#'   \item{moneda}{Moneda en la que está expresada la serie. Los valores
+#'   utilizados son `"DOP"`, `"USD"` y `"Total"`. Cuando la clasificación por
+#'   moneda no aplica, toma el valor `NA`.}
+#'   \item{entidad}{Nivel institucional de agregación de la serie:
+#'   `"General"`, `"Bancos múltiples"` o `"Resto OSD"`.}
+#' }
+#'
+#' @keywords internal
+#' @name detalles_indicadores_osd
+#' @noRd
+"detalles_indicadores_osd"

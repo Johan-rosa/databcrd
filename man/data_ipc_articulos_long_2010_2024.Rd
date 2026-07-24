@@ -33,4 +33,4 @@ data_ipc_articulos_long_2010_2024
 \description{
 CPI by item data, from 2010 to December 2024
 }
-\keyword{datasets}
+\keyword{internal}
