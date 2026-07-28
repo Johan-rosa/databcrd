@@ -722,14 +722,13 @@ get_tasas_reales <- function(
   file_path <- tempfile(fileext = ".xls")
   download_file(url, file_path)
 
-  column_names <- expand.grid(
-    type = c("activa", "pasiva"),
-    entidad = c("bm", "aap", "bac", "cc")
-  )
-
   columns <- c(
     "periodo",
-    paste(column_names$entidad, column_names$type, sep = "_"),
+    paste(
+      rep(c("bm", "aap", "bac", "cc"), each = 2),
+      rep(c("activa", "pasiva"), times = 4),
+      sep = "_"
+    ),
     "inflacion"
   )
 
