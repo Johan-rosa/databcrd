@@ -24,9 +24,9 @@ test_that("There aren't missing dates", {
 })
 
 
-om <- operaciones_monetarias()
 
 test_that("operaciones_monetarias() returns a valid tibble", {
+  om <- operaciones_monetarias()
   expect_s3_class(om, "tbl_df")
   expect_named(
     om,
@@ -48,15 +48,17 @@ test_that("operaciones_monetarias() returns a valid tibble", {
 })
 
 test_that("operaciones_monetarias() contains no empty rows", {
+  om <- operaciones_monetarias()
   expect_false(any(apply(is.na(om), 1, all)))
 })
 
 test_that("operaciones_monetarias() has no duplicated periods", {
+  om <- operaciones_monetarias()
   date_count <- dplyr::count(om, date)
   expect_true(max(date_count$n) == 1)
 })
 
 test_that("operaciones_monetarias() has no empty periods", {
+  om <- operaciones_monetarias()
   expect_false(all(is.na(om$date)))
 })
-
