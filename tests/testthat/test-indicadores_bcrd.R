@@ -52,7 +52,8 @@ test_that("operaciones_monetarias() contains no empty rows", {
 })
 
 test_that("operaciones_monetarias() has no duplicated periods", {
-  expect_false(as.logical(anyDuplicated(om$date)))
+  date_count <- dplyr::count(om, date)
+  expect_true(max(date_count$n) == 1)
 })
 
 test_that("operaciones_monetarias() has no empty periods", {
