@@ -33,4 +33,4 @@ data_ipc_articulos_2020_2025
 \description{
 CPI by item data, from October 2020 to December 2025
 }
-\keyword{datasets}
+\keyword{internal}
