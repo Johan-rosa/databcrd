@@ -118,13 +118,13 @@ indicadores_osd <- function(
       ) |>
       tidyr::pivot_longer(-c(row_id, indicador), names_to = "date", values_to = "value") |>
       dplyr::mutate(date = lubridate::ymd(date)) |>
-      dplyr::left_join(detalles_indicadores_osd) |>
+      dplyr::left_join(detalles_indicadores_osd, by = "row_id") |>
       dplyr::filter(
         is.null(filtro_variable)   | variable   %in% filtro_variable,
         is.null(filtro_nivel_tipo) | nivel_tipo %in% filtro_nivel_tipo,
         is.null(filtro_sector)     | sector     %in% filtro_sector,
         is.null(filtro_moneda)     | moneda     %in% filtro_moneda,
-        is.null(filtro_entidad)    | entidad       %in% filtro_entidad,
+        is.null(filtro_entidad)    | entidad    %in% filtro_entidad
       ) |>
       dplyr::rename(id_indicador = row_id)
 }
