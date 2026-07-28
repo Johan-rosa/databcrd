@@ -602,3 +602,179 @@ get_tasas_diarias <- function(
 
   data
 }
+
+#' Utility function for get_tasas_reales
+tasa_real_to_long <- function(data) {
+  data |>
+    tidyr::pivot_longer(
+      -dplyr::any_of(c("date", "year", "mes", "inflacion")),
+      names_to = "names",
+      values_to = "tasa_real"
+    ) |>
+    tidyr::separate(names, into = c("entidad", "tipo_tasa")) |>
+    dplyr::mutate(
+      entidad = dplyr::recode(
+        entidad,
+        "bm"  = "Bancos múltiples",
+        "aap" = "Asociaciones de ahorros y préstamos",
+        "cc"  = "Corporaciones de crédito",
+        "bac" = "Bancos de ahorro y crédito"
+      ),
+      tipo_tasa = stringr::str_to_title(tipo_tasa),
+      tasa_nominal = tasa_real + inflacion
+    ) |>
+    dplyr::relocate(tasa_nominal, inflacion, .after = tasa_real)
+}
+
+#' Retrieve real interest rates of financial intermediaries
+#'
+#' Downloads the real lending and deposit interest rates published by the
+#' Banco Central de la República Dominicana (BCRD) for financial
+#' intermediary institutions.
+#'
+#' Real interest rates are calculated by the BCRD as the difference between
+#' nominal interest rates and expected inflation over the following
+#' 12 months. The published series covers the period from 2008 onward. :contentReference[oaicite:0]{index=0}
+#'
+#' @param frecuencia Frequency of the returned data. One of:
+#'   \describe{
+#'     \item{"mensual"}{Monthly observations (default).}
+#'     \item{"anual"}{Annual averages or december values, not sure what it is.}
+#'   }
+#'
+#' @param format Output format. One of:
+#'   \describe{
+#'     \item{"wide"}{One column per institution and interest rate type.}
+#'     \item{"long"}{Tidy format with one observation per institution,
+#'     interest rate type, and period. Includes both the reported real
+#'     interest rate and the implied nominal interest rate.}
+#'   }
+#'
+#' @return
+#' A tibble.
+#'
+#' When `format = "wide"`, the returned data contain:
+#' \describe{
+#'   \item{date}{Observation date (monthly only).}
+#'   \item{year}{Calendar year.}
+#'   \item{mes}{Month number (monthly only).}
+#'   \item{bm_activa, bm_pasiva}{Real lending and deposit rates for
+#'   multiple banks.}
+#'   \item{aap_activa, aap_pasiva}{Real lending and deposit rates for
+#'   savings and loan associations.}
+#'   \item{bac_activa, bac_pasiva}{Real lending and deposit rates for
+#'   savings and credit banks.}
+#'   \item{cc_activa, cc_pasiva}{Real lending and deposit rates for
+#'   credit corporations.}
+#'   \item{inflacion}{Expected inflation over the next 12 months used by
+#'   the BCRD in the calculation of real interest rates.}
+#' }
+#'
+#' When `format = "long"`, the data are returned in tidy format with the
+#' variables `entidad`, `tipo_tasa`, `tasa_real`, `inflacion`, and
+#' `tasa_nominal`, where `tasa_nominal` is computed as:
+#'
+#' \deqn{
+#' \mathrm{tasa\_nominal} =
+#' \mathrm{tasa\_real} + \mathrm{inflacion}
+#' }
+#'
+#' @details
+#' The data are downloaded directly from the official BCRD statistical
+#' spreadsheets. The function parses the original workbook and returns a
+#' tidy dataset suitable for analysis.
+#'
+#' Institution abbreviations used in the wide format are:
+#' \describe{
+#'   \item{bm}{Multiple banks.}
+#'   \item{aap}{Savings and loan associations.}
+#'   \item{bac}{Savings and credit banks.}
+#'   \item{cc}{Credit corporations.}
+#' }
+#'
+#' @examples
+#' # Monthly data in wide format
+#' tasas <- get_tasas_reales()
+#'
+#' # Annual data in long format
+#' tasas_long <- get_tasas_reales(
+#'   frecuencia = "anual",
+#'   format = "long"
+#' )
+#'
+#' @source
+#' Banco Central de la República Dominicana (BCRD),
+#' "Tasas de Interés Reales de las Entidades de Intermediación Financiera". :contentReference[oaicite:1]{index=1}
+#'
+#' @export
+get_tasas_reales <- function(
+    frecuencia = c("mensual", "anual"),
+    format = c("wide", "long")
+) {
+  frecuencia <- rlang::arg_match(frecuencia)
+  format <- rlang::arg_match(format)
+
+  url <- paste0(
+    "https://cdn.bancentral.gov.do/documents/estadisticas/",
+    "sector-monetario-y-financiero/documents/ti_reales.xls"
+  )
+
+  file_path <- tempfile(fileext = ".xls")
+  download_file(url, file_path)
+
+  column_names <- expand.grid(
+    type = c("activa", "pasiva"),
+    entidad = c("bm", "aap", "bac", "cc")
+  )
+
+  columns <- c(
+    "periodo",
+    paste(column_names$entidad, column_names$type, sep = "_"),
+    "inflacion"
+  )
+
+  raw_data <- readxl::read_excel(file_path, skip = 13, col_names = FALSE) |>
+    suppressMessages() |>
+    purrr::set_names(columns)
+
+  result <- if (frecuencia == "anual") {
+
+    raw_data |>
+      dplyr::filter(
+        stringr::str_detect(periodo, "^\\d{4}"),
+        dplyr::if_all(-periodo, \(x) !is.na(x))
+      ) |>
+      dplyr::mutate(periodo = as.integer(periodo)) |>
+      dplyr::rename(year = periodo)
+
+  } else {
+
+    raw_data |>
+      dplyr::mutate(
+        periodo = stringr::str_squish(periodo),
+        year = stringr::str_extract(periodo, "^\\d{4}"),
+        .before = periodo
+      ) |>
+      tidyr::fill(year) |>
+      dplyr::filter(
+        stringr::str_detect(periodo, "^\\d{4}", negate = TRUE),
+        dplyr::if_all(-c(year, periodo), \(x) !is.na(x))
+      ) |>
+      dplyr::mutate(
+        periodo = stringr::str_extract(periodo, "[A-z]+"),
+        mes = crear_mes(periodo),
+        date = lubridate::make_date(year, mes, 1),
+        .before = periodo
+      ) |>
+      dplyr::select(-periodo) |>
+      dplyr::relocate(date, year, mes)
+  }
+
+  if (format == "long") {
+    result <- tasa_real_to_long(result)
+  }
+
+  result
+}
+
+
