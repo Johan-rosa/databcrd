@@ -9,7 +9,7 @@ operaciones_monetarias()
 \value{
 A tibble with the following variables:
 \describe{
-\item{periodo}{Reference period.}
+\item{date}{Reference period.}
 \item{ventanilla_depositos}{Short-term remunerated deposit facility (Spanish: \emph{Ventanilla Directa de Depósitos Remunerados de Corto Plazo}).}
 \item{subasta_letras}{One-day Central Bank bill auctions (Spanish: \emph{Subasta de Letras a un día}).}
 \item{operaciones_contraccion}{Subtotal of liquidity absorption operations (Spanish: \emph{Subtotal de Operaciones de Contracción}).}
