@@ -833,7 +833,11 @@ get_tasas_semanales <- function(
         suppressMessages()
 
       type   <- dplyr::if_else(stringr::str_detect(tolower(sheet), "^act"), "Activa", "Pasiva")
-      moneda <- dplyr::if_else(stringr::str_detect(sheet, "RD\\$$"), "DOP", "USD")
+      moneda <- dplyr::case_when(
+        stringr::str_detect(sheet, "RD\\$$") ~ "DOP",
+        stringr::str_detect(sheet, "US\\$$") ~ "USD",
+        .default = "DOP"
+      )
 
       headers <- .tasas_col_names_semanales[[sheet]]
 
