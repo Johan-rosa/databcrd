@@ -279,14 +279,16 @@ params <- dplyr::lst(
 )
 
 .tasas_detalles_labels <- c(
+  # El orden es relevante para el tipo de matching que se hace usando este
+  # objeto. 360d debe estar primero que 60d, por ejemplo.
   "30d"            = "0 a 30 días",
+  "360d"           = "181 a 360 días",
   "60d"            = "31 a 60 días",
   "180d"           = "91 a 180 días",
-  "360d"           = "181 a 360 días",
   "m360"           = "Más de 360 días",
   "2a"             = "361 días a 2 años",
-  "5a"             = "2 a 5 años",
   "m5a"            = "Más de 5 años",
+  "5a"             = "2 a 5 años",
   "pp"             = "Promedio ponderado",
   "ps"             = "Promedio simple",
   "comercio"       = "Comercio",
@@ -337,13 +339,13 @@ tasas_to_long <- function(
   tasas_wide |>
     tidyr::pivot_longer(cols = dplyr::matches("^ta|^tp")) |>
     dplyr::mutate(
+      value = as.numeric(value),
       grupo = dplyr::case_when(
         stringr::str_detect(name, "\\d[da]$") ~ "Plazo",
         stringr::str_detect(name, "pp$|ps|preferencial$") ~ "Promedio",
         stringr::str_detect(name, "comercio|consumo|hipotecario|tc") ~ "Sector"
       ),
       condicion = dplyr::if_else(stringr::str_detect(name, "preferencial"), "Preferencial", "General"),
-      # Reemplazado dplyr::recode por un mapeo directo moderno de strings (Punto 5)
       name = stringr::str_replace_all(name, c("ta_90d" = "0 a 90 días", "tp_90d" = "61 a 90 días")),
       detalle_raw = stringr::str_remove(name, "^ta_preferencial_|^ta_|^tp_"),
       detalle = stringr::str_replace_all(detalle_raw, .tasas_detalles_labels)
@@ -354,7 +356,7 @@ tasas_to_long <- function(
     dplyr::filter(is.null(filtro_grupo)     | grupo     %in% filtro_grupo) |>
     dplyr::filter(is.null(filtro_detalle)   | detalle   %in% filtro_detalle) |>
     dplyr::select(
-      dplyr::any_of(c("fecha", "year", "mes", "day")),
+      dplyr::any_of(c("fecha", "start_date", "end_date", "year", "mes", "day")),
       tipo_tasa = type, moneda, grupo, condicion, detalle, tasa = value
     ) |>
     dplyr::filter(!is.na(tasa))
@@ -768,4 +770,89 @@ get_tasas_reales <- function(
   result
 }
 
+# Tasas semanales ---------------------------------------------------------
+.tasas_col_names_semanales <- dplyr::lst(
+  `Activas RD$` =  c(
+    "start_date", "end_date",
+    "ta_90d", "ta_180d", "ta_360d", "ta_2a", "ta_5a", "ta_m5a",
+    "ta_ps", "ta_pp", "ta_preferencial",
+    "ta_comercio", "ta_consumo", "ta_hipotecario"
+  ),
+  `Pasivas RD$` = c(
+    "start_date", "end_date",
+    "tp_30d", "tp_60d", "tp_90d", "tp_180d", "tp_360d", "tp_2a",
+    "tp_5a", "tp_m5a",
+    "tp_ps", "tp_pp",  "tp_dep_ahorros", "tp_general",
+    "tp_preferencial", "tp_interbancarios"
+  ),
+  `Activas US$` = `Activas RD$`,
+  # No hay interbancaria para las pasivas en USD
+  `Pasivas US$` = `Pasivas RD$`[-length(`Pasivas RD$`)]
+)
 
+get_tasas_semanales <- function(
+    year             = 2025,
+    filtro_tipo_tasa = NULL,
+    filtro_moneda    = NULL,
+    filtro_condicion = NULL,
+    filtro_grupo     = NULL,
+    filtro_detalle   = NULL
+) {
+
+  file_url <- paste0(
+    "https://cdn.bancentral.gov.do/documents/estadisticas/sector-monetario-y-financiero/",
+    glue::glue("documents/tasas_semanalesBM-{year}.xlsx")
+  )
+
+  file_path <- tempfile(pattern = as.character(year), fileext = ".xlsx")
+  download_file(file_url, file_path) # Control de errores inyectado aquí
+
+  sheets <- readxl::excel_sheets(file_path)
+
+  data <- purrr::map(
+    purrr::set_names(sheets),
+    \(sheet) {
+      tasas <- readxl::read_excel(
+        path = file_path,
+        skip = 11,
+        trim_ws = TRUE,
+        col_names = FALSE,
+        sheet = sheet,
+        col_types = "text" # Forzado tipado explícito para evitar fallos de coercion silenciosa
+      ) |>
+        suppressMessages()
+
+      type   <- dplyr::if_else(stringr::str_detect(tolower(sheet), "^act"), "Activa", "Pasiva")
+      moneda <- dplyr::if_else(stringr::str_detect(sheet, "RD\\$$"), "DOP", "USD")
+
+      headers <- .tasas_col_names_semanales[[sheet]]
+
+      tasas |>
+        purrr::set_names(headers) |>
+        janitor::remove_empty(which = c("cols", "rows")) |>
+        dplyr::filter(dplyr::if_any(dplyr::ends_with("90d"), \(x) !is.na(x))) |>
+        dplyr::mutate(
+          dplyr::across(
+            c(start_date, end_date),
+            \(x) stringr::str_remove(x, "\\*") |> lubridate::dmy()
+          )
+        ) |>
+        dplyr::mutate(
+          year    = !!year,
+          type    = !!type,
+          moneda  = !!moneda
+        ) |>
+        dplyr::relocate(start_date, end_date, type, moneda)
+    }
+  ) |>
+    dplyr::bind_rows() |>
+    tasas_to_long(
+      filtro_tipo_tasa = filtro_tipo_tasa,
+      filtro_moneda    = filtro_moneda,
+      filtro_condicion = filtro_condicion,
+      filtro_grupo     = filtro_grupo,
+      filtro_detalle   = filtro_detalle
+    )
+
+  data
+}
