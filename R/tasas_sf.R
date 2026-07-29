@@ -787,25 +787,35 @@ get_tasas_reales <- function(
   ),
   `Activas US$` = `Activas RD$`,
   # No hay interbancaria para las pasivas en USD
-  `Pasivas US$` = `Pasivas RD$`[-length(`Pasivas RD$`)]
+  `Pasivas US$` = `Pasivas RD$`[-length(`Pasivas RD$`)],
+  Activa = `Activas RD$`,
+  Pasiva = `Pasivas RD$`
 )
 
 get_tasas_semanales <- function(
     year             = 2025,
+    entidad = c("bm", "aap", "bac"),
     filtro_tipo_tasa = NULL,
     filtro_moneda    = NULL,
     filtro_condicion = NULL,
     filtro_grupo     = NULL,
     filtro_detalle   = NULL
 ) {
+  entidad <- rlang::arg_match(entidad)
+  ext <- dplyr::case_when(
+    entidad == "aap" ~ "xls",
+    entidad == "bac" ~ "xls",
+    entidad == "bm" & year <= 2016 ~ "xls",
+    .default = "xlsx"
+  )
 
   file_url <- paste0(
     "https://cdn.bancentral.gov.do/documents/estadisticas/sector-monetario-y-financiero/",
-    glue::glue("documents/tasas_semanalesBM-{year}.xlsx")
+    glue::glue("documents/tasas_semanales{toupper(entidad)}-{year}.{ext}")
   )
 
-  file_path <- tempfile(pattern = as.character(year), fileext = ".xlsx")
-  download_file(file_url, file_path) # Control de errores inyectado aquí
+  file_path <- tempfile(pattern = as.character(year), fileext = paste0(".", ext))
+  download_file(file_url, file_path)
 
   sheets <- readxl::excel_sheets(file_path)
 
@@ -834,7 +844,13 @@ get_tasas_semanales <- function(
         dplyr::mutate(
           dplyr::across(
             c(start_date, end_date),
-            \(x) stringr::str_remove(x, "\\*") |> lubridate::dmy()
+            \(x) {
+              trimmed <- stringr::str_remove(x, "\\*")
+              with_dmy <- lubridate::dmy(trimmed) |> suppressWarnings()
+              with_excel <- janitor::excel_numeric_to_date(as.numeric(trimmed)) |>
+                suppressWarnings()
+              dplyr::coalesce(with_dmy, with_excel)
+            }
           )
         ) |>
         dplyr::mutate(
