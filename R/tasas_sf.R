@@ -1,11 +1,3 @@
-.download_bcrd_file <- function(url, dest_path) {
-  tryCatch({
-    utils::download.file(url, dest_path, mode = "wb", quiet = TRUE)
-  }, error = function(e) {
-    stop(glue::glue("Error al descargar desde {url}. Verifique su conexión de red o si el Banco Central cambió el enlace. Detalle: {e$message}"), call. = FALSE)
-  })
-}
-
 params <- dplyr::lst(
   bm_pasiva_2007 = dplyr::lst(
     endpoint = "tbm_pasiva-1991-2007.xls",
@@ -230,7 +222,7 @@ params <- dplyr::lst(
   file_url <- paste0(cdn_url, endpoint)
 
   temp_file <- tempfile(fileext = fileext)
-  .download_bcrd_file(file_url, temp_file)
+  download_file(file_url, temp_file)
 
   month_pattern <- purrr::map_chr(1:12, ~ crear_mes(.x, "number_to_text")) |>
     paste(collapse = "|")
@@ -544,7 +536,7 @@ get_tasas_diarias <- function(
   )
 
   file_path <- tempfile(pattern = as.character(year), fileext = ".xlsx")
-  .download_bcrd_file(file_url, file_path) # Control de errores inyectado aquí
+  download_file(file_url, file_path) # Control de errores inyectado aquí
 
   sheets <- readxl::excel_sheets(file_path)
 
