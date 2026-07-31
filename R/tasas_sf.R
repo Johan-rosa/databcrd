@@ -771,6 +771,18 @@ get_tasas_reales <- function(
 }
 
 # Tasas semanales ---------------------------------------------------------
+
+# Nombres de columnas por hoja para los archivos de tasas semanales del BCRD.
+#
+# Lista de referencia (lookup) que mapea el nombre de cada hoja del Excel
+# publicado por el BCRD a su vector de nombres de columna correspondiente.
+# Se usa dentro de `get_tasas_semanales()` para nombrar las columnas leídas
+# sin encabezado (`col_names = FALSE`) de cada hoja.
+#
+# Las hojas `Activas US$` y `Pasivas US$` heredan la estructura de sus
+# contrapartes en RD$, salvo que `Pasivas US$` excluye la columna de tasa
+# interbancaria (no existe interbancaria en USD). `Activa` y `Pasiva` cubren
+# el caso de archivos cuyas hojas no distinguen moneda.
 .tasas_col_names_semanales <- dplyr::lst(
   `Activas RD$` =  c(
     "start_date", "end_date",
@@ -792,6 +804,39 @@ get_tasas_reales <- function(
   Pasiva = `Pasivas RD$`
 )
 
+#' Descargar y consolidar las tasas de interés semanales del BCRD
+#'
+#' `get_tasas_semanales()` descarga el archivo de tasas de interés activas y
+#' pasivas semanales publicado por el Banco Central de la República
+#' Dominicana (BCRD) para una entidad financiera y un año determinados,
+#' procesa todas las hojas del libro de Excel, y devuelve los datos
+#' consolidados en formato largo (long) listos para análisis.
+#'
+#' @param year Numeric. Año de la serie a descargar (p. ej. `2025`).
+#' @param entidad Character. Entidad financiera cuyo archivo de tasas se
+#'   desea descargar. Uno de `"bm"`, `"aap"`, `"bac"`. Se valida con
+#'   `rlang::arg_match()`.
+#' @param filtro_tipo_tasa,filtro_moneda,filtro_condicion,filtro_grupo,filtro_detalle
+#'   Filtros opcionales que se pasan directamente a `tasas_to_long()` para
+#'   filtrar el resultado final en formato largo. `NULL` (por defecto)
+#'   equivale a no filtrar.
+#'
+#' @return Un tibble en formato largo con las tasas de interés semanales de
+#'   la entidad y año solicitados, incluyendo columnas como `start_date`,
+#'   `end_date`, `year`, `type`, `moneda`, y las columnas resultantes de
+#'   `tasas_to_long()` (p. ej. `tipo_tasa`, `condicion`, `grupo`, `detalle`,
+#'   `valor`, según corresponda).
+#'
+#' @seealso [tasas_to_long()] para la lógica de transformación a formato
+#'   largo y sus filtros.
+#'
+#' @examples
+#' \dontrun{
+#' get_tasas_semanales(year = 2025, entidad = "bm")
+#' get_tasas_semanales(year = 2024, entidad = "aap", filtro_moneda = "DOP")
+#' }
+#'
+#' @export
 get_tasas_semanales <- function(
     year             = 2025,
     entidad = c("bm", "aap", "bac"),
@@ -828,7 +873,7 @@ get_tasas_semanales <- function(
         trim_ws = TRUE,
         col_names = FALSE,
         sheet = sheet,
-        col_types = "text" # Forzado tipado explícito para evitar fallos de coercion silenciosa
+        col_types = "text"
       ) |>
         suppressMessages()
 

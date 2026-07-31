@@ -179,6 +179,8 @@ describe("Test tasas semanales", {
     expect_s3_class(get_tasas_semanales(year = 2026), "data.frame")
     expect_s3_class(get_tasas_semanales(year = 2025), "data.frame")
     expect_s3_class(get_tasas_semanales(year = 2024), "data.frame")
+    expect_s3_class(get_tasas_semanales(entidad = "aap", year = 2024), "data.frame")
+    expect_s3_class(get_tasas_semanales(entidad = "bac", year = 2024), "data.frame")
   })
 })
 
