@@ -161,7 +161,7 @@ download_file <- function(url, file_path) {
   tryCatch(
     utils::download.file(url, file_path, mode = "wb", quiet = TRUE),
     error = function(e) {
-      rlang::abort("Unable to download the data file")
+      rlang::abort(glue::glue("Unable to download the data file.\nURL: {url}.\nDetalle: {e$message}"))
     }
   )
 }

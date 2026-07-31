@@ -150,7 +150,7 @@ test_that("filtro_moneda filtra correctamente", {
 })
 
 test_that("filtro_tipo_tasa filtra correctamente", {
-  resultado <- get_tasas_diarias(2024, filtro_tipo_tasa = "Activa")
+  resultado <- get_tasas_diarias(2025, filtro_tipo_tasa = "Activa")
   expect_true(all(resultado$tipo_tasa == "Activa"))
 })
 
@@ -171,6 +171,18 @@ test_that("Argumentos inválidos lanzan error", {
   expect_error(get_tasas_diarias(2024, filtro_grupo     = "Otro"))
 })
 
+
+# Tasas semanales ---------------------------------------------------------
+
+describe("Test tasas semanales", {
+  it("returs a dataframe", {
+    expect_s3_class(get_tasas_semanales(year = 2026), "data.frame")
+    expect_s3_class(get_tasas_semanales(year = 2025), "data.frame")
+    expect_s3_class(get_tasas_semanales(year = 2024), "data.frame")
+    expect_s3_class(get_tasas_semanales(entidad = "aap", year = 2024), "data.frame")
+    expect_s3_class(get_tasas_semanales(entidad = "bac", year = 2024), "data.frame")
+  })
+})
 
 # Tasas reales ---------------------------------------------------------
 
