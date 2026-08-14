@@ -56,7 +56,7 @@ Republic.
 
 ``` r
 operaciones_monetarias()
-#> # A tibble: 2,911 × 10
+#> # A tibble: 2,912 × 10
 #>    date    year   mes   day ventanilla_depositos subasta_letras
 #>    <date> <dbl> <dbl> <int>                <dbl>          <dbl>
 #>  1 NA        NA    NA    NA               15517.         14928.
@@ -69,7 +69,7 @@ operaciones_monetarias()
 #>  8 NA        NA    NA    NA               23357.         21850 
 #>  9 NA        NA    NA    NA               21189.         23058.
 #> 10 NA        NA    NA    NA               29277.         13909.
-#> # ℹ 2,901 more rows
+#> # ℹ 2,902 more rows
 #> # ℹ 4 more variables: operaciones_contraccion <dbl>, ventanilla_repos <dbl>,
 #> #   subasta_repos <dbl>, operaciones_expansion <dbl>
 ```
