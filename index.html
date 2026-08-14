@@ -55,13 +55,438 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>The goal of {databcrd} is to make the data shared by the Central Bank of the Dominican Republic (DR) accessible to R users via an R packages. With the the functions contained in this package, downloading, cleaning and importing data about DR economy will be simple.</p>
+<p><strong>databcrd</strong> es un paquete de R para descargar, limpiar e importar los datos que publican el Banco Central de la República Dominicana (BCRD) y otras de fuentes internacionales que se usan a menudo junto a ellos (FMI, EIA, BCE, China NBS y World Gold Council).</p>
+<p>En lugar de enlaces a Excel, adivinar hojas y nombres de columnas, o mantener scripts de scraping frágiles cada vez que el BCRD cambia el formato de un archivo, <a href="https://johan-rosa.github.io/databcrd/">databcrd</a> expone una función por serie con una interfaz consistente y datos ya limpios en formato <em>tidy</em>.</p>
 <div class="section level2">
-<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+<h2 id="instalación">Instalación<a class="anchor" aria-label="anchor" href="#instalaci%C3%B3n"></a>
 </h2>
-<p>You can install the development version of databcrd like so:</p>
+<p>El paquete todavía no está en CRAN. Instala la versión de desarrollo desde GitHub:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"johan-rosa/databcrd"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"Johan-rosa/databcrd"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="uso-rápido">Uso rápido<a class="anchor" aria-label="anchor" href="#uso-r%C3%A1pido"></a>
+</h2>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://johan-rosa.github.io/databcrd/">databcrd</a></span><span class="op">)</span></span>
+<span> </span>
+<span><span class="co"># Indicador Mensual de Actividad Económica (IMAE)</span></span>
+<span><span class="fu"><a href="reference/get_imae.html">get_imae</a></span><span class="op">(</span><span class="op">)</span></span>
+<span> </span>
+<span><span class="co"># Tipo de cambio spot</span></span>
+<span><span class="fu"><a href="reference/get_tc_spot.html">get_tc_spot</a></span><span class="op">(</span><span class="op">)</span></span>
+<span> </span>
+<span><span class="co"># Tasa de Política Monetaria</span></span>
+<span><span class="fu"><a href="reference/get_tpm.html">get_tpm</a></span><span class="op">(</span><span class="op">)</span></span>
+<span> </span>
+<span><span class="co"># Inflación (IPC), a nivel general o por desagregaciones</span></span>
+<span><span class="fu"><a href="reference/get_ipc_data.html">get_ipc_data</a></span><span class="op">(</span><span class="st">"general"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/get_ipc_data.html">get_ipc_data</a></span><span class="op">(</span><span class="st">"subyacente"</span><span class="op">)</span></span></code></pre></div>
+<p>Cada función retorna un <code>tibble</code>, listo para encadenar con <code>dplyr</code>, graficar con <code>ggplot2</code> o convertir a serie de tiempo con <code>tsibble</code>.</p>
+</div>
+<div class="section level2">
+<h2 id="fuentes-de-datos">Fuentes de datos<a class="anchor" aria-label="anchor" href="#fuentes-de-datos"></a>
+</h2>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr>
+<th>Fuente</th>
+<th>Cobertura en el paquete</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><strong>BCRD</strong></td>
+<td>Cuentas nacionales, precios, tipo de cambio, tasas de interés, sector externo, sector fiscal, sector monetario y financiero</td>
+</tr>
+<tr>
+<td>
+<strong>FMI</strong> (<code>imf.data</code>)</td>
+<td>Inflación (IPC) comparada entre países, vía SDMX-CSV</td>
+</tr>
+<tr>
+<td>
+<strong>EIA</strong> (EE. UU.)</td>
+<td>Precio spot del petróleo WTI</td>
+</tr>
+<tr>
+<td><strong>BCE</strong></td>
+<td>Inflación (HICP), crecimiento del PIB real y desempleo de la eurozona</td>
+</tr>
+<tr>
+<td>
+<strong>China NBS</strong> (<code>data.stats.gov.cn</code>)</td>
+<td>Índice de Precios al Consumidor de China</td>
+</tr>
+<tr>
+<td><strong>World Gold Council</strong></td>
+<td>Precio mensual del oro desde 1833, y precio spot actual</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
+<h2 id="referencia-de-funciones">Referencia de funciones<a class="anchor" aria-label="anchor" href="#referencia-de-funciones"></a>
+</h2>
+<div class="section level3">
+<h3 id="cuentas-nacionales-y-actividad-real">Cuentas nacionales y actividad real<a class="anchor" aria-label="anchor" href="#cuentas-nacionales-y-actividad-real"></a>
+</h3>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr>
+<th>Función</th>
+<th>Descripción</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code><a href="reference/get_imae.html">get_imae()</a></code></td>
+<td>IMAE, base 2018</td>
+</tr>
+<tr>
+<td><code><a href="reference/get_imae_2007.html">get_imae_2007()</a></code></td>
+<td>IMAE, base 2007</td>
+</tr>
+<tr>
+<td><code><a href="reference/get_pib_gasto.html">get_pib_gasto()</a></code></td>
+<td>PIB por el enfoque del gasto (real y nominal)</td>
+</tr>
+<tr>
+<td><code><a href="reference/get_pib_gasto_2007.html">get_pib_gasto_2007()</a></code></td>
+<td>PIB por el enfoque del gasto, base 2007</td>
+</tr>
+<tr>
+<td><code><a href="reference/get_pib_sectores.html">get_pib_sectores()</a></code></td>
+<td>PIB por sector de origen (real y nominal)</td>
+</tr>
+<tr>
+<td><code><a href="reference/get_pib_sectores_2007.html">get_pib_sectores_2007()</a></code></td>
+<td>PIB por sector de origen, base 2007</td>
+</tr>
+<tr>
+<td><code><a href="reference/get_fbkf.html">get_fbkf()</a></code></td>
+<td>Formación bruta de capital fijo por sector y tipo de bien</td>
+</tr>
+<tr>
+<td><code><a href="reference/costo_canasta_familiar.html">costo_canasta_familiar()</a></code></td>
+<td>Costo de la canasta familiar</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="precios-e-inflación">Precios e inflación<a class="anchor" aria-label="anchor" href="#precios-e-inflaci%C3%B3n"></a>
+</h3>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr>
+<th>Función</th>
+<th>Descripción</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code><a href="reference/get_ipc_data.html">get_ipc_data()</a></code></td>
+<td>IPC por desagregación: general, grupos, regiones, subyacente, TNT</td>
+</tr>
+<tr>
+<td><code><a href="reference/get_ipc_articulos.html">get_ipc_articulos()</a></code></td>
+<td>IPC a nivel de artículo</td>
+</tr>
+<tr>
+<td><code><a href="reference/get_ipc_long.html">get_ipc_long()</a></code></td>
+<td>IPC en formato largo</td>
+</tr>
+<tr>
+<td><code><a href="reference/imf_inflation.html">imf_inflation()</a></code></td>
+<td>Inflación (IPC) del FMI para uno o varios países</td>
+</tr>
+<tr>
+<td><code><a href="reference/china_cpi.html">china_cpi()</a></code></td>
+<td>IPC de China (portal de la NBS)</td>
+</tr>
+<tr>
+<td><code><a href="reference/ze_inflation.html">ze_inflation()</a></code></td>
+<td>Inflación (HICP) de la eurozona</td>
+</tr>
+<tr>
+<td><code><a href="reference/get_expectativas.html">get_expectativas()</a></code></td>
+<td>Encuesta de expectativas macroeconómicas</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="tipo-de-cambio">Tipo de cambio<a class="anchor" aria-label="anchor" href="#tipo-de-cambio"></a>
+</h3>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr>
+<th>Función</th>
+<th>Descripción</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+<code><a href="reference/get_tc.html">get_tc()</a></code> / <code><a href="reference/get_tc_eif.html">get_tc_eif()</a></code>
+</td>
+<td>Tipo de cambio promedio de las operaciones en entidades de intermediación financiera</td>
+</tr>
+<tr>
+<td><code><a href="reference/get_tc_spot.html">get_tc_spot()</a></code></td>
+<td>Tipo de cambio en el mercado spot</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="tasas-de-interés-y-política-monetaria">Tasas de interés y política monetaria<a class="anchor" aria-label="anchor" href="#tasas-de-inter%C3%A9s-y-pol%C3%ADtica-monetaria"></a>
+</h3>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr>
+<th>Función</th>
+<th>Descripción</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code><a href="reference/get_tpm.html">get_tpm()</a></code></td>
+<td>Tasa de Política Monetaria y tasas de corto plazo asociadas</td>
+</tr>
+<tr>
+<td><code><a href="reference/get_tasas_activas.html">get_tasas_activas()</a></code></td>
+<td>Tasas de interés activas (préstamos)</td>
+</tr>
+<tr>
+<td><code><a href="reference/get_tasas_pasivas.html">get_tasas_pasivas()</a></code></td>
+<td>Tasas de interés pasivas (ahorros)</td>
+</tr>
+<tr>
+<td><code><a href="reference/get_tasas_diarias.html">get_tasas_diarias()</a></code></td>
+<td>Tasas de interés diarias del BCRD</td>
+</tr>
+<tr>
+<td><code><a href="reference/get_tasas_semanales.html">get_tasas_semanales()</a></code></td>
+<td>Tasas de interés semanales del BCRD</td>
+</tr>
+<tr>
+<td><code><a href="reference/get_tasas_reales.html">get_tasas_reales()</a></code></td>
+<td>Tasas de interés reales de los intermediarios financieros</td>
+</tr>
+<tr>
+<td><code><a href="reference/get_tasa_interbancaria.html">get_tasa_interbancaria()</a></code></td>
+<td>Tasas promedio de operaciones interbancarias por plazo</td>
+</tr>
+<tr>
+<td><code><a href="reference/tasas_to_long.html">tasas_to_long()</a></code></td>
+<td>Convierte tablas de tasas de formato ancho a largo</td>
+</tr>
+<tr>
+<td><code><a href="reference/get_encaje.html">get_encaje()</a></code></td>
+<td>Serie de encaje legal</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="sector-externo">Sector externo<a class="anchor" aria-label="anchor" href="#sector-externo"></a>
+</h3>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr>
+<th>Función</th>
+<th>Descripción</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code><a href="reference/get_exportaciones.html">get_exportaciones()</a></code></td>
+<td>Exportaciones totales por sector</td>
+</tr>
+<tr>
+<td><code><a href="reference/get_exportaciones_zf.html">get_exportaciones_zf()</a></code></td>
+<td>Exportaciones de zonas francas</td>
+</tr>
+<tr>
+<td><code><a href="reference/get_importaciones.html">get_importaciones()</a></code></td>
+<td>Importaciones totales por sector</td>
+</tr>
+<tr>
+<td><code><a href="reference/get_importaciones_petroleo.html">get_importaciones_petroleo()</a></code></td>
+<td>Importaciones de petróleo</td>
+</tr>
+<tr>
+<td><code><a href="reference/get_remesas.html">get_remesas()</a></code></td>
+<td>Remesas recibidas</td>
+</tr>
+<tr>
+<td><code><a href="reference/get_ied.html">get_ied()</a></code></td>
+<td>Inversión extranjera directa</td>
+</tr>
+<tr>
+<td><code><a href="reference/get_reservas_internacionales.html">get_reservas_internacionales()</a></code></td>
+<td>Reservas y activos del banco central</td>
+</tr>
+<tr>
+<td><code><a href="reference/get_embi.html">get_embi()</a></code></td>
+<td>EMBI (riesgo país) a distintas periodicidades</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="sector-fiscal-y-monetario">Sector fiscal y monetario<a class="anchor" aria-label="anchor" href="#sector-fiscal-y-monetario"></a>
+</h3>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr>
+<th>Función</th>
+<th>Descripción</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code><a href="reference/fiscal_operations.html">fiscal_operations()</a></code></td>
+<td>Operaciones fiscales</td>
+</tr>
+<tr>
+<td><code><a href="reference/fiscal_operations_gdp.html">fiscal_operations_gdp()</a></code></td>
+<td>Operaciones fiscales como % del PIB</td>
+</tr>
+<tr>
+<td><code><a href="reference/get_indicadores_monetarios_bcrd.html">get_indicadores_monetarios_bcrd()</a></code></td>
+<td>Indicadores monetarios del BCRD</td>
+</tr>
+<tr>
+<td><code><a href="reference/operaciones_monetarias.html">operaciones_monetarias()</a></code></td>
+<td>Operaciones monetarias</td>
+</tr>
+<tr>
+<td><code><a href="reference/indicadores_osd.html">indicadores_osd()</a></code></td>
+<td>Indicadores de Otras Sociedades de Depósito (OSD)</td>
+</tr>
+<tr>
+<td><code><a href="reference/get_prestamos_osd.html">get_prestamos_osd()</a></code></td>
+<td>Préstamos por sector de las OSD</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="series-internacionales-de-referencia">Series internacionales de referencia<a class="anchor" aria-label="anchor" href="#series-internacionales-de-referencia"></a>
+</h3>
+<table class="table">
+<thead><tr>
+<th>Función</th>
+<th>Descripción</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code><a href="reference/gold_price.html">gold_price()</a></code></td>
+<td>Precio mensual del oro desde 1833</td>
+</tr>
+<tr>
+<td><code><a href="reference/today_gold_price.html">today_gold_price()</a></code></td>
+<td>Precio spot del oro (requiere <code>GOLDAPI_KEY</code>)</td>
+</tr>
+<tr>
+<td><code><a href="reference/wti_price.html">wti_price()</a></code></td>
+<td>Precio spot del petróleo WTI (requiere <code>EIA_KEY</code>)</td>
+</tr>
+<tr>
+<td><code><a href="reference/ze_gdpg.html">ze_gdpg()</a></code></td>
+<td>Crecimiento del PIB real de la eurozona</td>
+</tr>
+<tr>
+<td><code><a href="reference/ze_unemployment.html">ze_unemployment()</a></code></td>
+<td>Tasa de desempleo de la eurozona</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3 id="utilidades">Utilidades<a class="anchor" aria-label="anchor" href="#utilidades"></a>
+</h3>
+<table class="table">
+<thead><tr>
+<th>Función</th>
+<th>Descripción</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code><a href="reference/crear_mes.html">crear_mes()</a></code></td>
+<td>Recodifica meses</td>
+</tr>
+<tr>
+<td><code><a href="reference/date_label.html">date_label()</a></code></td>
+<td>Construye etiquetas de fecha legibles</td>
+</tr>
+<tr>
+<td><code><a href="reference/rescale.html">rescale()</a></code></td>
+<td>Reescala un vector</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section level2">
+<h2 id="variables-de-entorno">Variables de entorno<a class="anchor" aria-label="anchor" href="#variables-de-entorno"></a>
+</h2>
+<p>Algunas fuentes requieren una API KEY propia del usuario. Configúralas en tu <code>.Renviron</code>:</p>
+<pre><code><span><span class="va">EIA_KEY</span><span class="op">=</span><span class="va">tu_llave_de_eia</span></span>
+<span><span class="va">GOLDAPI_KEY</span><span class="op">=</span><span class="va">tu_llave_de_goldapi</span></span></code></pre>
+<ul>
+<li>
+<code>EIA_KEY</code>: usada por <code><a href="reference/wti_price.html">wti_price()</a></code>. Se obtiene gratis en <a href="https://www.eia.gov/opendata/register.php" class="external-link uri">https://www.eia.gov/opendata/register.php</a>.</li>
+<li>
+<code>GOLDAPI_KEY</code>: usada por <code><a href="reference/today_gold_price.html">today_gold_price()</a></code>. Se obtiene en <a href="https://www.goldapi.io/" class="external-link uri">https://www.goldapi.io/</a>. El resto de las funciones no requiere autenticación.</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="artículos-y-documentación">Artículos y documentación<a class="anchor" aria-label="anchor" href="#art%C3%ADculos-y-documentaci%C3%B3n"></a>
+</h2>
+<p>El sitio del paquete, generado con <code>pkgdown</code>, incluye la referencia completa de funciones y artículos de uso (por ejemplo, <code><a href="articles/ipc_data.html">vignette("ipc_data")</a></code> para trabajar con las distintas desagregaciones del IPC):</p>
+<p><a href="https://johan-rosa.github.io/databcrd/" class="uri">https://johan-rosa.github.io/databcrd/</a></p>
+</div>
+<div class="section level2">
+<h2 id="diseño-del-paquete">Diseño del paquete<a class="anchor" aria-label="anchor" href="#dise%C3%B1o-del-paquete"></a>
+</h2>
+<ul>
+<li>Cada función de descarga sigue el mismo patrón: construir la solicitud con <code>httr2</code>, ejecutarla a través de un wrapper centralizado con manejo de errores (<code><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch()</a></code> + condiciones de <code><a href="https://rlang.r-lib.org/reference/abort.html" class="external-link">rlang::abort()</a></code>), y devolver un <code>tibble</code> ya limpio con <code>dplyr</code>/<code>janitor</code>/<code>lubridate</code>.</li>
+<li>Las funciones están documentadas con <code>roxygen2</code>, incluyendo ejemplos ejecutables.</li>
+<li>Cuando una fuente expone una API interna o no oficial (como el portal de datos de la NBS de China), la lógica de bajo nivel (encabezados, sesión, parsing del árbol de nodos) vive en funciones internas separadas de la función exportada, para que el punto de entrada público se mantenga simple.</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="contribuir">Contribuir<a class="anchor" aria-label="anchor" href="#contribuir"></a>
+</h2>
+<p>Los <em>issues</em> y <em>pull requests</em> son bienvenidos. Antes de abrir un PR, corre:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">document</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">test</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">lintr</span><span class="fu">::</span><span class="fu"><a href="https://lintr.r-lib.org/reference/lint.html" class="external-link">lint_package</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="licencia">Licencia<a class="anchor" aria-label="anchor" href="#licencia"></a>
+</h2>
+<p>MIT © Johan Rosa, Juan Quiñones</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="license">
@@ -92,6 +517,7 @@
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://github.com/johan-ros/databcrd/actions/workflows/main.yml" class="external-link"><img src="https://github.com/johan-rosa/databcrd/actions/workflows/main.yml/badge.svg" alt="CI"></a></li>
+<li><a href="LICENSE.html"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a></li>
 </ul>
 </div>
 
