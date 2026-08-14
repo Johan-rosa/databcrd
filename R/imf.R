@@ -119,9 +119,9 @@ imf_policy_rate <- function(
 imf_pcps_catalogo <- function() {
   url <- "https://data.imf.org/platform/rest/v1/registry/sdmx-plus/structure/glossary/IMF.RES/CL_PCPS_INDICATOR/3.0.0?references=hierarchy&detail=referencepartial"
 
-  resp <- request(url) |>
-    req_perform() |>
-    resp_body_json()
+  resp <- httr2::request(url) |>
+    httr2::req_perform() |>
+    httr2::resp_body_json()
 
   resp$data$glossaries[[1]]$terms |>
     purrr::map(
