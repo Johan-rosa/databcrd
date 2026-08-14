@@ -4,7 +4,9 @@
 \alias{get_ipc_data}
 \title{Download the CPI series}
 \usage{
-get_ipc_data(desagregacion)
+get_ipc_data(
+  desagregacion = c("general", "grupos", "regiones", "subyacente", "tnt")
+)
 }
 \arguments{
 \item{desagregacion}{string with the desired disaggregation. options:
