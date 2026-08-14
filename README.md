@@ -1,7 +1,7 @@
 # databcrd
 
 <!-- badges: start -->
-[![CI](https://github.com/johan-rosa/databcrd/actions/workflows/main.yml/badge.svg)](https://github.com/johan-ros/databcrd/actions/workflows/main.yml)
+[![CI](https://github.com/johan-rosa/databcrd/actions/workflows/main.yml/badge.svg)](https://github.com/johan-rosa/databcrd/actions/workflows/main.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)
 <!-- badges: end -->
 
