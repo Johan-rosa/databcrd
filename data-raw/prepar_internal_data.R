@@ -6,6 +6,7 @@ load("data/imports_details.rda")
 load("data/indicadores_bcrd_details.rda")
 load("data/ipc_articulos_details.rda")
 load("data/detalles_indicadores_osd.rda")
+load("data/catalogo_balanza_pagos.rda")
 
 usethis::use_data(
   data_ipc_articulos_2020_2025,
@@ -16,6 +17,7 @@ usethis::use_data(
   imports_details,
   indicadores_bcrd_details,
   detalles_indicadores_osd,
+  catalogo_balanza_pagos,
   internal = TRUE,
   overwrite = TRUE
 )
