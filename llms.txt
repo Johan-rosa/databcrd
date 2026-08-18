@@ -342,6 +342,12 @@ MIT © Johan Rosa, Juan Quiñones
   : Monthly Gold Prices Since 1833
 - [`imf_inflation()`](https://johan-rosa.github.io/databcrd/reference/imf_inflation.md)
   : Get IMF CPI inflation series for a set of countries
+- [`imf_pcps()`](https://johan-rosa.github.io/databcrd/reference/imf_pcps.md)
+  : Precios de materias primas del FMI (PCPS)
+- [`imf_pcps_catalogo()`](https://johan-rosa.github.io/databcrd/reference/imf_pcps_catalogo.md)
+  : Catálogo de indicadores del Primary Commodity Price System (PCPS)
+- [`imf_weo_forecast()`](https://johan-rosa.github.io/databcrd/reference/imf_weo_forecast.md)
+  : Proyecciones del World Economic Outlook (WEO) del FMI
 - [`imports_details`](https://johan-rosa.github.io/databcrd/reference/imports_details.md)
   : Utility complement to handle the total imports data
 - [`indicadores_bcrd_details`](https://johan-rosa.github.io/databcrd/reference/indicadores_bcrd_details.md)
