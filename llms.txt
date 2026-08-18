@@ -208,6 +208,12 @@ MIT © Johan Rosa, Juan Quiñones
 
 ## All functions
 
+- [`balanza_pagos()`](https://johan-rosa.github.io/databcrd/reference/balanza_pagos.md)
+  : Balanza de Pagos - datos trimestrales
+- [`balanza_servicios()`](https://johan-rosa.github.io/databcrd/reference/balanza_servicios.md)
+  : Balanza de Servicios - datos trimestrales
+- [`catalogo_balanza_pagos`](https://johan-rosa.github.io/databcrd/reference/catalogo_balanza_pagos.md)
+  : Catalogo jerarquico de cuentas de la Balanza de Pagos
 - [`china_cpi()`](https://johan-rosa.github.io/databcrd/reference/china_cpi.md)
   : Download China's Consumer Price Index (CPI) series
 - [`china_price_index_node_id()`](https://johan-rosa.github.io/databcrd/reference/china_price_index_node_id.md)

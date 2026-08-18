@@ -25,7 +25,7 @@ a data frame
 
 ``` r
 get_remesas("mensual")
-#> # A tibble: 198 × 4
+#> # A tibble: 199 × 4
 #>    fecha        mes  year      monto
 #>    <date>     <dbl> <dbl>      <dbl>
 #>  1 2010-01-01     1  2010 280155041.
@@ -38,7 +38,7 @@ get_remesas("mensual")
 #>  8 2010-08-01     8  2010 314046413.
 #>  9 2010-09-01     9  2010 294098116.
 #> 10 2010-10-01    10  2010 306398494.
-#> # ℹ 188 more rows
+#> # ℹ 189 more rows
 get_remesas("por_pais_emisor")
 #> # A tibble: 187 × 3
 #>    partida         year proporcion

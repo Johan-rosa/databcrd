@@ -6,7 +6,9 @@ disaggregation
 ## Usage
 
 ``` r
-get_ipc_data(desagregacion)
+get_ipc_data(
+  desagregacion = c("general", "grupos", "regiones", "subyacente", "tnt")
+)
 ```
 
 ## Arguments
