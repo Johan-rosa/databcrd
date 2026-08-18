@@ -274,31 +274,112 @@ imf_pcps <- function(
     )
 }
 
-# TODO: Make it possible to get the GDP as well as the CPI
+#' Proyecciones del World Economic Outlook (WEO) del FMI
+#'
+#' Descarga las últimas observaciones de inflación o crecimiento del PIB
+#' del World Economic Outlook (WEO) del FMI para uno o más países, en
+#' formato largo o ancho.
+#'
+#' @details
+#' El WEO se publica dos veces al año (abril y octubre) y mezcla, en la
+#' misma serie, años de dato real (histórico) y años de proyección, sin
+#' que la respuesta de la API indique cuál es cuál. No encontramos un
+#' atributo SDMX confiable para separar automáticamente lo real de lo
+#' proyectado con el paquete `imf.data` (se intentó
+#' `LATEST_ACTUAL_ANNUAL_DATA`, pero no existe en este dataflow). Por
+#' ahora, quien use esta función debe determinar el corte real/proyectado
+#' por su cuenta, por ejemplo contrastando el año contra la fecha de
+#' publicación del vintage de WEO consultado.
+#'
+#' `indicador` traduce dos etiquetas amigables a sus códigos WEO
+#' correspondientes:
+#' \describe{
+#'   \item{`"inflacion"`}{→ `PCPIEPCH`, inflación de **fin de periodo**,
+#'     %. No es la inflación promedio (`PCPIPCH`), que es la cifra que
+#'     habitualmente se cita como "la" inflación anual; esta función no
+#'     da acceso a `PCPIPCH` por ahora.}
+#'   \item{`"gdp"`}{→ `NGDP_RPCH`, crecimiento del PIB **real**, %. Esta
+#'     función no da acceso al PIB nominal (`NGDPD`) por ahora.}
+#' }
+#' Para usar otro código WEO (`PCPIPCH`, `NGDPD`, o cualquier otro),
+#' hay que agregar el caso correspondiente al `switch()` interno; con la
+#' interfaz actual no es posible pasar un código SDMX directamente.
+#'
+#' Solo se puede pedir un indicador por llamada; si se necesitan varios
+#' (p. ej. inflación y PIB juntos), hay que llamar la función dos veces y
+#' combinar los resultados con `dplyr::bind_rows()` o un `dplyr::*_join()`
+#' según el formato.
+#'
+#' `year` se convierte a entero (antes quedaba como texto, heredado de
+#' `TIME_PERIOD`).
+#'
+#' El formato `"wide"` solo tiene sentido con un único indicador por
+#' llamada: pivota a una columna por país, indexada por año.
+#'
+#' @param indicador `"inflacion"` (por defecto) o `"gdp"`. Ver `@details`
+#'   para el código WEO exacto al que traduce cada etiqueta.
+#' @param last_n_obs Número de observaciones más recientes a traer por
+#'   país (por defecto 6).
+#' @param countries Vector de códigos de país ISO-3 del FMI (por defecto
+#'   `c("DOM", "CHN", "USA")`).
+#' @param format `"long"` (por defecto, una fila por país y año) o
+#'   `"wide"` (una columna por país, indexada por año).
+#'
+#' @return
+#' En formato `"long"`, un tibble con (al menos) las columnas:
+#' \describe{
+#'   \item{country}{`chr`. Código de país ISO-3.}
+#'   \item{indicator}{`chr`. Código WEO real al que tradujo `indicador`
+#'     (`"PCPIEPCH"` o `"NGDP_RPCH"`).}
+#'   \item{year}{`int`. Año de la observación.}
+#'   \item{value}{`dbl`. Valor de la observación: % para ambos
+#'     indicadores disponibles actualmente.}
+#' }
+#' En formato `"wide"`, un tibble con columna `year` y una columna
+#' adicional por cada país en `countries`, con el valor de `indicador`.
+#'
+#' @source
+#' <https://data.imf.org/en/datasets/IMF.RES:WEO>
+#'
+#' @examples
+#' \dontrun{
+#' imf_weo_forecast()
+#'
+#' # Crecimiento del PIB real, formato ancho
+#' imf_weo_forecast(indicador = "gdp", format = "wide")
+#' }
+#'
+#' @export
 imf_weo_forecast <- function(
+    indicador = c("inflacion", "gdp"),
     last_n_obs = 6,
     countries = c("DOM", "CHN", "USA"),
     format = c("long", "wide")
 ) {
+  indicador <- rlang::arg_match(indicador)
   format <- rlang::arg_match(format)
+
+  indicador <- switch (indicador,
+    gdp = "NGDP_RPCH",
+    inflacion = "PCPIEPCH"
+  )
 
   data <- imf.data::get_data(
     dataflow = "WEO",
     agency_id = "IMF.RES",
     filters = list(
-      INDICATOR = "PCPIEPCH",
+      INDICATOR = indicador,
       COUNTRY   = countries
     ),
     last_n_obs = last_n_obs
   ) |>
     janitor::clean_names() |>
-    dplyr::rename(value = obs_value, year = time_period)
-
+    dplyr::rename(value = obs_value, year = time_period) |>
+    dplyr::mutate(year = as.integer(year))
   if (format == "wide") {
     data <- data |>
       dplyr::select(year, country, value) |>
       tidyr::pivot_wider(names_from = country, values_from = value)
   }
-
   data
 }
