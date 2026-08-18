@@ -150,7 +150,7 @@ test_that("filtro_moneda filtra correctamente", {
 })
 
 test_that("filtro_tipo_tasa filtra correctamente", {
-  resultado <- get_tasas_diarias(2024, filtro_tipo_tasa = "Activa")
+  resultado <- get_tasas_diarias(2025, filtro_tipo_tasa = "Activa")
   expect_true(all(resultado$tipo_tasa == "Activa"))
 })
 
@@ -169,4 +169,95 @@ test_that("Argumentos inválidos lanzan error", {
   expect_error(get_tasas_diarias(2024, filtro_tipo_tasa = "Nominal"))
   expect_error(get_tasas_diarias(2024, filtro_condicion = "Otro"))
   expect_error(get_tasas_diarias(2024, filtro_grupo     = "Otro"))
+})
+
+
+# Tasas semanales ---------------------------------------------------------
+
+describe("Test tasas semanales", {
+  it("returs a dataframe", {
+    expect_s3_class(get_tasas_semanales(year = 2026), "data.frame")
+    expect_s3_class(get_tasas_semanales(year = 2025), "data.frame")
+    expect_s3_class(get_tasas_semanales(year = 2024), "data.frame")
+    expect_s3_class(get_tasas_semanales(entidad = "aap", year = 2024), "data.frame")
+    expect_s3_class(get_tasas_semanales(entidad = "bac", year = 2024), "data.frame")
+  })
+})
+
+# Tasas reales ---------------------------------------------------------
+
+tasas_real_mensual_long <- get_tasas_reales("mensual", "long")
+tasa_real_anual_wide  <- get_tasas_reales("anual", "wide")
+tasas_real_anual_long <- get_tasas_reales("anual", "long")
+
+describe('get_tasas_reales("mensual", "wide")', {
+  tasa_real  <- get_tasas_reales("mensual", "wide")
+
+  it("No tiene fechas duplicadas", {
+    cnt <- dplyr::count(tasa_real, date)
+    expect_equal(max(cnt$n), 1)
+  })
+
+  it("No tiene fechas en el futuro", {
+    expect_true(max(tasa_real$date) < lubridate::today())
+  })
+
+  it("Tiene las columnas adecuadas", {
+    names <- c(
+      "date", "year", "mes",
+      paste(
+        rep(c("bm", "aap", "bac", "cc"), each = 2),
+        rep(c("activa", "pasiva"), times = 4),
+        sep = "_"
+      ),
+      "inflacion"
+    )
+
+    expect_named(tasa_real, names)
+  })
+
+  it("Tiene 12 meses por año", {
+    current_year <- lubridate::year(Sys.Date())
+
+    ns_complete <- tasa_real |>
+      dplyr::filter(year < current_year) |>
+      dplyr::count(year)
+
+    expect_true(all(ns_complete$n == 12L))
+  })
+})
+
+describe('get_tasas_reales("anual", "wide")', {
+  tasa_real  <- get_tasas_reales("anual", "wide")
+
+  it("No tiene fechas duplicadas", {
+    cnt <- dplyr::count(tasa_real, year)
+    expect_equal(max(cnt$n), 1)
+  })
+
+  it("No tiene fechas en el futuro", {
+    expect_true(max(tasa_real$year) < lubridate::year(lubridate::today()))
+  })
+
+  it("No hay años perdidos", {
+    ycnt <- tasa_real |>
+      dplyr::arrange(year) |>
+      dplyr::mutate(diff_year = year - dplyr::lag(year, default = 2007))
+
+    expect_true(all(ycnt$diff_year == 1))
+  })
+
+  it("Tiene las columnas adecuadas", {
+    names <- c(
+      "year",
+      paste(
+        rep(c("bm", "aap", "bac", "cc"), each = 2),
+        rep(c("activa", "pasiva"), times = 4),
+        sep = "_"
+      ),
+      "inflacion"
+    )
+
+    expect_named(tasa_real, names)
+  })
 })

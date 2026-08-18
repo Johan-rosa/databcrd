@@ -155,3 +155,20 @@ crear_mes <- function(mes, type = "text_to_number") {
 
   return(new_mes)
 }
+
+#' Helper to download file
+download_file <- function(url, file_path) {
+  tryCatch(
+    utils::download.file(url, file_path, mode = "wb", quiet = TRUE),
+    error = function(e) {
+      rlang::abort(glue::glue("Unable to download the data file.\nURL: {url}.\nDetalle: {e$message}"))
+    }
+  )
+}
+
+open_file <- function(url) {
+  ext <- stringr::str_extract(url, "\\.xls[x]?$")
+  file <- tempfile(fileext = ext)
+  download_file(url, file)
+  xopen::xopen(file)
+}

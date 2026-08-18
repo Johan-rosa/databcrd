@@ -16,19 +16,18 @@
 #' get_ipc_data("subyacente")
 #' get_ipc_data("regiones")
 #' get_ipc_data("tnt")
-get_ipc_data <- function(desagregacion) {
-  checkmate::assert_character(desagregacion)
-  checkmate::assert_choice(
-    desagregacion,
-    choices = c("general", "grupos", "regiones", "subyacente", "tnt")
-  )
+get_ipc_data <- function(
+    desagregacion = c("general", "grupos", "regiones", "subyacente", "tnt")
+) {
+  desagregacion <- rlang::arg_match(desagregacion)
 
-  result <- switch(desagregacion,
-                   "general" = get_ipc_general(),
-                   "grupos" = get_ipc_grupos(),
-                   "regiones" = get_ipc_regiones(),
-                   "subyacente" = get_ipc_subyacente(),
-                   "tnt" = get_ipc_tnt()
+  result <- switch(
+    desagregacion,
+    "general" = get_ipc_general(),
+    "grupos" = get_ipc_grupos(),
+    "regiones" = get_ipc_regiones(),
+    "subyacente" = get_ipc_subyacente(),
+    "tnt" = get_ipc_tnt()
   )
 
   return(result)

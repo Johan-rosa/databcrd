@@ -1,11 +1,3 @@
-.download_bcrd_file <- function(url, dest_path) {
-  tryCatch({
-    utils::download.file(url, dest_path, mode = "wb", quiet = TRUE)
-  }, error = function(e) {
-    stop(glue::glue("Error al descargar desde {url}. Verifique su conexión de red o si el Banco Central cambió el enlace. Detalle: {e$message}"), call. = FALSE)
-  })
-}
-
 params <- dplyr::lst(
   bm_pasiva_2007 = dplyr::lst(
     endpoint = "tbm_pasiva-1991-2007.xls",
@@ -230,7 +222,7 @@ params <- dplyr::lst(
   file_url <- paste0(cdn_url, endpoint)
 
   temp_file <- tempfile(fileext = fileext)
-  .download_bcrd_file(file_url, temp_file)
+  download_file(file_url, temp_file)
 
   month_pattern <- purrr::map_chr(1:12, ~ crear_mes(.x, "number_to_text")) |>
     paste(collapse = "|")
@@ -287,14 +279,16 @@ params <- dplyr::lst(
 )
 
 .tasas_detalles_labels <- c(
+  # El orden es relevante para el tipo de matching que se hace usando este
+  # objeto. 360d debe estar primero que 60d, por ejemplo.
   "30d"            = "0 a 30 días",
+  "360d"           = "181 a 360 días",
   "60d"            = "31 a 60 días",
   "180d"           = "91 a 180 días",
-  "360d"           = "181 a 360 días",
   "m360"           = "Más de 360 días",
   "2a"             = "361 días a 2 años",
-  "5a"             = "2 a 5 años",
   "m5a"            = "Más de 5 años",
+  "5a"             = "2 a 5 años",
   "pp"             = "Promedio ponderado",
   "ps"             = "Promedio simple",
   "comercio"       = "Comercio",
@@ -345,13 +339,13 @@ tasas_to_long <- function(
   tasas_wide |>
     tidyr::pivot_longer(cols = dplyr::matches("^ta|^tp")) |>
     dplyr::mutate(
+      value = as.numeric(value),
       grupo = dplyr::case_when(
         stringr::str_detect(name, "\\d[da]$") ~ "Plazo",
         stringr::str_detect(name, "pp$|ps|preferencial$") ~ "Promedio",
         stringr::str_detect(name, "comercio|consumo|hipotecario|tc") ~ "Sector"
       ),
       condicion = dplyr::if_else(stringr::str_detect(name, "preferencial"), "Preferencial", "General"),
-      # Reemplazado dplyr::recode por un mapeo directo moderno de strings (Punto 5)
       name = stringr::str_replace_all(name, c("ta_90d" = "0 a 90 días", "tp_90d" = "61 a 90 días")),
       detalle_raw = stringr::str_remove(name, "^ta_preferencial_|^ta_|^tp_"),
       detalle = stringr::str_replace_all(detalle_raw, .tasas_detalles_labels)
@@ -362,7 +356,7 @@ tasas_to_long <- function(
     dplyr::filter(is.null(filtro_grupo)     | grupo     %in% filtro_grupo) |>
     dplyr::filter(is.null(filtro_detalle)   | detalle   %in% filtro_detalle) |>
     dplyr::select(
-      dplyr::any_of(c("fecha", "year", "mes", "day")),
+      dplyr::any_of(c("fecha", "start_date", "end_date", "year", "mes", "day")),
       tipo_tasa = type, moneda, grupo, condicion, detalle, tasa = value
     ) |>
     dplyr::filter(!is.na(tasa))
@@ -544,7 +538,7 @@ get_tasas_diarias <- function(
   )
 
   file_path <- tempfile(pattern = as.character(year), fileext = ".xlsx")
-  .download_bcrd_file(file_url, file_path) # Control de errores inyectado aquí
+  download_file(file_url, file_path) # Control de errores inyectado aquí
 
   sheets <- readxl::excel_sheets(file_path)
 
@@ -589,6 +583,331 @@ get_tasas_diarias <- function(
           moneda  = !!moneda
         ) |>
         dplyr::relocate(fecha, year, mes, day = day_mes, type, moneda)
+    }
+  ) |>
+    dplyr::bind_rows() |>
+    tasas_to_long(
+      filtro_tipo_tasa = filtro_tipo_tasa,
+      filtro_moneda    = filtro_moneda,
+      filtro_condicion = filtro_condicion,
+      filtro_grupo     = filtro_grupo,
+      filtro_detalle   = filtro_detalle
+    )
+
+  data
+}
+
+#' Utility function for get_tasas_reales
+tasa_real_to_long <- function(data) {
+  data |>
+    tidyr::pivot_longer(
+      -dplyr::any_of(c("date", "year", "mes", "inflacion")),
+      names_to = "names",
+      values_to = "tasa_real"
+    ) |>
+    tidyr::separate(names, into = c("entidad", "tipo_tasa")) |>
+    dplyr::mutate(
+      entidad = dplyr::recode(
+        entidad,
+        "bm"  = "Bancos múltiples",
+        "aap" = "Asociaciones de ahorros y préstamos",
+        "cc"  = "Corporaciones de crédito",
+        "bac" = "Bancos de ahorro y crédito"
+      ),
+      tipo_tasa = stringr::str_to_title(tipo_tasa),
+      tasa_nominal = tasa_real + inflacion
+    ) |>
+    dplyr::relocate(tasa_nominal, inflacion, .after = tasa_real)
+}
+
+#' Retrieve real interest rates of financial intermediaries
+#'
+#' Downloads the real lending and deposit interest rates published by the
+#' Banco Central de la República Dominicana (BCRD) for financial
+#' intermediary institutions.
+#'
+#' Real interest rates are calculated by the BCRD as the difference between
+#' nominal interest rates and expected inflation over the following
+#' 12 months. The published series covers the period from 2008 onward. :contentReference[oaicite:0]{index=0}
+#'
+#' @param frecuencia Frequency of the returned data. One of:
+#'   \describe{
+#'     \item{"mensual"}{Monthly observations (default).}
+#'     \item{"anual"}{Annual averages or december values, not sure what it is.}
+#'   }
+#'
+#' @param format Output format. One of:
+#'   \describe{
+#'     \item{"wide"}{One column per institution and interest rate type.}
+#'     \item{"long"}{Tidy format with one observation per institution,
+#'     interest rate type, and period. Includes both the reported real
+#'     interest rate and the implied nominal interest rate.}
+#'   }
+#'
+#' @return
+#' A tibble.
+#'
+#' When `format = "wide"`, the returned data contain:
+#' \describe{
+#'   \item{date}{Observation date (monthly only).}
+#'   \item{year}{Calendar year.}
+#'   \item{mes}{Month number (monthly only).}
+#'   \item{bm_activa, bm_pasiva}{Real lending and deposit rates for
+#'   multiple banks.}
+#'   \item{aap_activa, aap_pasiva}{Real lending and deposit rates for
+#'   savings and loan associations.}
+#'   \item{bac_activa, bac_pasiva}{Real lending and deposit rates for
+#'   savings and credit banks.}
+#'   \item{cc_activa, cc_pasiva}{Real lending and deposit rates for
+#'   credit corporations.}
+#'   \item{inflacion}{Expected inflation over the next 12 months used by
+#'   the BCRD in the calculation of real interest rates.}
+#' }
+#'
+#' When `format = "long"`, the data are returned in tidy format with the
+#' variables `entidad`, `tipo_tasa`, `tasa_real`, `inflacion`, and
+#' `tasa_nominal`, where `tasa_nominal` is computed as:
+#'
+#' \deqn{
+#' \mathrm{tasa\_nominal} =
+#' \mathrm{tasa\_real} + \mathrm{inflacion}
+#' }
+#'
+#' @details
+#' The data are downloaded directly from the official BCRD statistical
+#' spreadsheets. The function parses the original workbook and returns a
+#' tidy dataset suitable for analysis.
+#'
+#' Institution abbreviations used in the wide format are:
+#' \describe{
+#'   \item{bm}{Multiple banks.}
+#'   \item{aap}{Savings and loan associations.}
+#'   \item{bac}{Savings and credit banks.}
+#'   \item{cc}{Credit corporations.}
+#' }
+#'
+#' @examples
+#' # Monthly data in wide format
+#' tasas <- get_tasas_reales()
+#'
+#' # Annual data in long format
+#' tasas_long <- get_tasas_reales(
+#'   frecuencia = "anual",
+#'   format = "long"
+#' )
+#'
+#' @source
+#' Banco Central de la República Dominicana (BCRD),
+#' "Tasas de Interés Reales de las Entidades de Intermediación Financiera". :contentReference[oaicite:1]{index=1}
+#'
+#' @export
+get_tasas_reales <- function(
+    frecuencia = c("mensual", "anual"),
+    format = c("wide", "long")
+) {
+  frecuencia <- rlang::arg_match(frecuencia)
+  format <- rlang::arg_match(format)
+
+  url <- paste0(
+    "https://cdn.bancentral.gov.do/documents/estadisticas/",
+    "sector-monetario-y-financiero/documents/ti_reales.xls"
+  )
+
+  file_path <- tempfile(fileext = ".xls")
+  download_file(url, file_path)
+
+  columns <- c(
+    "periodo",
+    paste(
+      rep(c("bm", "aap", "bac", "cc"), each = 2),
+      rep(c("activa", "pasiva"), times = 4),
+      sep = "_"
+    ),
+    "inflacion"
+  )
+
+  raw_data <- readxl::read_excel(file_path, skip = 13, col_names = FALSE) |>
+    suppressMessages() |>
+    purrr::set_names(columns)
+
+  result <- if (frecuencia == "anual") {
+
+    raw_data |>
+      dplyr::filter(
+        stringr::str_detect(periodo, "^\\d{4}"),
+        dplyr::if_all(-periodo, \(x) !is.na(x))
+      ) |>
+      dplyr::mutate(periodo = as.integer(periodo)) |>
+      dplyr::rename(year = periodo)
+
+  } else {
+
+    raw_data |>
+      dplyr::mutate(
+        periodo = stringr::str_squish(periodo),
+        year = stringr::str_extract(periodo, "^\\d{4}"),
+        .before = periodo
+      ) |>
+      tidyr::fill(year) |>
+      dplyr::filter(
+        stringr::str_detect(periodo, "^\\d{4}", negate = TRUE),
+        dplyr::if_all(-c(year, periodo), \(x) !is.na(x))
+      ) |>
+      dplyr::mutate(
+        periodo = stringr::str_extract(periodo, "[A-z]+"),
+        mes = crear_mes(periodo),
+        date = lubridate::make_date(year, mes, 1),
+        .before = periodo
+      ) |>
+      dplyr::select(-periodo) |>
+      dplyr::relocate(date, year, mes)
+  }
+
+  if (format == "long") {
+    result <- tasa_real_to_long(result)
+  }
+
+  result
+}
+
+# Tasas semanales ---------------------------------------------------------
+
+# Nombres de columnas por hoja para los archivos de tasas semanales del BCRD.
+#
+# Lista de referencia (lookup) que mapea el nombre de cada hoja del Excel
+# publicado por el BCRD a su vector de nombres de columna correspondiente.
+# Se usa dentro de `get_tasas_semanales()` para nombrar las columnas leídas
+# sin encabezado (`col_names = FALSE`) de cada hoja.
+#
+# Las hojas `Activas US$` y `Pasivas US$` heredan la estructura de sus
+# contrapartes en RD$, salvo que `Pasivas US$` excluye la columna de tasa
+# interbancaria (no existe interbancaria en USD). `Activa` y `Pasiva` cubren
+# el caso de archivos cuyas hojas no distinguen moneda.
+.tasas_col_names_semanales <- dplyr::lst(
+  `Activas RD$` =  c(
+    "start_date", "end_date",
+    "ta_90d", "ta_180d", "ta_360d", "ta_2a", "ta_5a", "ta_m5a",
+    "ta_ps", "ta_pp", "ta_preferencial",
+    "ta_comercio", "ta_consumo", "ta_hipotecario"
+  ),
+  `Pasivas RD$` = c(
+    "start_date", "end_date",
+    "tp_30d", "tp_60d", "tp_90d", "tp_180d", "tp_360d", "tp_2a",
+    "tp_5a", "tp_m5a",
+    "tp_ps", "tp_pp",  "tp_dep_ahorros", "tp_general",
+    "tp_preferencial", "tp_interbancarios"
+  ),
+  `Activas US$` = `Activas RD$`,
+  # No hay interbancaria para las pasivas en USD
+  `Pasivas US$` = `Pasivas RD$`[-length(`Pasivas RD$`)],
+  Activa = `Activas RD$`,
+  Pasiva = `Pasivas RD$`
+)
+
+#' Descargar y consolidar las tasas de interés semanales del BCRD
+#'
+#' `get_tasas_semanales()` descarga el archivo de tasas de interés activas y
+#' pasivas semanales publicado por el Banco Central de la República
+#' Dominicana (BCRD) para una entidad financiera y un año determinados,
+#' procesa todas las hojas del libro de Excel, y devuelve los datos
+#' consolidados en formato largo (long) listos para análisis.
+#'
+#' @param year Numeric. Año de la serie a descargar (p. ej. `2025`).
+#' @param entidad Character. Entidad financiera cuyo archivo de tasas se
+#'   desea descargar. Uno de `"bm"`, `"aap"`, `"bac"`. Se valida con
+#'   `rlang::arg_match()`.
+#' @param filtro_tipo_tasa,filtro_moneda,filtro_condicion,filtro_grupo,filtro_detalle
+#'   Filtros opcionales que se pasan directamente a `tasas_to_long()` para
+#'   filtrar el resultado final en formato largo. `NULL` (por defecto)
+#'   equivale a no filtrar.
+#'
+#' @return Un tibble en formato largo con las tasas de interés semanales de
+#'   la entidad y año solicitados, incluyendo columnas como `start_date`,
+#'   `end_date`, `year`, `type`, `moneda`, y las columnas resultantes de
+#'   `tasas_to_long()` (p. ej. `tipo_tasa`, `condicion`, `grupo`, `detalle`,
+#'   `valor`, según corresponda).
+#'
+#' @seealso [tasas_to_long()] para la lógica de transformación a formato
+#'   largo y sus filtros.
+#'
+#' @examples
+#' \dontrun{
+#' get_tasas_semanales(year = 2025, entidad = "bm")
+#' get_tasas_semanales(year = 2024, entidad = "aap", filtro_moneda = "DOP")
+#' }
+#'
+#' @export
+get_tasas_semanales <- function(
+    year             = 2025,
+    entidad = c("bm", "aap", "bac"),
+    filtro_tipo_tasa = NULL,
+    filtro_moneda    = NULL,
+    filtro_condicion = NULL,
+    filtro_grupo     = NULL,
+    filtro_detalle   = NULL
+) {
+  entidad <- rlang::arg_match(entidad)
+  ext <- dplyr::case_when(
+    entidad == "aap" ~ "xls",
+    entidad == "bac" ~ "xls",
+    entidad == "bm" & year <= 2016 ~ "xls",
+    .default = "xlsx"
+  )
+
+  file_url <- paste0(
+    "https://cdn.bancentral.gov.do/documents/estadisticas/sector-monetario-y-financiero/",
+    glue::glue("documents/tasas_semanales{toupper(entidad)}-{year}.{ext}")
+  )
+
+  file_path <- tempfile(pattern = as.character(year), fileext = paste0(".", ext))
+  download_file(file_url, file_path)
+
+  sheets <- readxl::excel_sheets(file_path)
+
+  data <- purrr::map(
+    purrr::set_names(sheets),
+    \(sheet) {
+      tasas <- readxl::read_excel(
+        path = file_path,
+        skip = 11,
+        trim_ws = TRUE,
+        col_names = FALSE,
+        sheet = sheet,
+        col_types = "text"
+      ) |>
+        suppressMessages()
+
+      type   <- dplyr::if_else(stringr::str_detect(tolower(sheet), "^act"), "Activa", "Pasiva")
+      moneda <- dplyr::case_when(
+        stringr::str_detect(sheet, "RD\\$$") ~ "DOP",
+        stringr::str_detect(sheet, "US\\$$") ~ "USD",
+        .default = "DOP"
+      )
+
+      headers <- .tasas_col_names_semanales[[sheet]]
+
+      tasas |>
+        purrr::set_names(headers) |>
+        janitor::remove_empty(which = c("cols", "rows")) |>
+        dplyr::filter(dplyr::if_any(dplyr::ends_with("90d"), \(x) !is.na(x))) |>
+        dplyr::mutate(
+          dplyr::across(
+            c(start_date, end_date),
+            \(x) {
+              trimmed <- stringr::str_remove(x, "\\*")
+              with_dmy <- lubridate::dmy(trimmed) |> suppressWarnings()
+              with_excel <- janitor::excel_numeric_to_date(as.numeric(trimmed)) |>
+                suppressWarnings()
+              dplyr::coalesce(with_dmy, with_excel)
+            }
+          )
+        ) |>
+        dplyr::mutate(
+          year    = !!year,
+          type    = !!type,
+          moneda  = !!moneda
+        ) |>
+        dplyr::relocate(start_date, end_date, type, moneda)
     }
   ) |>
     dplyr::bind_rows() |>

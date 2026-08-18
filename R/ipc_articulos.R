@@ -78,17 +78,19 @@ get_ipc_long <- function(desagregacion = c("general", "grupo", "subgrupo", "clas
 
 reshape_ipc_data <- function(raw_data, ref_year) {
   ipc_articulos_key <- ipc_articulos_details |>
-    dplyr::select(id = posicion, nombre, agregacion, grupo, subgrupo, clase, subclase, articulo)
+    dplyr::select(id, grupo, subgrupo, clase, subclase, articulo)
 
-  dplyr::left_join(ipc_articulos_key, raw_data, by = c("nombre", "agregacion")) |>
-    dplyr::select(-code) |>
+  dplyr::left_join(ipc_articulos_key, raw_data, by = c("id")) |>
     tidyr::pivot_longer(-c(id:ponderacion), values_to = "indice", names_to = "mes") |>
     dplyr::mutate(
-      year = ref_year,
+      year = as.numeric(ref_year),
       mes = crear_mes(mes),
       date = lubridate::make_date(year, mes, 1)
     ) |>
-    dplyr::relocate(date,year, mes, .before = ponderacion)
+    dplyr::relocate(
+      id, agregacion, nombre, grupo, subgrupo, clase, subclase, articulo,
+      date, year, mes, ponderacion, indice
+      )
 }
 
 read_ipc_articulos_sheet <- function(ref_year, file_path) {
@@ -102,10 +104,12 @@ read_ipc_articulos_sheet <- function(ref_year, file_path) {
 
   number_of_cols <- ncol(year_data)
   fixed_columns <- c("grupo", "subgrupo", "clase", "subclase", "articulo", "ponderacion")
-  data_names <- c(fixed_columns, crear_mes(seq_len(number_of_cols - length(fixed_columns)), "number_to_text"))
+  data_names <- c(
+    fixed_columns,
+    crear_mes(seq_len(number_of_cols - length(fixed_columns)), "number_to_text"))
 
   raw_data <- year_data |>
-    stats::setNames(data_names) |>
+    purrr::set_names(data_names) |>
     dplyr::mutate(
       nombre = dplyr::coalesce(grupo, subgrupo, clase, subclase, articulo),
       code = stringr::str_extract(nombre, "^\\d+"),
@@ -120,15 +124,12 @@ read_ipc_articulos_sheet <- function(ref_year, file_path) {
         stringr::str_length(code) == 7 ~ "Articulo",
         TRUE ~ "General"
       ),
-      nombre = dplyr::recode(
-        nombre,
-         "Suplementos alimenticios (Ensure y similares)" = "Suplementos alimenticios",
-         "Celebración de cumpleaños" = "Celebración de eventos"
-      )
+      code = ifelse(nombre == "Indice General", "Z0001", code)
     ) |>
-    dplyr::relocate(code, agregacion, nombre) |>
+    dplyr::relocate(id = code, agregacion, nombre) |>
     dplyr::select(-all_of(c("grupo", "subgrupo", "clase", "subclase", "articulo")))
 
   raw_data |>
     reshape_ipc_data(as.numeric(ref_year))
 }
+

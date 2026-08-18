@@ -84,31 +84,3 @@ plot_ipc_data(inflacion_general, ipc_vm, "Monthly Variation of CPI") +
 plot_ipc_data(inflacion_general, ipc_vi, "Year-over-Year Variation of CPI") +
   scale_y_continuous(labels = \(x) scales::comma(x, accuracy = 0.1, suffix = "%"))
 ```
-
-## Now a _naive_ forecast of inflation
-
-```{r forecasting}
-library(tsibble)
-library(fable)
-library(feasts)
-
-ts_ipc <- inflacion_general |>
-  mutate(fecha = yearmonth(fecha)) |>
-  select(-mes) |>
-  as_tsibble(index = fecha)
-
-models <- ts_ipc |>
-  model(
-    ets   = ETS(box_cox(ipc_vm, 0.3)),
-    arima = ARIMA(ipc_vm),
-    naive = SNAIVE(ipc_vm)
-  )
-
-models
-```
-
-```{r forecast_plots, fig.width=6, fig.height=3, fig.align='center'}
-models |>
-  forecast(h = "6 months") %>% 
-  autoplot(filter(ts_ipc, year > 2018), level = NULL) +
-  theme_minimal()
