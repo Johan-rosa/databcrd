@@ -115,7 +115,7 @@ imf_policy_rate <- function(
 
 
 
-#' Catalog: Primary Commodity Price System (PCPC)
+#' Catalog: Primary Commodity Price System (PCPS)
 imf_pcps_catalogo <- function() {
   url <- "https://data.imf.org/platform/rest/v1/registry/sdmx-plus/structure/glossary/IMF.RES/CL_PCPS_INDICATOR/3.0.0?references=hierarchy&detail=referencepartial"
 
@@ -136,21 +136,41 @@ imf_pcps_catalogo <- function() {
     purrr::list_rbind()
 }
 
+default_pcps_indicators <- c(
+  "PALLFNF", "PALLMETA", "PALUM", "PBEEF", "PBEVE", "PCERE",
+  "PCOCO", "PCOFF", "PFANDB", "PFERT", "PMAIZMT", "PSALM", "PSORG",
+  "PSOYB", "PSUGA", "PWHEAMT"
+)
+
 imf_pcps <- function(
-    indicadores = c("PBEVE"),
-    data_transformation = "INDEX"
+    indicadores = default_pcps_indicators,
+    data_transformation = "INDEX",
+    start_period = "2019-01"
 ) {
   catalogo <- imf_pcps_catalogo()
 
-  imf.data::get_data(
+  raw_data <- imf.data::get_data(
     dataflow = "PCPS",
     agency_id = "IMF.RES",
     filters = list(
+      COUNTRY = "G001",
       FREQUENCY = "M",
       INDICATOR = indicadores,
       DATA_TRANSFORMATION = data_transformation
-    )
+    ),
+    start_period = as.character(start_period)
   )
+
+  raw_data |>
+    janitor::clean_names() |>
+    dplyr::mutate(
+      fecha = lubridate::ym(time_period)
+    ) |>
+    dplyr::select(id = indicator, fecha, value = obs_value) |>
+    dplyr::left_join(
+      dplyr::select(catalogo, id, indicador_name = name),
+      by = "id"
+    )
 }
 
 # TODO: Make it possible to get the GDP as well as the CPI
