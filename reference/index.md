@@ -22,6 +22,10 @@
   : Change month encoding
 - [`date_label()`](https://johan-rosa.github.io/databcrd/reference/date_label.md)
   : Create date label
+- [`deuda_publica_by_fuente()`](https://johan-rosa.github.io/databcrd/reference/deuda_publica_by_fuente.md)
+  : Deuda pública consolidada por fuente de financiamiento
+- [`deuda_publica_by_sector()`](https://johan-rosa.github.io/databcrd/reference/deuda_publica_by_sector.md)
+  : Deuda pública consolidada por sector institucional
 - [`download_file()`](https://johan-rosa.github.io/databcrd/reference/download_file.md)
   : Helper to download file
 - [`expectativas_details`](https://johan-rosa.github.io/databcrd/reference/expectativas_details.md)
