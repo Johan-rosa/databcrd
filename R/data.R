@@ -162,3 +162,90 @@
 #' @name detalles_indicadores_osd
 #' @noRd
 "detalles_indicadores_osd"
+
+#' Catalogo jerarquico de cuentas de la Balanza de Pagos
+#'
+#' Catalogo de referencia con la estructura de cuentas de la Balanza de
+#' Pagos de la Republica Dominicana (formato MBP6), tal como la publica
+#' el BCRD en el archivo "Balanza de Pagos" (hoja `BOP_TRIM`). Cada fila
+#' representa una cuenta o subcuenta, con su codigo jerarquico decimal,
+#' nivel de profundidad, codigo padre y naturaleza contable, para poder
+#' unirse contra los datos crudos por posicion sin depender de parsear
+#' el texto de cada fila con expresiones regulares.
+#'
+#' @details
+#' El orden de las 57 filas de este catalogo coincide exactamente, fila
+#' por fila, con las 57 filas de datos de la hoja `BOP_TRIM` (columna A,
+#' filas 12-77, excluyendo separadores en blanco y notas al pie). Esa
+#' correspondencia posicional fue verificada explicitamente contra el
+#' archivo fuente y es la base de como [balanza_pagos()] une los datos
+#' crudos con este catalogo: por posicion, no por texto.
+#'
+#' `concepto` no es una copia literal del texto del Excel; se
+#' normalizo para uso consistente en el paquete:
+#' \itemize{
+#'   \item Se removieron acentos (`"Credito"`, no `"Crédito"`).
+#'   \item Las llamadas al pie (`1/`, `2/`, `3/`, `4/`) y la formula
+#'     `(3=1+2)` se movieron a la columna `nota`.
+#'   \item Se expandieron abreviaturas (p. ej. `"Deuda Pub. y Priv. Med.
+#'     y LP (Neto)"` -> `"Deuda Publica y Privada Mediano y Largo Plazo
+#'     (Neto)"`).
+#'   \item Se corrigio el typo de la fuente `"Transferecias"` ->
+#'     `"Transferencias"`.
+#' }
+#'
+#' `naturaleza` toma siempre uno de tres valores: `"Credito"`,
+#' `"Debito"` o `"Saldo"`. Las filas de subtotal (que suman a sus
+#' hijos, p. ej. `"Cuenta Corriente"`, `"Balanza de Bienes"`) y las
+#' cuentas que el BCRD reporta ya netas sin desglose de credito/debito
+#' (p. ej. los componentes de la Cuenta Financiera) quedan como
+#' `"Saldo"`.
+#'
+#' "Exportaciones" se codifico como Credito e "Importaciones" como
+#' Debito por convencion estandar de balanza de pagos; el archivo
+#' fuente no las etiqueta explicitamente con esos terminos (a
+#' diferencia de Balanza de Servicios, que si dice "Credito"/"Debito").
+#'
+#' @format Un tibble con 57 filas y 7 columnas:
+#' \describe{
+#'   \item{code}{`chr`. Codigo jerarquico decimal (`"1"`, `"1.1"`,
+#'     `"1.1.1.1"`, ...). Respeta la numeracion original de la fuente
+#'     para los niveles 1 a 3 y la extiende hacia abajo para las filas
+#'     sin numeral propio (p. ej. "Exportaciones", "Credito").}
+#'   \item{nivel}{`int`. Profundidad en la jerarquia, de 1 (cuentas
+#'     principales: Cuenta Corriente, Cuenta de Capital, etc.) a 5
+#'     (el nivel de detalle mas fino, p. ej. "Nacionales" dentro de
+#'     "Exportaciones").}
+#'   \item{code_padre}{`chr`. `code` de la fila padre en la jerarquia;
+#'     `NA` en las cuentas de nivel 1. Permite reconstruir el arbol o
+#'     hacer joins recursivos.}
+#'   \item{concepto}{`chr`. Descripcion de la cuenta, normalizada (ver
+#'     `@details`).}
+#'   \item{naturaleza}{`chr`. `"Credito"`, `"Debito"` o `"Saldo"`.}
+#'   \item{cuenta}{`chr`. Nombre de la cuenta de nivel 1 a la que
+#'     pertenece la fila (p. ej. `"Cuenta Corriente"`,
+#'     `"Cuenta Financiera"`, `"Financiamiento"`), util para filtrar
+#'     sin tener que interpretar el codigo.}
+#'   \item{nota}{`chr`. Llamada al pie (`"1/"`, `"2/"`, `"3/"`,
+#'     `"4/"`) o formula (`"Formula: 3 = 1 + 2"`) asociada a la fila
+#'     en la fuente; `NA` cuando no aplica.}
+#' }
+#'
+#' @source
+#' Estructura tomada de "BALANZA DE PAGOS DE LA REPUBLICA DOMINICANA -
+#' RESULTADOS CONFORME AL MBP6", Departamento Internacional, BCRD
+#' (hoja `BOP_TRIM` del archivo de balanza de pagos). Catalogo
+#' construido y validado manualmente contra esa hoja.
+#'
+#' @seealso [balanza_pagos()], que une los datos trimestrales crudos
+#'   contra este catalogo por posicion.
+#'
+#' @examples
+#' # Todas las cuentas de la Cuenta Corriente
+#' catalogo_balanza_pagos |>
+#'   dplyr::filter(cuenta == "Cuenta Corriente")
+#'
+#' # Solo las filas "hoja" (sin hijos), utiles para no doble-contar al sumar
+#' catalogo_balanza_pagos |>
+#'   dplyr::filter(!code %in% code_padre)
+"catalogo_balanza_pagos"
