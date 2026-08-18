@@ -115,7 +115,34 @@ imf_policy_rate <- function(
 
 
 
-#' Catalog: Primary Commodity Price System (PCPS)
+#' Catálogo de indicadores del Primary Commodity Price System (PCPS)
+#'
+#' Descarga el glosario de códigos `CL_PCPS_INDICATOR` publicado por el
+#' Departamento de Investigación del FMI (IMF.RES) en su API SDMX, y lo
+#' convierte en un tibble con un código de indicador por fila. El PCPS
+#' cubre precios e índices de precios de más de 100 materias primas
+#' (energía, agricultura, fertilizantes y metales).
+#'
+#' @return Un tibble con las columnas:
+#' \describe{
+#'   \item{id}{`chr`. Código del indicador (p. ej. `"PALLFNF"`,
+#'     `"POILBRE"`), usado para filtrar en [imf_pcps()].}
+#'   \item{name}{`chr`. Nombre corto del indicador en inglés (único idioma
+#'     disponible en el glosario), p. ej. `"Brent Crude, US dollars per
+#'     barrel, Unit prices"`.}
+#'   \item{description}{`chr`. Descripción larga del indicador: fuente de
+#'     la serie, metodología y unidad de medida.}
+#' }
+#'
+#' @source
+#' <https://data.imf.org/platform/rest/v1/registry/sdmx-plus/structure/glossary/IMF.RES/CL_PCPS_INDICATOR/3.0.0>
+#'
+#' @examples
+#' \dontrun{
+#' imf_pcps_catalogo()
+#' }
+#'
+#' @export
 imf_pcps_catalogo <- function() {
   url <- "https://data.imf.org/platform/rest/v1/registry/sdmx-plus/structure/glossary/IMF.RES/CL_PCPS_INDICATOR/3.0.0?references=hierarchy&detail=referencepartial"
 
@@ -136,12 +163,86 @@ imf_pcps_catalogo <- function() {
     purrr::list_rbind()
 }
 
+#' Códigos PCPS por defecto para [imf_pcps()]
+#'
+#' Selección curada de 16 indicadores del PCPS (alimentos, bebidas,
+#' cereales y fertilizantes) usada como valor por defecto del argumento
+#' `indicadores` en [imf_pcps()]. Ver [imf_pcps_catalogo()] para el
+#' catálogo completo de códigos disponibles.
+#'
+#' @noRd
 default_pcps_indicators <- c(
   "PALLFNF", "PALLMETA", "PALUM", "PBEEF", "PBEVE", "PCERE",
   "PCOCO", "PCOFF", "PFANDB", "PFERT", "PMAIZMT", "PSALM", "PSORG",
   "PSOYB", "PSUGA", "PWHEAMT"
 )
 
+#' Códigos PCPS por defecto para [imf_pcps()]
+#'
+#' Selección curada de 16 indicadores del PCPS (alimentos, bebidas,
+#' cereales y fertilizantes) usada como valor por defecto del argumento
+#' `indicadores` en [imf_pcps()]. Ver [imf_pcps_catalogo()] para el
+#' catálogo completo de códigos disponibles.
+#'
+#' @noRd
+default_pcps_indicators <- c(
+  "PALLFNF", "PALLMETA", "PALUM", "PBEEF", "PBEVE", "PCERE",
+  "PCOCO", "PCOFF", "PFANDB", "PFERT", "PMAIZMT", "PSALM", "PSORG",
+  "PSOYB", "PSUGA", "PWHEAMT"
+)
+#' Precios de materias primas del FMI (PCPS)
+#'
+#' Descarga series mensuales del Primary Commodity Price System (PCPS) del
+#' FMI para uno o más indicadores, y las une con sus nombres descriptivos
+#' obtenidos de [imf_pcps_catalogo()].
+#'
+#' @details
+#' La consulta siempre filtra `COUNTRY = "G001"` (agregado mundial): PCPS
+#' es un sistema de precios internacionales de referencia y no reporta
+#' series por país, así que este es el único código de país que existe
+#' para este dataflow. Se deja explícito en el filtro en vez de depender
+#' del comportamiento por defecto de [imf.data::get_data()] (que ya
+#' devuelve únicamente `"G001"` si se omite el filtro), para que la
+#' consulta sea autoexplicativa y no dependa de un default no documentado.
+#'
+#' El catálogo (`imf_pcps_catalogo()`) se descarga en cada llamada a esta
+#' función; implica una llamada de red adicional solo para obtener los
+#' nombres de los indicadores.
+#'
+#' @param indicadores Vector de códigos de indicador PCPS (ver
+#'   [imf_pcps_catalogo()] para la lista completa). Por defecto,
+#'   `default_pcps_indicators`: una selección curada de 16 índices y
+#'   precios de alimentos, bebidas, cereales y fertilizantes.
+#' @param data_transformation Código SDMX de transformación de datos.
+#'   `"INDEX"` por defecto (series en forma de índice); otras
+#'   transformaciones disponibles dependen del indicador.
+#' @param start_period Periodo inicial de la consulta, como cadena
+#'   `"YYYY-MM"` (p. ej. `"2019-01"`). Se convierte con `as.character()`
+#'   antes de enviarse a la API.
+#'
+#' @return Un tibble con las columnas:
+#' \describe{
+#'   \item{id}{`chr`. Código del indicador PCPS.}
+#'   \item{date}{`Date`. Primer día del mes de la observación.}
+#'   \item{value}{`dbl`. Valor de la observación, en la transformación
+#'     solicitada (`data_transformation`).}
+#'   \item{indicador_name}{`chr`. Nombre descriptivo del indicador,
+#'     obtenido de [imf_pcps_catalogo()]. `NA` si el código no aparece en
+#'     el catálogo actual.}
+#' }
+#'
+#' @source
+#' <https://data.imf.org/en/datasets/IMF.RES:PCPS>
+#'
+#' @examples
+#' \dontrun{
+#' imf_pcps()
+#'
+#' # Solo el precio del petróleo Brent, desde 2015
+#' imf_pcps(indicadores = "POILBRE", start_period = "2015-01")
+#' }
+#'
+#' @export
 imf_pcps <- function(
     indicadores = default_pcps_indicators,
     data_transformation = "INDEX",
