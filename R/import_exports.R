@@ -1,5 +1,24 @@
-construir_catalogo_exportaciones <- function(exportaciones) {
-  exportaciones |>
+#' Construye el catalogo jerarquico de exportaciones a partir del archivo raw
+#'
+#' Funcion interna que limpia el encabezado descriptivo de las hojas de
+#' exportaciones del Banco Central y deriva `id`, `categoria`, `nivel` y
+#' `regimen` para cada fila, a partir de la numeracion presente en el label
+#' original. El bloque de "Total" no trae numeracion en el archivo fuente,
+#' asi que se le asignan ids sinteticos consistentes con el esquema
+#' existente (Total = "4" implicito, dado que Minerales/Agropecuarios/
+#' Industriales son 1/2/3), y sus desgloses (Nacionales, Zonas Francas,
+#' Bienes Adquiridos en Puerto) se etiquetan como categoria "Subtotal" en
+#' vez de "Total", ya que son subtotales del gran total y no el total en si.
+#'
+#' @param raw_exportaciones tibble crudo con la primera columna como `id`
+#'   y la segunda como el label original de cada fila (`og_label`)
+#'
+#' @return Un tibble con columnas `id`, `og_label`, `label`, `categoria`,
+#'   `nivel` y `regimen`
+#' @noRd
+construir_catalogo_exportaciones <- function(raw_exportaciones) {
+  raw_exportaciones |>
+    dplyr::select(id = 1, og_label = 2) |>
     janitor::remove_empty(which = "rows") |>
     dplyr::mutate(
       id_in_label = stringr::str_extract(og_label, "^\\d[\\.\\d]+"),
@@ -47,27 +66,42 @@ construir_catalogo_exportaciones <- function(exportaciones) {
     )
 }
 
-#' Total exports by sectors
+#' Exportaciones totales por sector
 #'
-#' This function returns total exports by sectors in the  Dominican Republic
-#' based on the specified frequency.
+#' Descarga y consolida las cifras de exportaciones totales de Republica
+#' Dominicana por sector (minerales, agropecuarios, industriales) segun la
+#' periodicidad solicitada, a partir de los archivos publicados por el
+#' Banco Central en su portal de estadisticas del sector externo.
 #'
-#' @param frecuencia A character string that specifies the frequency of the
-#' data to be downloaded. Valid options are "mensual",
-#' "trimestral",  or "anual".
+#' @param frecuencia Cadena de texto con la periodicidad de los datos.
+#'   Valores validos: "mensual", "trimestral" o "anual".
+#' @param filtro_categoria Vector de caracteres opcional para filtrar por
+#'   categoria (p. ej. "Minerales", "Agropecuarios", "Industriales",
+#'   "Subtotal", "Total"). Si es `NULL` (por defecto) no se filtra.
+#' @param filtro_nivel Vector numerico opcional para filtrar por nivel
+#'   jerarquico (1 a 4). Si es `NULL` (por defecto) no se filtra.
+#' @param filtro_regimen Vector de caracteres opcional para filtrar por
+#'   regimen ("Nacionales" o "Zonas Francas"). Si es `NULL` (por defecto)
+#'   no se filtra.
 #'
-#' @return A data frame
+#' @return Un tibble con las exportaciones por sector, con columnas de
+#'   fecha (o year/trimestre segun la frecuencia), categoria, nivel,
+#'   regimen y valor exportado.
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' get_exportaciones("mensual")
-#' get_exportaciones("trimestral")
-#' get_exportaciones("anual")
-get_exportaciones <- function(frecuencia = "mensual") {
-  checkmate::assert_choice(
-    frecuencia,
-    choices = c("mensual", "trimestral", "anual")
-  )
+#' get_exportaciones("anual", filtro_categoria = "Industriales")
+#' get_exportaciones("trimestral", filtro_regimen = "Zonas Francas")
+#' }
+get_exportaciones <- function(
+    frecuencia = c("mensual", "trimestral", "anual"),
+    filtro_categoria = NULL,
+    filtro_nivel = NULL,
+    filtro_regimen = NULL
+) {
+  frecuencia <- rlang::arg_match(frecuencia)
 
   years <- 2010:lubridate::year(Sys.Date())
 
@@ -80,6 +114,7 @@ get_exportaciones <- function(frecuencia = "mensual") {
   files_path <- tempfile(pattern = as.character(years), fileext = ".xls")
 
   save_download <- purrr::possibly(utils::download.file, otherwise = NA) # nolint
+  on.exit(unlink(files_path), add = TRUE)
 
   purrr::walk2(
     url_descarga,
@@ -97,72 +132,71 @@ get_exportaciones <- function(frecuencia = "mensual") {
       exportaciones <- purrr::map(
         files_path,
         readxl::read_excel,
-        col_names = TRUE, skip = 8, na = "n.d.",
-        n_max = 70)  |>
+        col_names = TRUE,
+        skip = 8,
+        na = "n.d."
+      )  |>
         stats::setNames(years[seq_along(files_path)])
     )
   )
 
-  secciones_sin_numero <- c("Nacionales", "Zonas Francas", "Bienes Adquiridos en Puerto")
-
-  exportaciones[[1]] |>
-    janitor::clean_names() |>
-    dplyr::select(id = 1, og_label = 2) |>
-    construir_catalogo_exportaciones() |> View()
-
   exportaciones1 <- exportaciones |>
     purrr::map(
-      ~.x |>
-        exportaciones[[1]]
-        janitor::clean_names() |>
-        dplyr::slice(-1) |>
-        tidyr::drop_na(x2) |>
-        dplyr::select(-x1, -x2, -dplyr::last_col()) |>
-        # Algunas veces dejan los meses futuros y solo los ocultan
-        # hay que removerlos.
-        dplyr::select(where(~ any(.x > 0, na.rm = TRUE))) |>
-        dplyr::bind_cols(exports_details) |>
-        tidyr::pivot_longer(
-          names_to = "mes",
-          values_to = "valor_expor",
-          cols = -c(
-            original_names, labels, short_names,
-            categoria, nivel, direct_parent
+      \(year_data) {
+        meses <- crear_mes(1:12, "number_to_shorttext") |> tolower()
+
+        year_data_clean <-  year_data |>
+          janitor::clean_names() |>
+          janitor::remove_empty(which = "rows") |>
+          dplyr::filter(dplyr::if_all(dplyr::any_of(meses), \(x) !is.na(x)))
+
+        catalogo <- year_data_clean |> construir_catalogo_exportaciones()
+
+        catalogo |>
+          dplyr::bind_cols(
+            dplyr::select(year_data_clean, dplyr::any_of(meses))
+          ) |>
+          # Algunas veces dejan los meses futuros y solo los ocultan
+          # hay que removerlos.
+          dplyr::select(where(~ any(.x > 0, na.rm = TRUE))) |>
+          tidyr::pivot_longer(
+            names_to = "mes",
+            values_to = "valor_expor",
+            cols = -c(id, og_label, label, categoria, nivel, regimen)
           )
-        )
-      ) |>
+      }) |>
         dplyr::bind_rows(.id = "year") |>
         dplyr::mutate(
           mes = crear_mes(mes,
           type = "text_to_number"),
           fecha = lubridate::make_date(year, mes, "1"),
-          trimestre = lubridate::quarter(fecha, with_year = TRUE)
+          trimestre = lubridate::quarter(fecha),
+          .after = regimen
         )
 
-  if (frecuencia == "mensual") {
-    data <- exportaciones1 |>
-      dplyr::select(-c(year, mes, trimestre))
+  data <- if (frecuencia == "mensual") {
+    exportaciones1 |>
+      dplyr::select(-trimestre)
   } else if (frecuencia == "trimestral") {
-    data <- exportaciones1 |>
-      dplyr::select(-c(year, mes, fecha)) |>
-      dplyr::group_by(
-        trimestre, original_names, labels, short_names,
-        categoria, nivel, direct_parent
-      ) |>
+    exportaciones1 |>
+      dplyr::select(-c(mes, fecha)) |>
+      dplyr::group_by(year, trimestre, label, categoria, nivel, regimen) |>
       dplyr::summarize(valor_expor = sum(valor_expor)) |>
-      suppressMessages()
+      dplyr::ungroup()
   } else if (frecuencia == "anual") {
-    data <- exportaciones1 |>
+    exportaciones1 |>
       dplyr::select(-c(trimestre, mes, fecha)) |>
-      dplyr::group_by(
-        year, original_names, labels, short_names,
-        categoria, nivel, direct_parent
-      ) |>
+      dplyr::group_by(year, label, categoria, nivel, regimen) |>
       dplyr::summarize(valor_expor = sum(valor_expor)) |>
-      suppressMessages()
+      dplyr::ungroup()
   }
 
-  return(data)
+  data |>
+    dplyr::filter(
+      (is.null(filtro_categoria) | categoria %in% filtro_categoria) &
+      (is.null(filtro_nivel)     | nivel %in% filtro_nivel) &
+      (is.null(filtro_regimen)   | regimen %in% filtro_regimen)
+    )
 }
 
 #' Free Trade Exports
