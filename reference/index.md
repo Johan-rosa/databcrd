@@ -69,19 +69,20 @@
 - [`get_ipc_articulos()`](https://johan-rosa.github.io/databcrd/reference/get_ipc_articulos.md)
   : Download the CPI series at item level
 - [`get_ipc_data()`](https://johan-rosa.github.io/databcrd/reference/get_ipc_data.md)
-  : Download the CPI series
+  : Descarga el Índice de Precios al Consumidor (IPC) de República
+  Dominicana
 - [`get_ipc_general()`](https://johan-rosa.github.io/databcrd/reference/get_ipc_general.md)
-  : To get the general CPI data
+  : Serie del IPC general de República Dominicana
 - [`get_ipc_grupos()`](https://johan-rosa.github.io/databcrd/reference/get_ipc_grupos.md)
-  : To get the CPI data by group of goods and services
+  : IPC de República Dominicana por grupo de bienes y servicios
 - [`get_ipc_long()`](https://johan-rosa.github.io/databcrd/reference/get_ipc_long.md)
   : Download the CPI series in long format
 - [`get_ipc_regiones()`](https://johan-rosa.github.io/databcrd/reference/get_ipc_regiones.md)
-  : To get the CPI data by geographic region
+  : IPC de República Dominicana por región geográfica
 - [`get_ipc_subyacente()`](https://johan-rosa.github.io/databcrd/reference/get_ipc_subyacente.md)
-  : To get the CPI core inflation data
+  : IPC subyacente (inflación núcleo) de República Dominicana
 - [`get_ipc_tnt()`](https://johan-rosa.github.io/databcrd/reference/get_ipc_tnt.md)
-  : To get the CPI data by transferable or not
+  : IPC de República Dominicana por bienes transables y no transables
 - [`get_pib_gasto()`](https://johan-rosa.github.io/databcrd/reference/get_pib_gasto.md)
   : GDP by the expenditure approach, both real and nominal
 - [`get_pib_gasto_2007()`](https://johan-rosa.github.io/databcrd/reference/get_pib_gasto_2007.md)
