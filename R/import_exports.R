@@ -1,3 +1,52 @@
+construir_catalogo_exportaciones <- function(exportaciones) {
+  exportaciones |>
+    janitor::remove_empty(which = "rows") |>
+    dplyr::mutate(
+      id_in_label = stringr::str_extract(og_label, "^\\d[\\.\\d]+"),
+      id = dplyr::coalesce(id, id_in_label) |>
+        stringr::str_remove("\\.$"),
+      # el bloque de "Total" no trae numeracion en el og_label ni id propio
+      # en el raw -- se asignan ids sinteticos consistentes con el esquema
+      # existente (Total = "4" implicito, ya que Minerales/Agro/Industrial son 1/2/3)
+      id = dplyr::coalesce(
+        id,
+        dplyr::case_when(
+          og_label == "Nacionales" ~ "4.1",
+          og_label == "Zonas Francas" ~ "4.2",
+          og_label == "Bienes Adquiridos en Puerto" ~ "4.3",
+          og_label == "Combustibles para aeronaves" ~ "4.3.1",
+          og_label == "Alimentos para aeronaves" ~ "4.3.2",
+          TRUE ~ NA_character_
+        )
+      ),
+      label = stringr::str_remove_all(og_label, "[\\d\\./]|\\(.+\\)") |>
+        stringr::str_squish(),
+      categoria = dplyr::case_when(
+        stringr::str_detect(id, "^\\d$") ~ label,
+        label == "Total" ~ "Total",
+        TRUE ~ NA
+      ),
+      nivel = dplyr::case_when(
+        stringr::str_length(id) == 1 ~ 2,
+        stringr::str_length(id) == 3 ~ 3,
+        stringr::str_length(id)  > 3 ~ 4,
+        is.na(id) ~ 1
+      )
+    ) |>
+    dplyr::select(-id_in_label) |>
+    tidyr::fill(categoria) |>
+    dplyr::mutate(
+      # las filas bajo Total son subtotales del gran total, no el total en si
+      categoria = dplyr::if_else(categoria == "Total" & nivel %in% c(3, 4), "Subtotal", categoria),
+      regimen = dplyr::if_else(nivel == 3, label, NA)
+    ) |>
+    tidyr::fill(regimen) |>
+    dplyr::mutate(
+      regimen = dplyr::if_else(nivel < 4, NA, regimen),
+      label = dplyr::if_else(nivel == 3, paste(categoria, label), label)
+    )
+}
+
 #' Total exports by sectors
 #'
 #' This function returns total exports by sectors in the  Dominican Republic
@@ -35,7 +84,10 @@ get_exportaciones <- function(frecuencia = "mensual") {
   purrr::walk2(
     url_descarga,
     files_path,
-    \(url, file) save_download(url, file, mode = "wb", quiet = TRUE)
+    \(url, file) {
+      save_download(url, file, mode = "wb", quiet = TRUE)
+    },
+    .progress = TRUE
   ) |> suppressWarnings()
 
   files_path <- files_path[file.exists(files_path)]
@@ -51,9 +103,17 @@ get_exportaciones <- function(frecuencia = "mensual") {
     )
   )
 
+  secciones_sin_numero <- c("Nacionales", "Zonas Francas", "Bienes Adquiridos en Puerto")
+
+  exportaciones[[1]] |>
+    janitor::clean_names() |>
+    dplyr::select(id = 1, og_label = 2) |>
+    construir_catalogo_exportaciones() |> View()
+
   exportaciones1 <- exportaciones |>
     purrr::map(
       ~.x |>
+        exportaciones[[1]]
         janitor::clean_names() |>
         dplyr::slice(-1) |>
         tidyr::drop_na(x2) |>
