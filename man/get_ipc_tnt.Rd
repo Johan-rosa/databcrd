@@ -2,11 +2,49 @@
 % Please edit documentation in R/ipc.R
 \name{get_ipc_tnt}
 \alias{get_ipc_tnt}
-\title{To get the CPI data by transferable or not}
+\title{IPC de República Dominicana por bienes transables y no transables}
+\source{
+\url{https://cdn.bancentral.gov.do/documents/estadisticas/precios/documents/ipc_tnt_base_2019-2020.xls}
+}
 \usage{
 get_ipc_tnt()
 }
+\value{
+Un tibble con una fila por mes y las columnas:
+\describe{
+\item{fecha}{\code{Date}. Primer día del mes de la observación.}
+\item{year}{Año.}
+\item{mes}{Mes (1-12).}
+\item{ipc, ipc_vm, ipc_vd}{Índice general, variación mensual (\\%) y
+variación acumulada respecto a diciembre del año anterior (\\%).}
+\item{ipc_t, ipc_t_vm, ipc_t_vd}{Bienes y servicios transables:
+índice, variación mensual (\\%) y variación acumulada (\\%).}
+\item{ipc_nt, ipc_nt_vm, ipc_nt_vd}{Bienes y servicios no
+transables: índice, variación mensual (\\%) y variación acumulada
+(\\%).}
+}
+}
 \description{
-You can get the CPI index and the monthly, year over year and
-throughout the year variations, as well as the 12 month average
+Descarga y limpia la serie mensual del Índice de Precios al Consumidor
+(IPC) desagregada en bienes y servicios transables (\verb{_t}, expuestos a
+competencia internacional) y no transables (\verb{_nt}), base 2019-2020,
+publicada por el Banco Central de la República Dominicana (BCRD).
+}
+\details{
+El archivo se descarga en cada llamada desde el Excel del BCRD; no hay
+caché. Se descarta un encabezado largo (\code{skip = 31}) propio de este
+archivo y los guiones (\code{"-"}) se interpretan como \code{NA}. A diferencia
+de \code{\link[=get_ipc_general]{get_ipc_general()}} y \code{\link[=get_ipc_subyacente]{get_ipc_subyacente()}}, ninguno de los tres
+bloques (general, transable, no transable) incluye variación
+interanual (\verb{_vi}) ni promedio de 12 meses (\verb{_p12}); solo variación
+mensual (\verb{_vm}) y acumulada (\verb{_vd}).
+
+Llamada internamente por \code{\link[=get_ipc_data]{get_ipc_data()}} con
+\code{desagregacion = "tnt"}; no está exportada, así que para uso normal
+conviene usar \code{get_ipc_data("tnt")}.
+}
+\examples{
+\dontrun{
+get_ipc_tnt()
+}
 }

@@ -2,11 +2,46 @@
 % Please edit documentation in R/ipc.R
 \name{get_ipc_general}
 \alias{get_ipc_general}
-\title{To get the general CPI data}
+\title{Serie del IPC general de República Dominicana}
+\source{
+\url{https://cdn.bancentral.gov.do/documents/estadisticas/precios/documents/ipc_base_2019-2020.xls}
+}
 \usage{
 get_ipc_general()
 }
+\value{
+Un tibble con una fila por mes y las columnas:
+\describe{
+\item{fecha}{\code{Date}. Primer día del mes de la observación.}
+\item{year}{Año.}
+\item{mes}{Mes (1-12).}
+\item{ipc}{Índice de precios al consumidor.}
+\item{ipc_vm}{Variación mensual, en \\%.}
+\item{ipc_vd}{Variación acumulada respecto a diciembre del año
+anterior, en \\%.}
+\item{ipc_vi}{Variación interanual, en \\%.}
+\item{ipc_p12}{Promedio de la variación interanual de los últimos 12
+meses, en \\%.}
+}
+}
 \description{
-You can get the CPI index and the monthly, year over year and
-throughout the year variations, as well as the 12 month average
+Descarga y limpia la serie mensual del Índice de Precios al Consumidor
+(IPC) general, base 2019-2020, publicada por el Banco Central de la
+República Dominicana (BCRD).
+}
+\details{
+El archivo se descarga en cada llamada desde el Excel del BCRD; no hay
+caché ni control de versión del archivo fuente. Se descarta el
+encabezado del Excel (\code{skip = 7}) y el año se propaga hacia abajo con
+\code{\link[tidyr:fill]{tidyr::fill()}}, porque en el archivo original solo aparece en la
+primera fila de cada bloque de meses.
+
+Llamada internamente por \code{\link[=get_ipc_data]{get_ipc_data()}} con
+\code{desagregacion = "general"}; no está exportada, así que para uso
+normal conviene usar \code{get_ipc_data("general")}.
+}
+\examples{
+\dontrun{
+get_ipc_general()
+}
 }
