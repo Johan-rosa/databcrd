@@ -2,11 +2,68 @@
 % Please edit documentation in R/ipc.R
 \name{get_ipc_grupos}
 \alias{get_ipc_grupos}
-\title{To get the CPI data by group of goods and services}
+\title{IPC de República Dominicana por grupo de bienes y servicios}
+\source{
+\url{https://cdn.bancentral.gov.do/documents/estadisticas/precios/documents/ipc_grupos_base_2019-2020.xls}
+}
 \usage{
 get_ipc_grupos()
 }
+\value{
+Un tibble con una fila por mes y las columnas:
+\describe{
+\item{fecha}{\code{Date}. Primer día del mes de la observación.}
+\item{year}{Año.}
+\item{mes}{Mes (1-12).}
+\item{ipc_ayb, ipc_ayb_vm}{Alimentos y bebidas no alcohólicas:
+índice y variación mensual (\\%).}
+\item{ipc_alcohol_tabaco, ipc_alcohol_tabaco_vm}{Bebidas
+alcohólicas y tabaco: índice y variación mensual (\\%).}
+\item{ipc_ropa_calzado, ipc_ropa_calzado_vm}{Ropa y calzado: índice
+y variación mensual (\\%).}
+\item{ipc_vivienda, ipc_vivienda_vm}{Vivienda: índice y variación
+mensual (\\%).}
+\item{ipc_muebles, ipc_muebles_vm}{Muebles y artículos para el
+hogar: índice y variación mensual (\\%).}
+\item{ipc_salud, ipc_salud_vm}{Salud: índice y variación mensual
+(\\%).}
+\item{ipc_transporte, ipc_transporte_vm}{Transporte: índice y
+variación mensual (\\%).}
+\item{ipc_comunicaciones, ipc_comunicaciones_vm}{Comunicaciones:
+índice y variación mensual (\\%).}
+\item{ipc_cultura, ipc_cultura_vm}{Recreación y cultura: índice y
+variación mensual (\\%).}
+\item{ipc_educacion, ipc_educacion_vm}{Educación: índice y
+variación mensual (\\%).}
+\item{ipc_hotel_restaurantes, ipc_hotel_restaurantes_vm}{Restaurantes
+y hoteles: índice y variación mensual (\\%).}
+\item{ipc_bines_servicios, ipc_bienes_servicios_vm}{Bienes y
+servicios diversos: índice (nombre con el typo del origen) y
+variación mensual (\\%).}
+}
+}
 \description{
-You can get the CPI index and the monthly, year over year and
-throughout the year variations, as well as the 12 month average
+Descarga y limpia la serie mensual del Índice de Precios al Consumidor
+(IPC) desagregada por grupo de bienes y servicios, base 2019-2020,
+publicada por el Banco Central de la República Dominicana (BCRD).
+}
+\details{
+A diferencia de \code{\link[=get_ipc_general]{get_ipc_general()}}, cada grupo solo trae el índice y
+su variación mensual (\verb{_vm}); no incluye variación interanual,
+acumulada ni promedio de 12 meses.
+
+La columna del grupo "Bienes y servicios diversos" tiene un nombre
+inconsistente en el origen: el índice se llama \code{ipc_bines_servicios}
+(sin la "e" de "bienes") mientras que su variación mensual sí se llama
+\code{ipc_bienes_servicios_vm}. Se documenta tal cual está para no romper
+código existente que dependa de estos nombres.
+
+Llamada internamente por \code{\link[=get_ipc_data]{get_ipc_data()}} con
+\code{desagregacion = "grupos"}; no está exportada, así que para uso normal
+conviene usar \code{get_ipc_data("grupos")}.
+}
+\examples{
+\dontrun{
+get_ipc_grupos()
+}
 }

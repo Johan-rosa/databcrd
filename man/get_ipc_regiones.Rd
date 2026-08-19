@@ -2,11 +2,45 @@
 % Please edit documentation in R/ipc.R
 \name{get_ipc_regiones}
 \alias{get_ipc_regiones}
-\title{To get the CPI data by geographic region}
+\title{IPC de República Dominicana por región geográfica}
+\source{
+\url{https://cdn.bancentral.gov.do/documents/estadisticas/precios/documents/ipc_regiones_base_2019-2020.xls}
+}
 \usage{
 get_ipc_regiones()
 }
+\value{
+Un tibble con una fila por mes y las columnas:
+\describe{
+\item{fecha}{\code{Date}. Primer día del mes de la observación.}
+\item{year}{Año.}
+\item{mes}{Mes (1-12).}
+\item{ipc_ozama, ipc_ozama_vm}{Región Ozama: índice y variación
+mensual (\\%).}
+\item{ipc_cibao, ipc_cibao_vm}{Región Cibao: índice y variación
+mensual (\\%).}
+\item{ipc_este, ipc_este_vm}{Región Este: índice y variación
+mensual (\\%).}
+\item{ipc_sur, ipc_sur_vm}{Región Sur: índice y variación mensual
+(\\%).}
+}
+}
 \description{
-You can get the CPI index and the monthly, year over year and
-throughout the year variations, as well as the 12 month average
+Descarga y limpia la serie mensual del Índice de Precios al Consumidor
+(IPC) desagregada por región geográfica, base 2019-2020, publicada por
+el Banco Central de la República Dominicana (BCRD).
+}
+\details{
+Al igual que \code{\link[=get_ipc_grupos]{get_ipc_grupos()}}, cada región solo trae el índice y su
+variación mensual (\verb{_vm}); no incluye variación interanual, acumulada
+ni promedio de 12 meses.
+
+Llamada internamente por \code{\link[=get_ipc_data]{get_ipc_data()}} con
+\code{desagregacion = "regiones"}; no está exportada, así que para uso
+normal conviene usar \code{get_ipc_data("regiones")}.
+}
+\examples{
+\dontrun{
+get_ipc_regiones()
+}
 }

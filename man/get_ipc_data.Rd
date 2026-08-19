@@ -2,28 +2,53 @@
 % Please edit documentation in R/ipc.R
 \name{get_ipc_data}
 \alias{get_ipc_data}
-\title{Download the CPI series}
+\title{Descarga el Índice de Precios al Consumidor (IPC) de República Dominicana}
 \usage{
 get_ipc_data(
   desagregacion = c("general", "grupos", "regiones", "subyacente", "tnt")
 )
 }
 \arguments{
-\item{desagregacion}{string with the desired disaggregation. options:
-"general", "grupos", "regiones", "subyacente", "tnt" (transable y no
-transable), "articulos"}
+\item{desagregacion}{Cadena con la desagregación deseada. Una de:
+\describe{
+\item{\code{"general"}}{Índice general del IPC, sin desagregar.}
+\item{\code{"grupos"}}{IPC por grupos de bienes y servicios (alimentos y
+bebidas, vivienda, transporte, etc.).}
+\item{\code{"regiones"}}{IPC por región geográfica (Ozama, Cibao, Este,
+Sur).}
+\item{\code{"subyacente"}}{IPC subyacente (inflación núcleo, excluye
+rubros volátiles).}
+\item{\code{"tnt"}}{IPC de bienes transables y no transables.}
+}}
 }
 \value{
-a tibble
+Un tibble; las columnas exactas dependen de \code{desagregacion}
+(ver \code{\link[=get_ipc_general]{get_ipc_general()}}, \code{\link[=get_ipc_grupos]{get_ipc_grupos()}}, \code{\link[=get_ipc_regiones]{get_ipc_regiones()}},
+\code{\link[=get_ipc_subyacente]{get_ipc_subyacente()}} y \code{\link[=get_ipc_tnt]{get_ipc_tnt()}}). En todos los casos incluye
+al menos \code{fecha}, \code{year} y \code{mes}.
 }
 \description{
-Download the CPI inflacion series for the Dominican Republic in any
-disaggregation
+Punto de entrada único para las distintas desagregaciones del IPC
+publicadas por el Banco Central de la República Dominicana (BCRD).
+Según el valor de \code{desagregacion}, delega en \code{\link[=get_ipc_general]{get_ipc_general()}},
+\code{\link[=get_ipc_grupos]{get_ipc_grupos()}}, \code{\link[=get_ipc_regiones]{get_ipc_regiones()}}, \code{\link[=get_ipc_subyacente]{get_ipc_subyacente()}} o
+\code{\link[=get_ipc_tnt]{get_ipc_tnt()}}.
+}
+\details{
+Todas las series se descargan directamente desde los archivos Excel
+publicados por el BCRD (base 2019-2020); no hay caché, así que cada
+llamada dispara una descarga nueva.
+
+Para el detalle por artículo (grupo, subgrupo, clase, subclase y
+artículo) hay que usar \code{\link[=get_ipc_articulos]{get_ipc_articulos()}} o \code{\link[=get_ipc_long]{get_ipc_long()}}: esta
+función no acepta \code{"articulos"} como valor de \code{desagregacion}.
 }
 \examples{
+\dontrun{
 get_ipc_data("general")
 get_ipc_data("grupos")
 get_ipc_data("subyacente")
 get_ipc_data("regiones")
 get_ipc_data("tnt")
+}
 }

@@ -2,11 +2,48 @@
 % Please edit documentation in R/ipc.R
 \name{get_ipc_subyacente}
 \alias{get_ipc_subyacente}
-\title{To get the CPI core inflation data}
+\title{IPC subyacente (inflación núcleo) de República Dominicana}
+\source{
+\url{https://cdn.bancentral.gov.do/documents/estadisticas/precios/documents/ipc_subyacente_base_2019-2020.xlsx}
+}
 \usage{
 get_ipc_subyacente()
 }
+\value{
+Un tibble con una fila por mes y las columnas:
+\describe{
+\item{fecha}{\code{Date}. Primer día del mes de la observación.}
+\item{year}{Año.}
+\item{mes}{Mes (1-12).}
+\item{ipc_subyacente}{Índice de precios al consumidor subyacente.}
+\item{ipc_subyacente_vm}{Variación mensual, en \\%.}
+\item{ipc_subyacente_vd}{Variación acumulada respecto a diciembre
+del año anterior, en \\%.}
+\item{ipc_subyacente_vi}{Variación interanual, en \\%.}
+}
+}
 \description{
-You can get the CPI index and the monthly, year over year and
-throughout the year variations, as well as the 12 month average
+Descarga y limpia la serie mensual del Índice de Precios al Consumidor
+(IPC) subyacente, base 2019-2020, publicada por el Banco Central de la
+República Dominicana (BCRD). El IPC subyacente excluye del cálculo los
+rubros de precios más volátiles (p. ej. combustibles y algunos
+alimentos frescos), como una medida de la tendencia inflacionaria de
+fondo.
+}
+\details{
+El archivo se descarga en cada llamada desde el Excel del BCRD; no hay
+caché. Se descarta un encabezado largo (\code{skip = 25}) propio de este
+archivo, y los guiones (\code{"-"}) del Excel se interpretan como \code{NA}.
+Tras la limpieza, las columnas numéricas se convierten explícitamente
+con \code{\link[=as.numeric]{as.numeric()}} porque llegan como texto desde
+\code{\link[readxl:read_excel]{readxl::read_excel()}}.
+
+Llamada internamente por \code{\link[=get_ipc_data]{get_ipc_data()}} con
+\code{desagregacion = "subyacente"}; no está exportada, así que para uso
+normal conviene usar \code{get_ipc_data("subyacente")}.
+}
+\examples{
+\dontrun{
+get_ipc_subyacente()
+}
 }
