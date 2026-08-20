@@ -199,16 +199,38 @@ get_exportaciones <- function(
     )
 }
 
-#' Free Trade Exports
+#' Exportaciones de zonas francas por partida
 #'
-#' This function returns Free Trade exports from the Dominican Republic
-#' by goods
+#' Descarga y consolida las exportaciones de zonas francas de la Republica
+#' Dominicana desagregadas por partida (tipo de bien), a partir del archivo
+#' publicado por el Banco Central en su portal de estadisticas del sector
+#' externo. Los valores estan expresados en millones de USD.
 #'
-#' @return A data frame
+#' @details
+#' La funcion identifica las columnas de partidas a partir del encabezado
+#' del archivo original, removiendo las notas al pie (p. ej. "1/", "2/").
+#' Se descartan las filas que ya vienen acumuladas por anio (aquellas cuya
+#' etiqueta de mes contiene un anio de 4 digitos, usadas como totales en el
+#' archivo fuente). Las fechas se generan de forma secuencial, un mes por
+#' fila, comenzando en enero de 2010.
+#'
+#' @return Un tibble en formato largo con columnas `fecha`, `year`, `mes`,
+#'   `partida` y `valor` (en millones de USD).
+#'   \describe{
+#'     \item{fecha}{Fecha del periodo (primer dia del mes)}
+#'     \item{year}{Anio del periodo}
+#'     \item{mes}{Mes del periodo (1-12)}
+#'     \item{partida}{Tipo de bien exportado desde zonas francas}
+#'     \item{valor}{Valor exportado, en millones de USD}
+#'   }
+#'
+#' @source \url{https://cdn.bancentral.gov.do/documents/estadisticas/sector-externo/documents/Exportaciones_Zonas_Francas_6.xls}
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' get_exportaciones_zf()
+#' }
 get_exportaciones_zf <- function() {
   file_url <- base::paste0(
     "https://cdn.bancentral.gov.do/documents/",
@@ -217,25 +239,37 @@ get_exportaciones_zf <- function() {
   )
   file_path <- base::tempfile(pattern = "", fileext = ".xls")
 
-  utils::download.file(file_url, file_path, mode = "wb", quiet = TRUE)
+  download_file(file_url, file_path)
 
-  data <- suppressMessages(
-    readxl::read_excel(path = file_path, skip = 8) |>
-      janitor::clean_names() |>
-      dplyr::filter(!is.na(confecciones_textiles), !grepl("^2", x3)) |>
-      dplyr::select(where(~ any(.x > 0, na.rm = TRUE))) |>
-      dplyr::mutate(
-        fecha = seq(
-          as.Date("2010-01-01"),
-          length.out = dplyr::n(),
-          by = "month")
-      ) |>
-      dplyr::select(-c(x1, x2, x3)) |>
-      tidyr::pivot_longer(!fecha, names_to = "partida", values_to = "valor_expor")
-  )
+  raw_data <- readxl::read_excel(path = file_path, skip = 8) |>
+    suppressMessages()
 
-  return(data)
+  rubros <- names(raw_data) |>
+    stringr::str_remove_all(" \\d/") |>
+    stringr::str_subset("^\\w")
 
+  headers <- c("year", "mes_number", "mes_label", rubros)
+
+  usethis::ui_info("Valores en millones de USD")
+
+  raw_data |>
+    purrr::set_names(headers) |>
+    dplyr::filter(
+      dplyr::if_any(dplyr::any_of(rubros), \(x) x > 0),
+      stringr::str_detect(mes_label, "\\d{4}", negate = TRUE)
+    ) |>
+    dplyr::mutate(
+      fecha = seq(
+        lubridate::ymd("2010-01-01"),
+        by = "month",
+        length.out = dplyr::n()
+      ),
+      year = lubridate::year(fecha),
+      mes  = lubridate::month(fecha),
+      .before = year
+    ) |>
+    dplyr::select(-c(mes_number, mes_label)) |>
+    tidyr::pivot_longer(-c(fecha, year, mes), names_to = "partida", values_to = "valor")
 }
 
 #' Total imports by sectors

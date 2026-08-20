@@ -2,17 +2,40 @@
 % Please edit documentation in R/import_exports.R
 \name{get_exportaciones_zf}
 \alias{get_exportaciones_zf}
-\title{Free Trade Exports}
+\title{Exportaciones de zonas francas por partida}
+\source{
+\url{https://cdn.bancentral.gov.do/documents/estadisticas/sector-externo/documents/Exportaciones_Zonas_Francas_6.xls}
+}
 \usage{
 get_exportaciones_zf()
 }
 \value{
-A data frame
+Un tibble en formato largo con columnas \code{fecha}, \code{year}, \code{mes},
+\code{partida} y \code{valor} (en millones de USD).
+\describe{
+\item{fecha}{Fecha del periodo (primer dia del mes)}
+\item{year}{Anio del periodo}
+\item{mes}{Mes del periodo (1-12)}
+\item{partida}{Tipo de bien exportado desde zonas francas}
+\item{valor}{Valor exportado, en millones de USD}
+}
 }
 \description{
-This function returns Free Trade exports from the Dominican Republic
-by goods
+Descarga y consolida las exportaciones de zonas francas de la Republica
+Dominicana desagregadas por partida (tipo de bien), a partir del archivo
+publicado por el Banco Central en su portal de estadisticas del sector
+externo. Los valores estan expresados en millones de USD.
+}
+\details{
+La funcion identifica las columnas de partidas a partir del encabezado
+del archivo original, removiendo las notas al pie (p. ej. "1/", "2/").
+Se descartan las filas que ya vienen acumuladas por anio (aquellas cuya
+etiqueta de mes contiene un anio de 4 digitos, usadas como totales en el
+archivo fuente). Las fechas se generan de forma secuencial, un mes por
+fila, comenzando en enero de 2010.
 }
 \examples{
+\dontrun{
 get_exportaciones_zf()
+}
 }
