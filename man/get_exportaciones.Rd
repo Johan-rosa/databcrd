@@ -2,24 +2,45 @@
 % Please edit documentation in R/import_exports.R
 \name{get_exportaciones}
 \alias{get_exportaciones}
-\title{Total exports by sectors}
+\title{Exportaciones totales por sector}
 \usage{
-get_exportaciones(frecuencia = "mensual")
+get_exportaciones(
+  frecuencia = c("mensual", "trimestral", "anual"),
+  filtro_categoria = NULL,
+  filtro_nivel = NULL,
+  filtro_regimen = NULL
+)
 }
 \arguments{
-\item{frecuencia}{A character string that specifies the frequency of the
-data to be downloaded. Valid options are "mensual",
-"trimestral",  or "anual".}
+\item{frecuencia}{Cadena de texto con la periodicidad de los datos.
+Valores validos: "mensual", "trimestral" o "anual".}
+
+\item{filtro_categoria}{Vector de caracteres opcional para filtrar por
+categoria (p. ej. "Minerales", "Agropecuarios", "Industriales",
+"Subtotal", "Total"). Si es \code{NULL} (por defecto) no se filtra.}
+
+\item{filtro_nivel}{Vector numerico opcional para filtrar por nivel
+jerarquico (1 a 4). Si es \code{NULL} (por defecto) no se filtra.}
+
+\item{filtro_regimen}{Vector de caracteres opcional para filtrar por
+regimen ("Nacionales" o "Zonas Francas"). Si es \code{NULL} (por defecto)
+no se filtra.}
 }
 \value{
-A data frame
+Un tibble con las exportaciones por sector, con columnas de
+fecha (o year/trimestre segun la frecuencia), categoria, nivel,
+regimen y valor exportado.
 }
 \description{
-This function returns total exports by sectors in the  Dominican Republic
-based on the specified frequency.
+Descarga y consolida las cifras de exportaciones totales de Republica
+Dominicana por sector (minerales, agropecuarios, industriales) segun la
+periodicidad solicitada, a partir de los archivos publicados por el
+Banco Central en su portal de estadisticas del sector externo.
 }
 \examples{
+\dontrun{
 get_exportaciones("mensual")
-get_exportaciones("trimestral")
-get_exportaciones("anual")
+get_exportaciones("anual", filtro_categoria = "Industriales")
+get_exportaciones("trimestral", filtro_regimen = "Zonas Francas")
+}
 }
