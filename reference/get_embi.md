@@ -23,7 +23,7 @@ a tibble
 
 ``` r
 get_embi("diario")
-#> # A tibble: 4,704 × 21
+#> # A tibble: 4,703 × 21
 #>    Fecha      Global LATINO `REP DOM` Argentina Bolivia Brasil Chile Colombia
 #>    <date>      <dbl>  <dbl>     <dbl>     <dbl>   <dbl>  <dbl> <dbl>    <dbl>
 #>  1 2007-10-29   2.10   2.33      2.28      3.50     NaN   1.75  1.12     1.60
@@ -36,12 +36,12 @@ get_embi("diario")
 #>  8 2007-11-07   2.25   2.48      2.29      3.60     NaN   1.90  1.16     1.76
 #>  9 2007-11-08   2.33   2.58      2.40      3.85     NaN   1.99  1.24     1.85
 #> 10 2007-11-09   2.36   2.61      2.44      3.87     NaN   2.02  1.23     1.88
-#> # ℹ 4,694 more rows
+#> # ℹ 4,693 more rows
 #> # ℹ 12 more variables: `Costa Rica` <dbl>, Ecuador <dbl>, `El Salvador` <dbl>,
 #> #   Guatemala <dbl>, Honduras <dbl>, México <dbl>, Paraguay <dbl>, Perú <dbl>,
 #> #   Panamá <dbl>, Uruguay <dbl>, Venezuela <dbl>, `RD-LATINO` <dbl>
 get_embi("semanal")
-#> # A tibble: 983 × 21
+#> # A tibble: 982 × 21
 #>    Fecha      Global LATINO `REP DOM` Argentina Bolivia Brasil Chile Colombia
 #>    <date>      <dbl>  <dbl>     <dbl>     <dbl>   <dbl>  <dbl> <dbl>    <dbl>
 #>  1 2007-10-28   2.11   2.31      2.25      3.34     NaN   1.75  1.12     1.59
@@ -54,7 +54,7 @@ get_embi("semanal")
 #>  8 2007-12-16   2.51   2.80      2.71      4.06     NaN   2.18  1.53     1.88
 #>  9 2007-12-23   2.41   2.69      2.62      3.94     NaN   2.06  1.49     1.80
 #> 10 2007-12-30   2.64   2.91      2.91      4.23     NaN   2.26  1.52     2.08
-#> # ℹ 973 more rows
+#> # ℹ 972 more rows
 #> # ℹ 12 more variables: `Costa Rica` <dbl>, Ecuador <dbl>, `El Salvador` <dbl>,
 #> #   Guatemala <dbl>, Honduras <dbl>, México <dbl>, Paraguay <dbl>, Perú <dbl>,
 #> #   Panamá <dbl>, Uruguay <dbl>, Venezuela <dbl>, `RD-LATINO` <dbl>

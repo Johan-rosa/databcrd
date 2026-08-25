@@ -23,7 +23,7 @@ a tibble
 
 ``` r
 get_expectativas("eem")
-#> # A tibble: 9,315 × 9
+#> # A tibble: 9,270 × 9
 #>    fecha       year   mes medida  short_names    variable_key variable horizonte
 #>    <date>     <dbl> <dbl> <chr>   <chr>          <chr>        <fct>    <fct>    
 #>  1 2009-06-01  2009     6 Mediana inf_anio_actu… inf          Inflaci… Año actu…
@@ -36,7 +36,7 @@ get_expectativas("eem")
 #>  8 2009-06-01  2009     6 Mediana tc_24m         tc           Variaci… 24 meses 
 #>  9 2009-06-01  2009     6 Mediana pib_trim_actu… pib          Crecimi… Trimestr…
 #> 10 2009-06-01  2009     6 Mediana pib_anio_actu… pib          Crecimi… Año actu…
-#> # ℹ 9,305 more rows
+#> # ℹ 9,260 more rows
 #> # ℹ 1 more variable: expectativa <dbl>
 get_expectativas("eoe")
 #> # A tibble: 2,651 × 5
