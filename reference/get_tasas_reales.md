@@ -17,7 +17,6 @@ get_tasas_reales(
 
 Banco Central de la República Dominicana (BCRD), "Tasas de Interés
 Reales de las Entidades de Intermediación Financiera".
-:contentReference\[oaicite:1\]index=1
 
 ## Arguments
 

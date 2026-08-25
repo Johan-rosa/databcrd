@@ -45,7 +45,7 @@ A monthly-frequency `tibble` including:
 
   Demand deposits interest rate.
 
-- monto_d\_Amounts by maturity bucket (days). tasa_d\_:
+- monto_d\_\\Amounts by maturity bucket (days). tasa_d\_\\
 
   Interest rates by maturity bucket (days).
 
