@@ -16,6 +16,8 @@
   : Fetch metadata for China's CPI series
 - [`china_tree_node()`](https://johan-rosa.github.io/databcrd/reference/china_tree_node.md)
   : Navigate the NBS data-portal folder tree
+- [`cme_futuros()`](https://johan-rosa.github.io/databcrd/reference/cme_futuros.md)
+  : Cotizaciones de futuros de CME Group
 - [`costo_canasta_familiar()`](https://johan-rosa.github.io/databcrd/reference/costo_canasta_familiar.md)
   : Family Basket Cost
 - [`crear_mes()`](https://johan-rosa.github.io/databcrd/reference/crear_mes.md)
@@ -59,9 +61,9 @@
 - [`get_imae_2007()`](https://johan-rosa.github.io/databcrd/reference/get_imae_2007.md)
   : Monthly Economic Activity Indicator, base 2007
 - [`get_importaciones()`](https://johan-rosa.github.io/databcrd/reference/get_importaciones.md)
-  : Total imports by sectors
+  : Importaciones totales por sector
 - [`get_importaciones_petroleo()`](https://johan-rosa.github.io/databcrd/reference/get_importaciones_petroleo.md)
-  : Oil Imports
+  : Importaciones mensuales de petróleo y derivados
 - [`get_indicadores_monetarios_bcrd()`](https://johan-rosa.github.io/databcrd/reference/get_indicadores_monetarios_bcrd.md)
   : Monetary Indicators of the Central Bank of the Dominican Republic
 - [`get_ipc_articulos()`](https://johan-rosa.github.io/databcrd/reference/get_ipc_articulos.md)
@@ -141,8 +143,6 @@
   : Catálogo de indicadores del Primary Commodity Price System (PCPS)
 - [`imf_weo_forecast()`](https://johan-rosa.github.io/databcrd/reference/imf_weo_forecast.md)
   : Proyecciones del World Economic Outlook (WEO) del FMI
-- [`imports_details`](https://johan-rosa.github.io/databcrd/reference/imports_details.md)
-  : Utility complement to handle the total imports data
 - [`indicadores_bcrd_details`](https://johan-rosa.github.io/databcrd/reference/indicadores_bcrd_details.md)
   : Utility complement to handle the monetary indicators data
 - [`indicadores_osd()`](https://johan-rosa.github.io/databcrd/reference/indicadores_osd.md)

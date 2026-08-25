@@ -1,6 +1,9 @@
-# Oil Imports
+# Importaciones mensuales de petróleo y derivados
 
-This function returns oil imports to the Dominican Republic by type
+Descarga y organiza en formato ordenado (tidy) la serie de importaciones
+mensuales de petróleo crudo y sus derivados publicada por el Banco
+Central de la República Dominicana (BCRD), con datos desde enero de 2010
+en adelante.
 
 ## Usage
 
@@ -10,25 +13,42 @@ get_importaciones_petroleo()
 
 ## Value
 
-A data frame
+Un tibble con las columnas:
+
+- fecha:
+
+  Fecha correspondiente al mes de la observación (`Date`).
+
+- combustible:
+
+  Tipo de combustible. Uno de: "Petroleo Crudo", "Gasolina", "Gasoil",
+  "GLP", "Gas Natural", "Fuel-Oil", "Gasolina de Aviación", "Avtur",
+  "Otros", "Total".
+
+- volumen:
+
+  Volumen importado, en barriles (BB).
+
+- precio:
+
+  Precio promedio, en US\$/BB.
+
+- valor:
+
+  Valor de la importación, en US\$.
+
+## Details
+
+La función descarga el archivo `Importaciones_Crudo_6.xls` publicado por
+el BCRD en su sección de estadísticas del sector externo, reconstruye
+los encabezados (que combinan el nombre del combustible con la métrica
+en filas separadas) y transforma el resultado a formato largo, con una
+fila por combinación de fecha y combustible.
 
 ## Examples
 
 ``` r
-get_exportaciones_zf()
-#> ℹ Valores en millones de USD
-#> # A tibble: 1,755 × 5
-#>    fecha        mes  year partida                                   valor
-#>    <date>     <dbl> <dbl> <chr>                                     <dbl>
-#>  1 2010-01-01     1  2010 Confecciones textiles                      38.3
-#>  2 2010-01-01     1  2010 Productos eléctricos                       36.4
-#>  3 2010-01-01     1  2010 Artículos de joyería y conexos             23.1
-#>  4 2010-01-01     1  2010 Productos farmacéuticos                     0.9
-#>  5 2010-01-01     1  2010 Fabricación Equipos Médicos y Quirúrgicos  53.1
-#>  6 2010-01-01     1  2010 Manufacturas de calzados                   19.8
-#>  7 2010-01-01     1  2010 Manufacturas de tabaco                     19.5
-#>  8 2010-01-01     1  2010 Otros                                      23.4
-#>  9 2010-01-01     1  2010 Total                                     214. 
-#> 10 2010-02-01     2  2010 Confecciones textiles                      60.2
-#> # ℹ 1,745 more rows
+if (FALSE) { # \dontrun{
+get_importaciones_petroleo()
+} # }
 ```
