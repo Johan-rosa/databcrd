@@ -65,6 +65,125 @@ construir_catalogo_exportaciones_importaciones <- function(raw_comercio_exterior
     )
 }
 
+#' Descarga y construye datos de comercio exterior por partida y mes
+#'
+#' Funcion interna compartida entre `get_exportaciones()` y
+#' `get_importaciones()`: descarga los archivos anuales publicados por el
+#' Banco Central, construye el catalogo jerarquico con
+#' `construir_catalogo_exportaciones_importaciones()` y devuelve los datos
+#' en formato largo por mes, listos para agregar segun la frecuencia deseada.
+#'
+#' @param tipo "exportaciones" o "importaciones" -- determina el archivo a
+#'   descargar y algunos ajustes de lectura especificos de cada fuente
+#'
+#' @return Un tibble largo con columnas `year`, `id`, `og_label`, `label`,
+#'   `categoria`, `nivel`, `regimen`, `mes`, `fecha`, `trimestre` y `valor`
+#' @noRd
+descargar_comercio_exterior <- function(tipo = c("exportaciones", "importaciones")) {
+  tipo <- rlang::arg_match(tipo)
+
+  # ajustes especificos de cada fuente: nombre del archivo y tope de filas a
+  # leer (importaciones trae notas al pie que hay que evitar leer)
+  nombre_archivo <- switch(
+    tipo,
+    exportaciones = "Exportaciones_Mensuales_",
+    importaciones = "Importaciones_Mensuales_"
+  )
+
+  years <- 2010:lubridate::year(Sys.Date())
+  url_descarga <- paste0(
+    "https://cdn.bancentral.gov.do/documents/estadisticas/",
+    "sector-externo/documents/", nombre_archivo, years, "_6.xls"
+  )
+  files_path <- tempfile(pattern = as.character(years), fileext = ".xls")
+  on.exit(unlink(files_path), add = TRUE)
+
+  save_download <- purrr::possibly(download_file, otherwise = NA) # nolint
+  purrr::walk2(
+    url_descarga, files_path,
+    \(url, file) save_download(url, file),
+    .progress = TRUE
+  ) |> suppressWarnings()
+
+  files_path <- files_path[file.exists(files_path)]
+
+  suppressMessages(
+    suppressWarnings(
+      raw_data <- purrr::map(
+        files_path,
+        readxl::read_excel,
+        col_names = TRUE,
+        skip = 8,
+        na = "n.d."
+      ) |>
+        stats::setNames(years[seq_along(files_path)])
+    )
+  )
+
+  raw_data |>
+    purrr::map(
+      \(year_data) {
+        meses <- crear_mes(1:12, "number_to_shorttext") |> tolower()
+
+        year_data_clean <- year_data |>
+          janitor::clean_names() |>
+          janitor::remove_empty(which = "rows") |>
+          dplyr::filter(dplyr::if_any(dplyr::any_of(meses), \(x) !is.na(x)))
+
+        catalogo <- year_data_clean |> construir_catalogo_exportaciones_importaciones()
+
+        catalogo |>
+          dplyr::bind_cols(
+            dplyr::select(year_data_clean, dplyr::any_of(meses))
+          ) |>
+          # Algunas veces dejan los meses futuros y solo los ocultan
+          # hay que removerlos.
+          dplyr::select(where(~ any(.x > 0, na.rm = TRUE))) |>
+          tidyr::pivot_longer(
+            names_to = "mes",
+            values_to = "valor",
+            cols = -c(id, og_label, label, categoria, nivel, regimen)
+          )
+      }
+    ) |>
+    dplyr::bind_rows(.id = "year") |>
+    dplyr::mutate(
+      mes = crear_mes(mes, type = "text_to_number"),
+      fecha = lubridate::make_date(year, mes, "1"),
+      trimestre = lubridate::quarter(fecha),
+      .after = regimen
+    )
+}
+
+#' Agrega datos de comercio exterior segun la frecuencia solicitada
+#' @noRd
+agregar_por_frecuencia <- function(data, frecuencia) {
+  if (frecuencia == "mensual") {
+    data |> dplyr::select(-trimestre)
+  } else if (frecuencia == "trimestral") {
+    data |>
+      dplyr::select(-c(mes, fecha)) |>
+      dplyr::group_by(year, trimestre, label, categoria, nivel, regimen) |>
+      dplyr::summarize(valor = sum(valor), .groups = "drop")
+  } else if (frecuencia == "anual") {
+    data |>
+      dplyr::select(-c(trimestre, mes, fecha)) |>
+      dplyr::group_by(year, label, categoria, nivel, regimen) |>
+      dplyr::summarize(valor = sum(valor), .groups = "drop")
+  }
+}
+
+#' Aplica los filtros opcionales de categoria, nivel y regimen
+#' @noRd
+aplicar_filtros_comercio_exterior <- function(data, filtro_categoria, filtro_nivel, filtro_regimen) {
+  data |>
+    dplyr::filter(
+      (is.null(filtro_categoria) | categoria %in% filtro_categoria) &
+        (is.null(filtro_nivel)     | nivel %in% filtro_nivel) &
+        (is.null(filtro_regimen)   | regimen %in% filtro_regimen)
+    )
+}
+
 #' Exportaciones totales por sector
 #'
 #' Descarga y consolida las cifras de exportaciones totales de Republica
@@ -101,119 +220,31 @@ get_exportaciones <- function(
     filtro_regimen = NULL
 ) {
   frecuencia <- rlang::arg_match(frecuencia)
-
-  years <- 2010:lubridate::year(Sys.Date())
-
-  url_descarga <- paste0(
-    "https://cdn.bancentral.gov.do/documents/estadisticas/",
-    "sector-externo/documents/Exportaciones_Mensuales_",
-    years, "_6.xls"
-  )
-
-  files_path <- tempfile(pattern = as.character(years), fileext = ".xls")
-
-  save_download <- purrr::possibly(utils::download.file, otherwise = NA) # nolint
-  on.exit(unlink(files_path), add = TRUE)
-
-  purrr::walk2(
-    url_descarga,
-    files_path,
-    \(url, file) {
-      save_download(url, file, mode = "wb", quiet = TRUE)
-    },
-    .progress = TRUE
-  ) |> suppressWarnings()
-
-  files_path <- files_path[file.exists(files_path)]
-
-  suppressMessages(
-    suppressWarnings(
-      exportaciones <- purrr::map(
-        files_path,
-        readxl::read_excel,
-        col_names = TRUE,
-        skip = 8,
-        na = "n.d."
-      )  |>
-        stats::setNames(years[seq_along(files_path)])
-    )
-  )
-
-  exportaciones1 <- exportaciones |>
-    purrr::map(
-      \(year_data) {
-        meses <- crear_mes(1:12, "number_to_shorttext") |> tolower()
-
-        year_data_clean <-  year_data |>
-          janitor::clean_names() |>
-          janitor::remove_empty(which = "rows") |>
-          dplyr::filter(dplyr::if_all(dplyr::any_of(meses), \(x) !is.na(x)))
-
-        catalogo <- year_data_clean |> construir_catalogo_exportaciones_importaciones()
-
-        catalogo |>
-          dplyr::bind_cols(
-            dplyr::select(year_data_clean, dplyr::any_of(meses))
-          ) |>
-          # Algunas veces dejan los meses futuros y solo los ocultan
-          # hay que removerlos.
-          dplyr::select(where(~ any(.x > 0, na.rm = TRUE))) |>
-          tidyr::pivot_longer(
-            names_to = "mes",
-            values_to = "valor_expor",
-            cols = -c(id, og_label, label, categoria, nivel, regimen)
-          )
-      }) |>
-        dplyr::bind_rows(.id = "year") |>
-        dplyr::mutate(
-          mes = crear_mes(mes,
-          type = "text_to_number"),
-          fecha = lubridate::make_date(year, mes, "1"),
-          trimestre = lubridate::quarter(fecha),
-          .after = regimen
-        )
-
-  data <- if (frecuencia == "mensual") {
-    exportaciones1 |>
-      dplyr::select(-trimestre)
-  } else if (frecuencia == "trimestral") {
-    exportaciones1 |>
-      dplyr::select(-c(mes, fecha)) |>
-      dplyr::group_by(year, trimestre, label, categoria, nivel, regimen) |>
-      dplyr::summarize(valor_expor = sum(valor_expor)) |>
-      dplyr::ungroup()
-  } else if (frecuencia == "anual") {
-    exportaciones1 |>
-      dplyr::select(-c(trimestre, mes, fecha)) |>
-      dplyr::group_by(year, label, categoria, nivel, regimen) |>
-      dplyr::summarize(valor_expor = sum(valor_expor)) |>
-      dplyr::ungroup()
-  }
-
-  data |>
-    dplyr::filter(
-      (is.null(filtro_categoria) | categoria %in% filtro_categoria) &
-      (is.null(filtro_nivel)     | nivel %in% filtro_nivel) &
-      (is.null(filtro_regimen)   | regimen %in% filtro_regimen)
-    )
+  descargar_comercio_exterior("exportaciones") |>
+    agregar_por_frecuencia(frecuencia) |>
+    aplicar_filtros_comercio_exterior(filtro_categoria, filtro_nivel, filtro_regimen)
 }
 
-#' Total imports by sectors
+#' Importaciones totales por sector
 #'
-#' This function returns total imports by sectors in the  Dominican Republic
-#' based on the specified frequency.
+#' Descarga y consolida las cifras de importaciones totales de Republica
+#' Dominicana por sector segun la periodicidad solicitada, a partir de los
+#' archivos publicados por el Banco Central en su portal de estadisticas
+#' del sector externo.
 #'
-#' @param frecuencia A character string that specifies the frequency of the
-#' data to be downloaded. Valid options are "mensual",
-#' "trimestral",  or "anual".
+#' @inheritParams get_exportaciones
 #'
-#' @return A data frame
+#' @return Un tibble con las importaciones por sector, con columnas de
+#'   fecha (o year/trimestre segun la frecuencia), categoria, nivel,
+#'   regimen y valor importado.
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' get_importaciones("mensual")
-#' get_importaciones("trimestral")
-#' get_importaciones("anual")
+#' get_importaciones("anual", filtro_categoria = "Industriales")
+#' get_importaciones("trimestral", filtro_regimen = "Zonas Francas")
+#' }
 get_importaciones <- function(
     frecuencia = c("mensual", "trimestral", "anual"),
     filtro_categoria = NULL,
@@ -221,96 +252,9 @@ get_importaciones <- function(
     filtro_regimen = NULL
 ) {
   frecuencia <- rlang::arg_match(frecuencia)
-
-  years <- 2010:lubridate::year(Sys.Date())
-
-  url_descarga <- paste0(
-    "https://cdn.bancentral.gov.do/documents/estadisticas/",
-    "sector-externo/documents/Importaciones_Mensuales_",
-    years, "_6.xls")
-
-  files_path <- tempfile(pattern = as.character(years), fileext = ".xls")
-
-  save_download <- purrr::possibly(download_file, otherwise = NA) # nolint
-
-  purrr::walk2(
-    url_descarga, files_path, \(url, file) save_download(url, file),
-    .progress = TRUE
-  ) |>
-    suppressWarnings()
-
-  files_path <- files_path[file.exists(files_path)]
-
-  suppressMessages(
-    suppressWarnings(
-      importaciones <- purrr::map(
-        files_path,
-        readxl::read_excel,
-        col_names = TRUE, skip = 8, na = "n.d.",
-        n_max = 70)  |>
-        stats::setNames(years[seq_along(files_path)])
-    )
-  )
-
-  importaciones1 <- importaciones |>
-    purrr::map(
-      \(year_data) {
-        meses <- crear_mes(1:12, "number_to_shorttext") |> tolower()
-
-        year_data_clean <-  year_data |>
-          janitor::clean_names() |>
-          janitor::remove_empty(which = "rows") |>
-          dplyr::filter(dplyr::if_any(dplyr::any_of(meses), \(x) !is.na(x)))
-
-        catalogo <- year_data_clean |> construir_catalogo_exportaciones_importaciones()
-
-        catalogo |>
-          dplyr::bind_cols(
-            dplyr::select(year_data_clean, dplyr::any_of(meses))
-          ) |>
-          # Algunas veces dejan los meses futuros y solo los ocultan
-          # hay que removerlos.
-          dplyr::select(where(~ any(.x > 0, na.rm = TRUE))) |>
-          tidyr::pivot_longer(
-            names_to = "mes",
-            values_to = "valor_expor",
-            cols = -c(id, og_label, label, categoria, nivel, regimen)
-          )
-      }
-    ) |>
-    dplyr::bind_rows(.id = "year") |>
-    dplyr::mutate(
-      mes = crear_mes(mes, type = "text_to_number"),
-      fecha = lubridate::make_date(year, mes, "1"),
-      trimestre = lubridate::quarter(fecha),
-      .after = regimen
-    )
-
-
-
-  data <- if (frecuencia == "mensual") {
-    importaciones1 |>
-      dplyr::select(-trimestre)
-  } else if (frecuencia == "trimestral") {
-    importaciones1 |>
-      dplyr::select(-c(mes, fecha)) |>
-      dplyr::group_by(year, trimestre, label, categoria, nivel, regimen) |>
-      dplyr::summarize(valor_expor = sum(valor_expor)) |>
-      dplyr::ungroup()
-  } else if (frecuencia == "anual") {
-    importaciones1 |>
-      dplyr::select(-c(trimestre, mes, fecha)) |>
-      dplyr::group_by(year, label, categoria, nivel, regimen) |>
-      dplyr::summarize(valor_expor = sum(valor_expor)) |>
-      dplyr::ungroup()
-  }
-
-  data |>
-    dplyr::filter(
-      (is.null(filtro_categoria) | categoria %in% filtro_categoria),
-      (is.null(filtro_nivel)     | nivel %in% filtro_nivel),
-      (is.null(filtro_regimen)   | regimen %in% filtro_regimen)
-    )
+  descargar_comercio_exterior("importaciones") |>
+    agregar_por_frecuencia(frecuencia) |>
+    aplicar_filtros_comercio_exterior(filtro_categoria, filtro_nivel, filtro_regimen)
 }
 
 #' Importaciones mensuales de petróleo y derivados
