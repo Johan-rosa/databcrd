@@ -2,17 +2,37 @@
 % Please edit documentation in R/import_exports.R
 \name{get_importaciones_petroleo}
 \alias{get_importaciones_petroleo}
-\title{Oil Imports}
+\title{Importaciones mensuales de petróleo y derivados}
 \usage{
 get_importaciones_petroleo()
 }
 \value{
-A data frame
+Un tibble con las columnas:
+\describe{
+\item{fecha}{Fecha correspondiente al mes de la observación (\code{Date}).}
+\item{combustible}{Tipo de combustible. Uno de: "Petroleo Crudo",
+"Gasolina", "Gasoil", "GLP", "Gas Natural", "Fuel-Oil",
+"Gasolina de Aviación", "Avtur", "Otros", "Total".}
+\item{volumen}{Volumen importado, en barriles (BB).}
+\item{precio}{Precio promedio, en US$/BB.}
+\item{valor}{Valor de la importación, en US$.}
+}
 }
 \description{
-This function returns oil imports to the Dominican Republic
-by type
+Descarga y organiza en formato ordenado (tidy) la serie de importaciones
+mensuales de petróleo crudo y sus derivados publicada por el Banco Central
+de la República Dominicana (BCRD), con datos desde enero de 2010 en
+adelante.
+}
+\details{
+La función descarga el archivo \code{Importaciones_Crudo_6.xls} publicado por
+el BCRD en su sección de estadísticas del sector externo, reconstruye los
+encabezados (que combinan el nombre del combustible con la métrica en
+filas separadas) y transforma el resultado a formato largo, con una fila
+por combinación de fecha y combustible.
 }
 \examples{
-get_exportaciones_zf()
+\dontrun{
+get_importaciones_petroleo()
+}
 }
