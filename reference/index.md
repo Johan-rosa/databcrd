@@ -30,8 +30,6 @@
   : Helper to download file
 - [`expectativas_details`](https://johan-rosa.github.io/databcrd/reference/expectativas_details.md)
   : Utility complement to handle the macroeconomic expectations
-- [`exports_details`](https://johan-rosa.github.io/databcrd/reference/exports_details.md)
-  : Utility complement to handle the total exports data
 - [`fiscal_operations()`](https://johan-rosa.github.io/databcrd/reference/fiscal_operations.md)
   : Fiscal operations
 - [`fiscal_operations_gdp()`](https://johan-rosa.github.io/databcrd/reference/fiscal_operations_gdp.md)
@@ -49,9 +47,9 @@
 - [`get_expectativas()`](https://johan-rosa.github.io/databcrd/reference/get_expectativas.md)
   : Macroeconomic Expectations
 - [`get_exportaciones()`](https://johan-rosa.github.io/databcrd/reference/get_exportaciones.md)
-  : Total exports by sectors
+  : Exportaciones totales por sector
 - [`get_exportaciones_zf()`](https://johan-rosa.github.io/databcrd/reference/get_exportaciones_zf.md)
-  : Free Trade Exports
+  : Exportaciones de zonas francas por partida
 - [`get_fbkf()`](https://johan-rosa.github.io/databcrd/reference/get_fbkf.md)
   : Download GROSS FIXED CAPITAL FORMATION BY SECTOR AND TYPE OF GOOD
 - [`get_ied()`](https://johan-rosa.github.io/databcrd/reference/get_ied.md)
