@@ -19,8 +19,8 @@ A monthly-frequency \code{tibble} including:
 \item{tasa_promedio_ponderado}{Weighted average interbank interest rate.}
 \item{monto_depositos_vista}{Demand deposits amount.}
 \item{tasa_depositos_vista}{Demand deposits interest rate.}
-\item{monto_d_\emph{}{Amounts by maturity bucket (days).}
-\item{tasa_d_}}{Interest rates by maturity bucket (days).}
+\item{monto_d_\\\emph{}{Amounts by maturity bucket (days).}
+\item{tasa_d_\\}}{Interest rates by maturity bucket (days).}
 }
 }
 \description{

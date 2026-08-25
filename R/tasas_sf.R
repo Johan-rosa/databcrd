@@ -698,7 +698,7 @@ tasa_real_to_long <- function(data) {
 #'
 #' @source
 #' Banco Central de la República Dominicana (BCRD),
-#' "Tasas de Interés Reales de las Entidades de Intermediación Financiera". :contentReference[oaicite:1]{index=1}
+#' "Tasas de Interés Reales de las Entidades de Intermediación Financiera".
 #'
 #' @export
 get_tasas_reales <- function(

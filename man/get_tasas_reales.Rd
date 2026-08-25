@@ -5,7 +5,7 @@
 \title{Retrieve real interest rates of financial intermediaries}
 \source{
 Banco Central de la República Dominicana (BCRD),
-"Tasas de Interés Reales de las Entidades de Intermediación Financiera". :contentReference[oaicite:1]{index=1}
+"Tasas de Interés Reales de las Entidades de Intermediación Financiera".
 }
 \usage{
 get_tasas_reales(
