@@ -288,10 +288,8 @@ get_exportaciones_zf <- function() {
 #' get_importaciones("mensual")
 #' get_importaciones("trimestral")
 #' get_importaciones("anual")
-get_importaciones <- function(frecuencia = "mensual") {
-  checkmate::assert_choice(
-    frecuencia,
-    choices = c("mensual", "trimestral", "anual"))
+get_importaciones <- function(frecuencia = c("mensual", "trimestral", "anual")) {
+  frecuencia <- rlang::arg_match(frecuencia)
 
   years <- 2010:lubridate::year(Sys.Date())
 
@@ -370,16 +368,36 @@ get_importaciones <- function(frecuencia = "mensual") {
   return(data)
 }
 
-#' Oil Imports
+#' Importaciones mensuales de petróleo y derivados
 #'
-#' This function returns oil imports to the Dominican Republic
-#' by type
+#' Descarga y organiza en formato ordenado (tidy) la serie de importaciones
+#' mensuales de petróleo crudo y sus derivados publicada por el Banco Central
+#' de la República Dominicana (BCRD), con datos desde enero de 2010 en
+#' adelante.
 #'
-#' @return A data frame
+#' La función descarga el archivo `Importaciones_Crudo_6.xls` publicado por
+#' el BCRD en su sección de estadísticas del sector externo, reconstruye los
+#' encabezados (que combinan el nombre del combustible con la métrica en
+#' filas separadas) y transforma el resultado a formato largo, con una fila
+#' por combinación de fecha y combustible.
+#'
+#' @return Un tibble con las columnas:
+#'   \describe{
+#'     \item{fecha}{Fecha correspondiente al mes de la observación (`Date`).}
+#'     \item{combustible}{Tipo de combustible. Uno de: "Petroleo Crudo",
+#'       "Gasolina", "Gasoil", "GLP", "Gas Natural", "Fuel-Oil",
+#'       "Gasolina de Aviación", "Avtur", "Otros", "Total".}
+#'     \item{volumen}{Volumen importado, en barriles (BB).}
+#'     \item{precio}{Precio promedio, en US$/BB.}
+#'     \item{valor}{Valor de la importación, en US$.}
+#'   }
+#'
 #' @export
 #'
 #' @examples
-#' get_exportaciones_zf()
+#' \dontrun{
+#' get_importaciones_petroleo()
+#' }
 get_importaciones_petroleo <- function() {
   file_url <- base::paste0(
     "https://cdn.bancentral.gov.do/documents/",
@@ -389,41 +407,73 @@ get_importaciones_petroleo <- function() {
 
   file_path <- base::tempfile(pattern = "", fileext = ".xls")
 
-  utils::download.file(file_url, file_path, mode = "wb", quiet = TRUE)
+  download_file(file_url, file_path)
 
-  headers <- c("Fecha",
-               "PetroleoCrudoXVolumen", "PetroleoCrudoXPrecio",
-               "PetroleoCrudoXValor",
-               "GasolinaXVolumen", "GasolinaXPrecio", "GasolinaXValor",
-               "GasoilXVolumen", "GasoilXPrecio", "GasoilXValor",
-               "GLPXVolumen", "GLPXPrecio", "GLPXValor",
-               "GasNaturalXVolumen", "GasNaturalXPrecio", "GasNaturalXValor",
-               "FuelOilXVolumen", "FuelOilXPrecio", "FuelOilXValor",
-               "GasolinadeAviacionXVolumen", "GasolinadeAviacionXPrecio",
-               "GasolinadeAviacionXValor",
-               "AvturXVolumen", "AvturXPrecio", "AvturXValor",
-               "OtrosXVolumen", "OtrosXPrecio", "OtrosXValor",
-               "TotalXVolumen", "TotalXPrecio", "TotalXValor")
+  headers <- readxl::read_excel(
+    path = file_path,
+    skip = 6,
+    n_max = 3,
+    col_names = FALSE
+  ) |>
+    suppressMessages()
 
-  data <- readxl::read_excel(
+  combustibles <- tibble::tibble(x = unlist(headers[1, ], use.names = FALSE)) |>
+    tidyr::fill(x) |>
+    dplyr::pull(x)
+
+  metricas <- unlist(headers[2, ], use.names = FALSE)
+  columns <- paste(combustibles, metricas, sep = "--")
+  columns[1] <- "year_mes"
+
+  metricas_esperadas <- c("Volumen", "Precio", "Valor")
+  metricas_encontradas <- unique(metricas[!is.na(metricas)])
+
+  if (!all(metricas_esperadas %in% metricas_encontradas)) {
+    rlang::abort(
+      message = paste0(
+        "El formato de las metricas en el archivo del BCRD cambio. ",
+        "Se esperaban: ", paste(metricas_esperadas, collapse = ", "),
+        ". Se encontraron: ", paste(metricas_encontradas, collapse = ", "), "."
+      ),
+      class = "databcrd_error"
+    )
+  }
+
+  raw_data <- readxl::read_excel(
     path = file_path,
     skip = 8,
-    col_names = headers
+    col_names = FALSE
   ) |>
-    dplyr::filter(!is.na(PetroleoCrudoXPrecio), !grepl("^2", Fecha)) |>
-    dplyr::mutate(
-      fecha = seq(as.Date("2010-01-01"), length.out = dplyr::n(), by = "month"),
-      PetroleoCrudoXVolumen = as.numeric(PetroleoCrudoXVolumen)
-    ) |>
-    dplyr::filter(dplyr::if_any(where(is.numeric), ~ .x > 0)) |>
-    dplyr::select(-Fecha) |>
-    tidyr::pivot_longer(!fecha, names_to = "partida", values_to = "valor_impor") |>
-    tidyr::separate_wider_delim(
-      cols = partida,
-      delim = "X",
-      names = c("categoria", "partida")
-    )
+    purrr::set_names(columns) |>
+    suppressMessages()
 
-  return(data)
+  data <- raw_data |>
+    dplyr::filter(
+      dplyr::if_any(
+        dplyr::any_of(columns[-1]),
+        \(x) stringr::str_detect(x, "[A-z]", negate = TRUE)
+      ),
+      dplyr::if_any(
+        dplyr::any_of(columns[-1]),
+        \(x) suppressWarnings(as.numeric(x)) > 0
+      )
+    ) |>
+    dplyr::filter(stringr::str_detect(year_mes, "\\d{4}", negate = TRUE)) |>
+    dplyr::mutate(
+      dplyr::across(dplyr::all_of(columns[-1]), as.numeric),
+      fecha = seq(as.Date("2010-01-01"), length.out = dplyr::n(), by = "month"),
+      .before = year_mes
+    ) |>
+    tidyr::pivot_longer(
+      cols = dplyr::all_of(columns[-1]),
+      names_to = c("combustible", ".value"),
+      names_pattern = "^(.+)--(Volumen|Precio|Valor)$"
+    ) |>
+    janitor::clean_names()
+
+  usethis::ui_info("Volumen en Barriles (BB), Precio en USD/BB y Volumen en USD")
+  data
 
 }
+
+
