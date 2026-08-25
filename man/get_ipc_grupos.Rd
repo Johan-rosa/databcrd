@@ -16,30 +16,30 @@ Un tibble con una fila por mes y las columnas:
 \item{year}{Año.}
 \item{mes}{Mes (1-12).}
 \item{ipc_ayb, ipc_ayb_vm}{Alimentos y bebidas no alcohólicas:
-índice y variación mensual (\\%).}
+índice y variación mensual (\\\%).}
 \item{ipc_alcohol_tabaco, ipc_alcohol_tabaco_vm}{Bebidas
-alcohólicas y tabaco: índice y variación mensual (\\%).}
+alcohólicas y tabaco: índice y variación mensual (\\\%).}
 \item{ipc_ropa_calzado, ipc_ropa_calzado_vm}{Ropa y calzado: índice
-y variación mensual (\\%).}
+y variación mensual (\\\%).}
 \item{ipc_vivienda, ipc_vivienda_vm}{Vivienda: índice y variación
-mensual (\\%).}
+mensual (\\\%).}
 \item{ipc_muebles, ipc_muebles_vm}{Muebles y artículos para el
-hogar: índice y variación mensual (\\%).}
+hogar: índice y variación mensual (\\\%).}
 \item{ipc_salud, ipc_salud_vm}{Salud: índice y variación mensual
-(\\%).}
+(\\\%).}
 \item{ipc_transporte, ipc_transporte_vm}{Transporte: índice y
-variación mensual (\\%).}
+variación mensual (\\\%).}
 \item{ipc_comunicaciones, ipc_comunicaciones_vm}{Comunicaciones:
-índice y variación mensual (\\%).}
+índice y variación mensual (\\\%).}
 \item{ipc_cultura, ipc_cultura_vm}{Recreación y cultura: índice y
-variación mensual (\\%).}
+variación mensual (\\\%).}
 \item{ipc_educacion, ipc_educacion_vm}{Educación: índice y
-variación mensual (\\%).}
+variación mensual (\\\%).}
 \item{ipc_hotel_restaurantes, ipc_hotel_restaurantes_vm}{Restaurantes
-y hoteles: índice y variación mensual (\\%).}
+y hoteles: índice y variación mensual (\\\%).}
 \item{ipc_bines_servicios, ipc_bienes_servicios_vm}{Bienes y
 servicios diversos: índice (nombre con el typo del origen) y
-variación mensual (\\%).}
+variación mensual (\\\%).}
 }
 }
 \description{

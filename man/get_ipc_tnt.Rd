@@ -15,13 +15,13 @@ Un tibble con una fila por mes y las columnas:
 \item{fecha}{\code{Date}. Primer día del mes de la observación.}
 \item{year}{Año.}
 \item{mes}{Mes (1-12).}
-\item{ipc, ipc_vm, ipc_vd}{Índice general, variación mensual (\\%) y
-variación acumulada respecto a diciembre del año anterior (\\%).}
+\item{ipc, ipc_vm, ipc_vd}{Índice general, variación mensual (\\\%) y
+variación acumulada respecto a diciembre del año anterior (\\\%).}
 \item{ipc_t, ipc_t_vm, ipc_t_vd}{Bienes y servicios transables:
-índice, variación mensual (\\%) y variación acumulada (\\%).}
+índice, variación mensual (\\\%) y variación acumulada (\\\%).}
 \item{ipc_nt, ipc_nt_vm, ipc_nt_vd}{Bienes y servicios no
-transables: índice, variación mensual (\\%) y variación acumulada
-(\\%).}
+transables: índice, variación mensual (\\\%) y variación acumulada
+(\\\%).}
 }
 }
 \description{

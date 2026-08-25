@@ -16,12 +16,12 @@ Un tibble con una fila por mes y las columnas:
 \item{year}{Año.}
 \item{mes}{Mes (1-12).}
 \item{ipc}{Índice de precios al consumidor.}
-\item{ipc_vm}{Variación mensual, en \\%.}
+\item{ipc_vm}{Variación mensual, en porcentaje.}
 \item{ipc_vd}{Variación acumulada respecto a diciembre del año
-anterior, en \\%.}
-\item{ipc_vi}{Variación interanual, en \\%.}
+anterior, en \%.}
+\item{ipc_vi}{Variación interanual, en porcentaje.}
 \item{ipc_p12}{Promedio de la variación interanual de los últimos 12
-meses, en \\%.}
+meses, en porcentaje.}
 }
 }
 \description{

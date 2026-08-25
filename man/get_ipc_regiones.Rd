@@ -16,13 +16,13 @@ Un tibble con una fila por mes y las columnas:
 \item{year}{Año.}
 \item{mes}{Mes (1-12).}
 \item{ipc_ozama, ipc_ozama_vm}{Región Ozama: índice y variación
-mensual (\\%).}
+mensual (\\\%).}
 \item{ipc_cibao, ipc_cibao_vm}{Región Cibao: índice y variación
-mensual (\\%).}
+mensual (\\\%).}
 \item{ipc_este, ipc_este_vm}{Región Este: índice y variación
-mensual (\\%).}
+mensual (\\\%).}
 \item{ipc_sur, ipc_sur_vm}{Región Sur: índice y variación mensual
-(\\%).}
+(\\\%).}
 }
 }
 \description{

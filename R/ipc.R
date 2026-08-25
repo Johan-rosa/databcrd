@@ -82,12 +82,12 @@ get_ipc_data <- function(
 #'   \item{year}{Año.}
 #'   \item{mes}{Mes (1-12).}
 #'   \item{ipc}{Índice de precios al consumidor.}
-#'   \item{ipc_vm}{Variación mensual, en \%.}
+#'   \item{ipc_vm}{Variación mensual, en porcentaje.}
 #'   \item{ipc_vd}{Variación acumulada respecto a diciembre del año
-#'     anterior, en \%.}
-#'   \item{ipc_vi}{Variación interanual, en \%.}
+#'     anterior, en %.}
+#'   \item{ipc_vi}{Variación interanual, en porcentaje.}
 #'   \item{ipc_p12}{Promedio de la variación interanual de los últimos 12
-#'     meses, en \%.}
+#'     meses, en porcentaje.}
 #' }
 #'
 #' @source
@@ -159,30 +159,30 @@ get_ipc_general <- function() {
 #'   \item{year}{Año.}
 #'   \item{mes}{Mes (1-12).}
 #'   \item{ipc_ayb, ipc_ayb_vm}{Alimentos y bebidas no alcohólicas:
-#'     índice y variación mensual (\%).}
+#'     índice y variación mensual (\\%).}
 #'   \item{ipc_alcohol_tabaco, ipc_alcohol_tabaco_vm}{Bebidas
-#'     alcohólicas y tabaco: índice y variación mensual (\%).}
+#'     alcohólicas y tabaco: índice y variación mensual (\\%).}
 #'   \item{ipc_ropa_calzado, ipc_ropa_calzado_vm}{Ropa y calzado: índice
-#'     y variación mensual (\%).}
+#'     y variación mensual (\\%).}
 #'   \item{ipc_vivienda, ipc_vivienda_vm}{Vivienda: índice y variación
-#'     mensual (\%).}
+#'     mensual (\\%).}
 #'   \item{ipc_muebles, ipc_muebles_vm}{Muebles y artículos para el
-#'     hogar: índice y variación mensual (\%).}
+#'     hogar: índice y variación mensual (\\%).}
 #'   \item{ipc_salud, ipc_salud_vm}{Salud: índice y variación mensual
-#'     (\%).}
+#'     (\\%).}
 #'   \item{ipc_transporte, ipc_transporte_vm}{Transporte: índice y
-#'     variación mensual (\%).}
+#'     variación mensual (\\%).}
 #'   \item{ipc_comunicaciones, ipc_comunicaciones_vm}{Comunicaciones:
-#'     índice y variación mensual (\%).}
+#'     índice y variación mensual (\\%).}
 #'   \item{ipc_cultura, ipc_cultura_vm}{Recreación y cultura: índice y
-#'     variación mensual (\%).}
+#'     variación mensual (\\%).}
 #'   \item{ipc_educacion, ipc_educacion_vm}{Educación: índice y
-#'     variación mensual (\%).}
+#'     variación mensual (\\%).}
 #'   \item{ipc_hotel_restaurantes, ipc_hotel_restaurantes_vm}{Restaurantes
-#'     y hoteles: índice y variación mensual (\%).}
+#'     y hoteles: índice y variación mensual (\\%).}
 #'   \item{ipc_bines_servicios, ipc_bienes_servicios_vm}{Bienes y
 #'     servicios diversos: índice (nombre con el typo del origen) y
-#'     variación mensual (\%).}
+#'     variación mensual (\\%).}
 #' }
 #'
 #' @source
@@ -265,13 +265,13 @@ get_ipc_grupos <- function() {
 #'   \item{year}{Año.}
 #'   \item{mes}{Mes (1-12).}
 #'   \item{ipc_ozama, ipc_ozama_vm}{Región Ozama: índice y variación
-#'     mensual (\%).}
+#'     mensual (\\%).}
 #'   \item{ipc_cibao, ipc_cibao_vm}{Región Cibao: índice y variación
-#'     mensual (\%).}
+#'     mensual (\\%).}
 #'   \item{ipc_este, ipc_este_vm}{Región Este: índice y variación
-#'     mensual (\%).}
+#'     mensual (\\%).}
 #'   \item{ipc_sur, ipc_sur_vm}{Región Sur: índice y variación mensual
-#'     (\%).}
+#'     (\\%).}
 #' }
 #'
 #' @source
@@ -345,10 +345,10 @@ get_ipc_regiones <- function() {
 #'   \item{year}{Año.}
 #'   \item{mes}{Mes (1-12).}
 #'   \item{ipc_subyacente}{Índice de precios al consumidor subyacente.}
-#'   \item{ipc_subyacente_vm}{Variación mensual, en \%.}
+#'   \item{ipc_subyacente_vm}{Variación mensual, en \\%.}
 #'   \item{ipc_subyacente_vd}{Variación acumulada respecto a diciembre
-#'     del año anterior, en \%.}
-#'   \item{ipc_subyacente_vi}{Variación interanual, en \%.}
+#'     del año anterior, en \\%.}
+#'   \item{ipc_subyacente_vi}{Variación interanual, en \\%.}
 #' }
 #'
 #' @source
@@ -425,13 +425,13 @@ get_ipc_subyacente <- function() {
 #'   \item{fecha}{`Date`. Primer día del mes de la observación.}
 #'   \item{year}{Año.}
 #'   \item{mes}{Mes (1-12).}
-#'   \item{ipc, ipc_vm, ipc_vd}{Índice general, variación mensual (\%) y
-#'     variación acumulada respecto a diciembre del año anterior (\%).}
+#'   \item{ipc, ipc_vm, ipc_vd}{Índice general, variación mensual (\\%) y
+#'     variación acumulada respecto a diciembre del año anterior (\\%).}
 #'   \item{ipc_t, ipc_t_vm, ipc_t_vd}{Bienes y servicios transables:
-#'     índice, variación mensual (\%) y variación acumulada (\%).}
+#'     índice, variación mensual (\\%) y variación acumulada (\\%).}
 #'   \item{ipc_nt, ipc_nt_vm, ipc_nt_vd}{Bienes y servicios no
-#'     transables: índice, variación mensual (\%) y variación acumulada
-#'     (\%).}
+#'     transables: índice, variación mensual (\\%) y variación acumulada
+#'     (\\%).}
 #' }
 #'
 #' @source

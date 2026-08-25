@@ -16,10 +16,10 @@ Un tibble con una fila por mes y las columnas:
 \item{year}{Año.}
 \item{mes}{Mes (1-12).}
 \item{ipc_subyacente}{Índice de precios al consumidor subyacente.}
-\item{ipc_subyacente_vm}{Variación mensual, en \\%.}
+\item{ipc_subyacente_vm}{Variación mensual, en \\\%.}
 \item{ipc_subyacente_vd}{Variación acumulada respecto a diciembre
-del año anterior, en \\%.}
-\item{ipc_subyacente_vi}{Variación interanual, en \\%.}
+del año anterior, en \\\%.}
+\item{ipc_subyacente_vi}{Variación interanual, en \\\%.}
 }
 }
 \description{
