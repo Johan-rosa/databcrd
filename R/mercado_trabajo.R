@@ -43,7 +43,8 @@ pea <- function(filtro_desagregacion = NULL) {
           dplyr::mutate(
             trimestre = stringr::str_extract(trimestre, "[IV]+"),
             trimestre = dplyr::recode(trimestre, "I" = 1, "II" = 2, "III" = 3, "IV" = 4),
-            fecha = lubridate::make_date(year, trimestre * 3, 1)
+            fecha = lubridate::make_date(year, trimestre * 3, 1),
+            year = as.numeric(year)
           ) |>
           dplyr::relocate(fecha, year, trimestre)
       }
