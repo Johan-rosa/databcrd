@@ -210,169 +210,269 @@ MIT © Johan Rosa, Juan Quiñones
 
 - [`balanza_pagos()`](https://johan-rosa.github.io/databcrd/reference/balanza_pagos.md)
   : Balanza de Pagos - datos trimestrales
+
 - [`balanza_servicios()`](https://johan-rosa.github.io/databcrd/reference/balanza_servicios.md)
   : Balanza de Servicios - datos trimestrales
+
 - [`catalogo_balanza_pagos`](https://johan-rosa.github.io/databcrd/reference/catalogo_balanza_pagos.md)
   : Catalogo jerarquico de cuentas de la Balanza de Pagos
+
 - [`china_cpi()`](https://johan-rosa.github.io/databcrd/reference/china_cpi.md)
   : Download China's Consumer Price Index (CPI) series
+
 - [`china_price_index_node_id()`](https://johan-rosa.github.io/databcrd/reference/china_price_index_node_id.md)
   : Find the node id for China's CPI indicator category
+
 - [`china_series_cpi_metadata()`](https://johan-rosa.github.io/databcrd/reference/china_series_cpi_metadata.md)
   : Fetch metadata for China's CPI series
+
 - [`china_tree_node()`](https://johan-rosa.github.io/databcrd/reference/china_tree_node.md)
   : Navigate the NBS data-portal folder tree
+
 - [`cme_futuros()`](https://johan-rosa.github.io/databcrd/reference/cme_futuros.md)
   : Cotizaciones de futuros de CME Group
+
 - [`costo_canasta_familiar()`](https://johan-rosa.github.io/databcrd/reference/costo_canasta_familiar.md)
   : Family Basket Cost
+
 - [`crear_mes()`](https://johan-rosa.github.io/databcrd/reference/crear_mes.md)
   : Change month encoding
+
 - [`date_label()`](https://johan-rosa.github.io/databcrd/reference/date_label.md)
   : Create date label
+
 - [`deuda_publica_by_fuente()`](https://johan-rosa.github.io/databcrd/reference/deuda_publica_by_fuente.md)
   : Deuda pública consolidada por fuente de financiamiento
+
 - [`deuda_publica_by_sector()`](https://johan-rosa.github.io/databcrd/reference/deuda_publica_by_sector.md)
   : Deuda pública consolidada por sector institucional
+
 - [`download_file()`](https://johan-rosa.github.io/databcrd/reference/download_file.md)
   : Helper to download file
+
 - [`expectativas_details`](https://johan-rosa.github.io/databcrd/reference/expectativas_details.md)
   : Utility complement to handle the macroeconomic expectations
+
 - [`fiscal_operations()`](https://johan-rosa.github.io/databcrd/reference/fiscal_operations.md)
   : Fiscal operations
+
 - [`fiscal_operations_gdp()`](https://johan-rosa.github.io/databcrd/reference/fiscal_operations_gdp.md)
   : Fiscal operations as a percentage of GDP
+
 - [`get_ecc()`](https://johan-rosa.github.io/databcrd/reference/get_ecc.md)
   : Get ECC
+
 - [`get_eem()`](https://johan-rosa.github.io/databcrd/reference/get_eem.md)
   : Get EEM
+
 - [`get_embi()`](https://johan-rosa.github.io/databcrd/reference/get_embi.md)
   : Download EMBI
+
 - [`get_encaje()`](https://johan-rosa.github.io/databcrd/reference/get_encaje.md)
   : Download legal reserve serie
+
 - [`get_eoe()`](https://johan-rosa.github.io/databcrd/reference/get_eoe.md)
   : Get EOE
+
 - [`get_expectativas()`](https://johan-rosa.github.io/databcrd/reference/get_expectativas.md)
   : Macroeconomic Expectations
+
 - [`get_exportaciones()`](https://johan-rosa.github.io/databcrd/reference/get_exportaciones.md)
   : Exportaciones totales por sector
+
 - [`get_exportaciones_zf()`](https://johan-rosa.github.io/databcrd/reference/get_exportaciones_zf.md)
   : Exportaciones de zonas francas por partida
+
 - [`get_fbkf()`](https://johan-rosa.github.io/databcrd/reference/get_fbkf.md)
   : Download GROSS FIXED CAPITAL FORMATION BY SECTOR AND TYPE OF GOOD
+
 - [`get_ied()`](https://johan-rosa.github.io/databcrd/reference/get_ied.md)
   : Foreign direct investment to the Dominican Republic
+
 - [`get_imae()`](https://johan-rosa.github.io/databcrd/reference/get_imae.md)
   : Monthly Economic Activity Indicator, base 2018
+
 - [`get_imae_2007()`](https://johan-rosa.github.io/databcrd/reference/get_imae_2007.md)
   : Monthly Economic Activity Indicator, base 2007
+
 - [`get_importaciones()`](https://johan-rosa.github.io/databcrd/reference/get_importaciones.md)
   : Importaciones totales por sector
+
 - [`get_importaciones_petroleo()`](https://johan-rosa.github.io/databcrd/reference/get_importaciones_petroleo.md)
   : Importaciones mensuales de petróleo y derivados
+
 - [`get_indicadores_monetarios_bcrd()`](https://johan-rosa.github.io/databcrd/reference/get_indicadores_monetarios_bcrd.md)
   : Monetary Indicators of the Central Bank of the Dominican Republic
+
 - [`get_ipc_articulos()`](https://johan-rosa.github.io/databcrd/reference/get_ipc_articulos.md)
   : Download the CPI series at item level
+
 - [`get_ipc_data()`](https://johan-rosa.github.io/databcrd/reference/get_ipc_data.md)
   : Descarga el Índice de Precios al Consumidor (IPC) de República
   Dominicana
+
 - [`get_ipc_general()`](https://johan-rosa.github.io/databcrd/reference/get_ipc_general.md)
   : Serie del IPC general de República Dominicana
+
 - [`get_ipc_grupos()`](https://johan-rosa.github.io/databcrd/reference/get_ipc_grupos.md)
   : IPC de República Dominicana por grupo de bienes y servicios
+
 - [`get_ipc_long()`](https://johan-rosa.github.io/databcrd/reference/get_ipc_long.md)
   : Download the CPI series in long format
+
 - [`get_ipc_regiones()`](https://johan-rosa.github.io/databcrd/reference/get_ipc_regiones.md)
   : IPC de República Dominicana por región geográfica
+
 - [`get_ipc_subyacente()`](https://johan-rosa.github.io/databcrd/reference/get_ipc_subyacente.md)
   : IPC subyacente (inflación núcleo) de República Dominicana
+
 - [`get_ipc_tnt()`](https://johan-rosa.github.io/databcrd/reference/get_ipc_tnt.md)
   : IPC de República Dominicana por bienes transables y no transables
+
 - [`get_pib_gasto()`](https://johan-rosa.github.io/databcrd/reference/get_pib_gasto.md)
   : GDP by the expenditure approach, both real and nominal
+
 - [`get_pib_gasto_2007()`](https://johan-rosa.github.io/databcrd/reference/get_pib_gasto_2007.md)
   : GDP by the expenditure approach, both real and nominal
+
 - [`get_pib_sectores()`](https://johan-rosa.github.io/databcrd/reference/get_pib_sectores.md)
   : GDP by the sector of origin, both real and nominal
+
 - [`get_pib_sectores_2007()`](https://johan-rosa.github.io/databcrd/reference/get_pib_sectores_2007.md)
   : GDP by the sector of origin, both real and nominal
+
 - [`get_prestamos_osd()`](https://johan-rosa.github.io/databcrd/reference/get_prestamos_osd.md)
   : Download the loans by sector series
+
 - [`get_remesas()`](https://johan-rosa.github.io/databcrd/reference/get_remesas.md)
   : Remittances to the Dominican Republic
+
 - [`get_remesas_avg()`](https://johan-rosa.github.io/databcrd/reference/get_remesas_avg.md)
   : Get average of remittances
+
 - [`get_remesas_cnt()`](https://johan-rosa.github.io/databcrd/reference/get_remesas_cnt.md)
   : Get quantity of transactions of remittances
+
 - [`get_remesas_currency()`](https://johan-rosa.github.io/databcrd/reference/get_remesas_currency.md)
   : Get remittances by currency
+
 - [`get_remesas_epa()`](https://johan-rosa.github.io/databcrd/reference/get_remesas_epa.md)
   : Get remittances by payment company
+
 - [`get_remesas_genero()`](https://johan-rosa.github.io/databcrd/reference/get_remesas_genero.md)
   : Get remittances by gender
+
 - [`get_remesas_mensuales()`](https://johan-rosa.github.io/databcrd/reference/get_remesas_mensuales.md)
   : Get the monthly remittances
+
 - [`get_remesas_pais()`](https://johan-rosa.github.io/databcrd/reference/get_remesas_pais.md)
   : Get remittances by country
+
 - [`get_remesas_provincias()`](https://johan-rosa.github.io/databcrd/reference/get_remesas_provincias.md)
   : Get remittances by provinces
+
 - [`get_reservas_internacionales()`](https://johan-rosa.github.io/databcrd/reference/get_reservas_internacionales.md)
   : Parse Bank Reserve and Asset Data from Excel
+
 - [`get_tasa_interbancaria()`](https://johan-rosa.github.io/databcrd/reference/get_tasa_interbancaria.md)
   : Get average interbank interest rates by maturity
+
 - [`get_tasas_activas()`](https://johan-rosa.github.io/databcrd/reference/get_tasas_activas.md)
   : Download interest rates for loans (Activas)
+
 - [`get_tasas_diarias()`](https://johan-rosa.github.io/databcrd/reference/get_tasas_diarias.md)
   : Daily Interest Rates from the Central Bank
+
 - [`get_tasas_pasivas()`](https://johan-rosa.github.io/databcrd/reference/get_tasas_pasivas.md)
   : Download interest rates for savings (Pasivas)
+
 - [`get_tasas_reales()`](https://johan-rosa.github.io/databcrd/reference/get_tasas_reales.md)
   : Retrieve real interest rates of financial intermediaries
+
 - [`get_tasas_semanales()`](https://johan-rosa.github.io/databcrd/reference/get_tasas_semanales.md)
   : Descargar y consolidar las tasas de interés semanales del BCRD
+
 - [`get_tc()`](https://johan-rosa.github.io/databcrd/reference/get_tc.md)
   : Average exchange rate of the operations in financial institutions
+
 - [`get_tc_eif()`](https://johan-rosa.github.io/databcrd/reference/get_tc_eif.md)
   : Average exchange rate of the operations in financial institutions
+
 - [`get_tc_spot()`](https://johan-rosa.github.io/databcrd/reference/get_tc_spot.md)
   : Exchange rates in the spot market of the Dominican Republic
+
 - [`get_tpm()`](https://johan-rosa.github.io/databcrd/reference/get_tpm.md)
   : Series of the Monetary Policy Rate of the Dominican Republic
+
 - [`gold_price()`](https://johan-rosa.github.io/databcrd/reference/gold_price.md)
   : Monthly Gold Prices Since 1833
+
 - [`imf_inflation()`](https://johan-rosa.github.io/databcrd/reference/imf_inflation.md)
   : Get IMF CPI inflation series for a set of countries
+
 - [`imf_pcps()`](https://johan-rosa.github.io/databcrd/reference/imf_pcps.md)
   : Precios de materias primas del FMI (PCPS)
+
 - [`imf_pcps_catalogo()`](https://johan-rosa.github.io/databcrd/reference/imf_pcps_catalogo.md)
   : Catálogo de indicadores del Primary Commodity Price System (PCPS)
+
 - [`imf_weo_forecast()`](https://johan-rosa.github.io/databcrd/reference/imf_weo_forecast.md)
   : Proyecciones del World Economic Outlook (WEO) del FMI
+
 - [`indicadores_bcrd_details`](https://johan-rosa.github.io/databcrd/reference/indicadores_bcrd_details.md)
   : Utility complement to handle the monetary indicators data
+
 - [`indicadores_osd()`](https://johan-rosa.github.io/databcrd/reference/indicadores_osd.md)
   : Obtener indicadores de Otras Sociedades de Depósito (OSD)
+
 - [`ipc_articulos_details`](https://johan-rosa.github.io/databcrd/reference/ipc_articulos_details.md)
   : Utility complement to handle the CPI by item
+
+- [`mercado_laboral_niveles()`](https://johan-rosa.github.io/databcrd/reference/mercado_laboral_niveles.md)
+  : Principales indicadores del mercado laboral en niveles (personas)
+
+- [`mercado_laboral_tasas()`](https://johan-rosa.github.io/databcrd/reference/mercado_laboral_tasas.md)
+  : Principales indicadores del mercado laboral en tasas (porcentajes)
+
+- [`ml_fechas()`](https://johan-rosa.github.io/databcrd/reference/ml_fechas.md)
+  :
+
+  Las primeras 2 filas leídas traen el encabezado combinado (año arriba,
+  número romano del trimestre abajo);
+  [`ml_fechas()`](https://johan-rosa.github.io/databcrd/reference/ml_fechas.md)
+  las combina en un vector de fechas/etiquetas, una por columna de
+  datos.
+
 - [`operaciones_monetarias()`](https://johan-rosa.github.io/databcrd/reference/operaciones_monetarias.md)
   : Monetary Operations
+
+- [`pea()`](https://johan-rosa.github.io/databcrd/reference/pea.md) :
+  Población en Edad de Trabajar (PET) y Fuerza de Trabajo (PEA)
+
 - [`read_details()`](https://johan-rosa.github.io/databcrd/reference/read_details.md)
   : Function to read files metadata
+
 - [`rescale()`](https://johan-rosa.github.io/databcrd/reference/rescale.md)
   : change the scale of a vector
+
 - [`tasa_real_to_long()`](https://johan-rosa.github.io/databcrd/reference/tasa_real_to_long.md)
   : Utility function for get_tasas_reales
+
 - [`tasas_to_long()`](https://johan-rosa.github.io/databcrd/reference/tasas_to_long.md)
   : Pivot wide formats of interest rates data frames to long format
+
 - [`today_gold_price()`](https://johan-rosa.github.io/databcrd/reference/today_gold_price.md)
   : Retrieve the current gold spot price
+
 - [`wti_price()`](https://johan-rosa.github.io/databcrd/reference/wti_price.md)
   : Download WTI crude oil spot prices from the EIA API
+
 - [`ze_gdpg()`](https://johan-rosa.github.io/databcrd/reference/ze_gdpg.md)
   : Download euro area real GDP growth data
+
 - [`ze_inflation()`](https://johan-rosa.github.io/databcrd/reference/ze_inflation.md)
   : Download euro area inflation data
+
 - [`ze_unemployment()`](https://johan-rosa.github.io/databcrd/reference/ze_unemployment.md)
   : Download euro area unemployment data
 
